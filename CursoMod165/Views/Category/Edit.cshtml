@@ -1,0 +1,50 @@
+﻿@model CursoMod165.Models.Category
+@* aqui é o cabecalho ... da vista *@
+<h1>Edit</h1>
+
+<h4>Category</h4>
+
+<hr />
+
+
+<div>
+    <!-- botao no topo -->
+    @*<a asp-action="Index">Back to List</a>    <!-- o "a" é para fazer link aparece a azul na pagina  --> *@
+    <a class="btn btn-outline-primary" asp-action="Index">Back to List</a>
+
+</div>
+
+<!-- bootstrap dito pelos alunos, é uma biblioteca do css  -->
+<div class="row">
+    <div class="col-md-4">
+
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <!-- para copia o nome para nos novos camppos fazer shift + alt + "." "."-->
+                <!-- control-Label e não form-label -->
+                <label asp-for="Name" class="form-label"></label>  
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Description" class="form-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            
+
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />   <!-- isto é um botao -->
+            </div>
+
+
+        </form>
+
+
+    </div>
+
+</div>

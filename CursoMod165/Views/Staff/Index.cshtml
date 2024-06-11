@@ -1,0 +1,89 @@
+﻿<!-- indica que vai usar o model Staff -->
+@model IEnumerable<CursoMod165.Models.Staff>
+<!--  IEnumera.. é uma lista!   -->
+
+<h1>Staff Index</h1>
+
+<p>
+    <!--  a proxima linha faz uma acção; cria a opcao de criar um novo customer   -->
+    <!--  Vai para a pagina create Staff se for primido  -->
+    <a class="btn btn-outline-primary" asp-action="Create">Create New</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <!--   está só =  Aniversário    -->
+                @Html.DisplayNameFor(model => model.EmployeeNumber)
+
+            </th>
+            <th>
+                <!--  Nome  -->
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                <!--  Nome  -->
+                @Html.DisplayNameFor(model => model.StaffRoleID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Address)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PhoneNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NTF)
+            </th>
+            <th>
+                <!-- Aqui vamos criar/apresentar novos botoes no fim da tabela: apagar, modificar etc  -->
+                Actions
+            </th>
+        </tr>
+    </thead>
+    <!-- Apresenta dados que estao na base de dados -->
+    <tbody>
+        <!-- se a tabela estiver vazia apresenta informacao que esta vazia -->
+        @if (!Model.Any())
+        {
+            <tr>No Data (A base de dados nao tem qualquer valor preenchido) </tr>
+        }
+        <!-- para cada elemento do staff apresenta os seguintes campos -->
+        <!-- Os campos tem de cuincidir com os de cima -->
+        @foreach (var staff in Model)
+        {
+            <tr>
+                <td>
+                    <!-- arroba staff.Name   ()estava com arroba junto do staff -->
+                    @Html.DisplayFor(modelItem => staff.EmployeeNumber)
+                </td>
+                <td>
+                    <!-- arroba staff.Name -->
+                    @Html.DisplayFor(modelItem => staff.Name)
+                </td>
+                <td>
+                    <!-- arroba staff.Name -->
+                    @Html.DisplayFor(modelItem => staff.StaffRole.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => staff.Address)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => staff.PhoneNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => staff.NTF)
+                </td>
+
+                <td>
+                    <!--  td é uma celula ou coluna na pagina html -->
+                    <a class="btn btn-outline-success" asp-action="Details" asp-route-id="@staff.ID">Details</a>
+                    <a class="btn btn-outline-warning" asp-action="Edit" asp-route-id="@staff.ID">Edit</a>
+                    <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@staff.ID">Delete</a>
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table> 
+

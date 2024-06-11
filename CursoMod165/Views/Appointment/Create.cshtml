@@ -1,0 +1,26 @@
+﻿@model CursoMod165.Models.Appointment
+
+<h1>Create</h1>
+
+<h4>Appointment</h4>
+
+<hr />
+
+<div class="row">
+    <div class="col-md-4">
+
+        <!-- Vai buscar a informacao a view Shared (codigo patilhado)  -->
+        <form asp-action="Create">
+            <partial name="Shared/_form" />
+            
+
+
+            <!-- a accao do botao altera de de acordo com o pretendido, create, edit, etc -->
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+
+        </form>
+
+    </div>
+</div>

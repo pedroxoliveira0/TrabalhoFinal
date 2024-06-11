@@ -1,0 +1,74 @@
+﻿@model IEnumerable<CursoMod165.Models.Category>
+<!--  IEnumera.. é uma lista!   -->
+@* aqui apresento uma lista com o conteudo da dBase *@
+
+
+<h1>Category Index</h1>
+
+<p>
+    <!--  a proxima linha faz uma acção; cria a opcao de criar um novo customer   -->
+    <a class="btn btn-outline-primary" asp-action="Create">Create New</a>
+</p>
+
+
+<!-- Apresento 1º cabecalho e de seguinda num ciclo for o conteudo linha a linha da base de dados -->
+<!-- Faz Cabecalho da tabela -->
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <!--  Nome  -->
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+
+            <th>
+                <!--   está só =  Descricao    -->
+                @Html.DisplayNameFor(model => model.Description)
+
+            </th>
+           
+            <th>
+                <!-- Aqui vamos criar novos botoes na tabela: apagar, modificar etc  -->
+                <!-- o que é isto ??? -->
+                <!-- titulo da tab para as accoes possiveis na tabela -->
+                Actions
+            </th>
+        </tr>
+    </thead>
+    
+    <!-- Apresenta dados que estao na base de dados -->
+    <!-- se a tabela estiver vazia apresenta informacao que esta vazia -->
+    <tbody> 
+        @if (!Model.Any())
+        {
+            <tr>No Data (A base de dados nao tem qualquer valor preenchido) </tr>
+            
+        } 
+    <!-- para cada elemento do staff apresenta os seguintes campos -->
+    <!-- Os campos tem de coincidir com os de cima -->
+        @foreach (var category in Model)
+        {
+        <tr>
+            <td>
+                <!-- arroba category.Name -->
+                @Html.DisplayFor(modelItem => category.Name)
+            </td>
+
+            <td>
+                <!-- arroba description.Name -->
+                @Html.DisplayFor(modelItem => category.Description)
+            </td>
+
+            <td>
+                <!--  td é uma celula ou coluna na pagina html -->
+                    @*<a class="btn btn-outline-success" asp-action="Details" asp-route-id="@category.ID">Details</a>*@
+                <a class="btn btn-outline-warning" asp-action="Edit" asp-route-id="@category.ID">Edit</a>
+                <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@category.ID">Delete</a>
+
+            </td>
+        </tr>
+        }
+    </tbody>
+    
+
+</table>

@@ -1,0 +1,50 @@
+﻿@model CursoMod165.Models.Category
+@* aqui é o cabecalho ... da vista *@
+<h1>Create</h1>
+
+<h4>Category</h4>
+
+<hr />
+
+<!--  COlocar BAckground color  papayawhip; gainsboro  -->
+<body style="background-color:burlywood"> @* formatacao do corpo da pagina *@
+
+<!-- bootstrap dito pelos alunos, é uma biblioteca do css  -->
+<!-- http.s://www.w3schools.com/bootstrap/bootstrap_grid_system.asp -->
+<div class="row">
+    <div class="col-md-4">
+
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <!-- para copia o nome para nos novos camppos fazer shift + alt + "." "."-->
+                <!-- control-Label e não form-label -->
+                <label asp-for="Name" class="form-label"></label>  <!-- // -->
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+          
+
+            <div class="form-group">
+                <label asp-for="Description" class="form-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+
+
+
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+
+
+        </form>
+
+
+    </div>
+
+</div>
+</body>

@@ -1,0 +1,172 @@
+﻿@model CursoMod165.Models.Product
+@* aqui é o cabecalho ... da vista *@
+<h1>Create</h1>
+
+<h4>Product</h4>
+
+<hr />
+
+
+
+@*// ... stuff  *@
+<!-- So tenho de por na view (form) os valores que depois passam para aDBase (tabela) -->
+<!--  COlocar BAckground color  papayawhip; gainsboro  -->
+<body style="background-color:darkolivegreen">
+
+
+    <!--  Criar matriz para apresentacao dos dados  -->
+    <div class="row">
+        <div class="col-md-4">
+
+            <form asp-action="Create">
+                <!-- se for dada a accao create  -->
+                <!--  valida formatos definidos no modelo -->
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+
+                <!-- Colocar o form name dentro de um grupo, para ficar mais organizado  -->
+                <div class="form-group">
+                    <label asp-for="Description" class="form-label"></label>
+                    <input asp-for="Description" class="form-control" />
+                    <span asp-validation-for="Description  " class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Price" class="form-label"></label>   <!--  Escreve Label class... é biblioteca bootstrap -->
+                    <input asp-for="Price" class="form-control" />     <!-- recebe uma entrada de valor na var Price  -->
+                    <span asp-validation-for="Price" class="text-danger"></span>
+                </div>
+
+                <!--  Não estava a criar o registo pk o campo address não era preenchido -->
+                <div class="form-group">
+                    <label asp-for="Quantity" class="form-label"></label>
+                    <input asp-for="Quantity" class="form-control" />
+                    <span asp-validation-for="Quantity" class="text-danger"></span>
+                </div>
+
+                <!--  ver se o Link Foto estava a dar problema ... -->
+                <div class="form-group">
+                    <label asp-for="LinkFoto" class="form-label"></label>
+                    <input asp-for="LinkFoto" class="form-control" />
+                    <span asp-validation-for="LinkFoto" class="text-danger"></span>
+                </div>
+
+
+
+                <!-- Temos de adicionar campo para preenchimento da Chave/nome role  -->
+                <div class="form-group">
+                    <label asp-for="CategoryID" class="form-label"></label>
+                    <!-- para termos acesso à informação da tabela secindaria temos de fazer uma lista de selecção -->
+                    <!-- Temos de passar uma variavel para casar com o numero da tabela secundaria roles -->
+                    <!--  <select asp-for="CategoryID" class="form-control" asp-items="ViewBag.StaffRoles"></select>  -->
+                    
+                    <select asp-for="CategoryID" class="form-control" asp-items="ViewBag.Categories">
+                        <!-- ViewBag.CategoryList -->
+                    </select>
+
+                    <span asp-validation-for="CategoryID" class="text-danger"></span>
+                </div>
+
+                @*
+                // aqui passamos dados entre tabela Staffroles e Staff
+                ViewBag.Categories = new SelectList(_context.Categories, "ID", "Name");
+                ViewBag.FrutoCategoriesID = _context.Categories.First(c => c.Name == "Fruto").ID;
+                *@
+
+
+
+                <!--  Agora temos de adicionar aqui group id= specialty-->
+                <div id="form-group-systemunity" class="form-group">
+                    <label asp-for="SystemUnity" class="form-label"></label>
+                    <select asp-for="SystemUnity" class="form-control" asp-items="Html.GetEnumSelectList<SystemUnity>()"></select>
+                    <!--// Programacao dinamica  , devolve um parametrico (com se altera um dado do objecto altera todos) -->
+
+                    <span asp-validation-for="SystemUnity" class="text-danger"></span>
+                </div>
+
+
+                <!-- Passagem para os campos de uma Lista 
+
+                    <div class="form-group">
+                    <label asp-for="StaffID" class="form-label"></label>
+                    <select asp-for="StaffID" class="form-control" asp-items="ViewBag.StaffList"></select>
+                    <span asp-validation-for="StaffID" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="CustomerID" class="form-label"></label>
+                    <select asp-for="CustomerID" class="form-control" asp-items="ViewBag.CustomerList"></select>
+                    <span asp-validation-for="CustomerID" class="text-danger"></span>
+                </div>
+
+
+                -->
+
+
+
+
+                <div class="form-group">
+                    <!--  fim do formulario   -->
+                    <input type="submit" value="Create" class="btn btn-primary" />  <!-- cria registo key -->
+                    <!-- este create é um do botao, final para submeter todos os dados  -->
+                </div>
+
+                @*
+                <!-- Agora como so queremos a especialidade no medico -->
+                <!-- Vamos ter de escrever um codigo e Java Script para ocultar as -->
+                <!-- Especialidade quando a role não é médico -->
+                <!-- (e)  => é uma variavel -->
+                <!--  Estava a dar erro porque faltava o #  -->
+                @section Scripts {
+
+                    <script type="text/javascript" on-content-loaded="true">
+                        // on-content -> serve para carregar JavaScript
+
+                        // var que retorna id do medico
+                        const medicStaffRoleID = @(ViewBag.MedicStaffRoleID);  // retorn ID 2 = role Medico
+
+                        function visibleFormGroupSpecialty(e) {    // esta função nao necessita do atributo "e"
+                            // $("select#StaffRoleID").change((e) => {
+
+                            let selectedStaffRoleID = $("select#StaffRoleID").val();
+
+                            let formGroupSpecialty = $("div#form-group-specialty");
+
+                            console.log(selectedStaffRoleID);
+
+                            // Agora so apresenta especialidade se for  medico
+                            // .css é J.query . if (selectedStaffRoleID == 2)
+                            if (selectedStaffRoleID == medicStaffRoleID) { // vemos receber do controlador o ID do medico para nao termos aqui um numero 2
+                                formGroupSpecialty.css('visibility', 'visible');  // aqui mostramos
+                                $("select#Specialty").val('@((int)Specialty.Generalist)');  // por defeito é um valor que não é 0,1,2,3, ... etc
+                                // ao generalist é atribuido um numero que pode ser alterado para outro qualquer ...
+                            }
+                            else {
+                                formGroupSpecialty.css('visibility', 'hidden');  // aqui escondemos
+                                $("select#Specialty").val(null); // prenche a null se nao for médico
+                                // Nudge - um pequeno empurrão : não é livro de programação / economia ...
+
+                            }
+                        }
+
+                        $("select#StaffRoleID").change(visibleFormGroupSpecialty);  // ordem para executar a função -> visible...
+
+                        // Inicializar o form-group-specialty
+                        visibleFormGroupSpecialty(null);  // quando inicializa a pagina fica null sem mostrar
+
+
+
+                    </script>
+                *@
+
+                }
+
+
+            </form>
+
+        </div>
+    </div>
+
+
+    <!-- Nova linha -->
+</body> 

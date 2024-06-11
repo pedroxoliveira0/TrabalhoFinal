@@ -1,0 +1,149 @@
+﻿@model IEnumerable<CursoMod165.Models.Sale>
+<!--  IEnumera.. é uma lista!   -->
+@* aqui apresento uma lista com o conteudo da dBase *@
+
+
+<h1>Order Index</h1>
+
+<p>
+    <!-- Usar interncionalizacao -->
+    <!--  a proxima linha faz uma acção; cria a opcao de criar um novo customer   -->
+    <a class="btn btn-outline-primary" asp-action="Create">@SharedLocalizer["Create New"]</a>
+
+    
+
+</p>
+
+
+
+
+<!-- Apresento 1º cabecalho e de seguinda num ciclo for o conteudo linha a linha da base de dados -->
+<!-- Faz Cabecalho da tabela -->
+<table class="table">
+    <thead>
+        <tr>
+
+            <th>
+                <!--   está só =  Descricao    -->
+                @Html.DisplayNameFor(model => model.CodVenda)
+
+               
+            </th>
+
+            <th>
+                <!--  Preço  -->
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
+
+            <th>
+                <!--  Quantidade  -->
+                @Html.DisplayNameFor(model => model.Time)
+            </th>
+
+
+            <!--// o proximo campo tem e ser obtido numa outra tabela com a chave estrangeira -->
+            <th>
+                <!--  Nome na tabela category  -->
+                @Html.DisplayNameFor(model => model.Customer.Name)
+            </th>
+
+
+            <!-- Codigo da unidade th ou td bold ou nao-->
+            <th>
+                <!-- Nome do produto dentro da category -->
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+
+
+            <!-- Codigo da unidade th ou td bold ou nao -->
+            <th>
+                <!-- Nome do produto dentro da category -->
+                @Html.DisplayNameFor(model => model.Observations)
+            </th>
+
+            <!-- Codigo da unidade th ou td bold ou nao-->
+            <th>
+                <!-- Nome do produto dentro da category -->
+                @Html.DisplayNameFor(model => model.IsPaid)
+            </th>
+
+
+            <th>
+                <!-- Aqui vamos criar novos botoes na tabela: apagar, modificar etc  -->
+                <!-- o que é isto ??? -->
+                <!-- titulo da tab para as accoes possiveis na tabela -->
+                Actions
+            </th>
+        </tr>
+    </thead>
+
+    <!-- Apresenta dados que estao na base de dados -->
+    <!-- se a tabela estiver vazia apresenta informacao que esta vazia -->
+    <tbody>
+        @if (!Model.Any())
+        {
+            <tr>No Data (A base de dados nao tem qualquer valor preenchido) </tr>
+
+        }
+        <!-- para cada elemento do staff apresenta os seguintes campos -->
+        <!-- Os campos tem de coincidir com os de cima -->
+        @foreach (var sale in Model)
+        {
+            <tr>
+
+
+                <td>
+                    <!-- Falta internacionalizacao -->
+                    @Html.DisplayFor(modelItem => sale.CodVenda)
+                </td>
+
+                <td>
+                    <!-- arroba price -->
+                    @Html.DisplayFor(modelItem => sale.Date)
+                </td>
+
+                <td>
+                    <!-- arroba quantity -->
+                    @Html.DisplayFor(modelItem => sale.Time)
+                </td>
+
+                <!--// o proximo campo tem e ser obtido numa outra tabela com a chave estrangeira -->
+                <td>
+                    <!-- Nome do produto dentro da category -->
+                    @Html.DisplayFor(modelItem => sale.Customer.Name)
+                </td>
+
+                <!-- Codigo da unidade -->
+                <td>
+                    <!-- Nome do produto dentro da category -->
+                    @Html.DisplayFor(modelItem => sale.Status)
+                </td>
+
+                <!-- Observacoes -->
+                <td>
+                    <!-- Nome do produto dentro da category -->
+                    @Html.DisplayFor(modelItem => sale.Observations)
+                </td>
+
+                <!-- se esta pago -->
+                <td>
+                    <!-- Nome do produto dentro da category -->
+                    @Html.DisplayFor(modelItem => sale.IsPaid)
+                </td>
+
+                <td>
+                    <!--  td é uma celula ou coluna na pagina html -->
+                    <a class="btn btn-outline-success" asp-action="Details" asp-route-id="@sale.ID">Details</a>
+                    <a class="btn btn-outline-warning" asp-action="Edit" asp-route-id="@sale.ID">Edit</a>
+                    <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@sale.ID">Delete</a>
+
+                </td>
+            </tr>
+        }
+
+        
+
+    </tbody>
+
+
+</table>

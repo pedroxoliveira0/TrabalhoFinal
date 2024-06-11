@@ -1,0 +1,391 @@
+﻿@model int
+
+@{
+	
+	//int counterMyPage = 0; // assim não guarda o estado da variavel
+}
+
+<!-- <h1>Trabalho Final de Curso ASP.NET 165</h1>-->
+
+<h1>@ViewData["Titulo1"]</h1>
+
+
+
+<!-- <h2>1 de Março de 2024</h2> -->
+<h2>@ViewBag.Titulo2</h2>
+
+
+
+<h4>1. Enunciado</h4>
+
+<p>
+	É pretendido que seja desenvolvida uma aplicação web que apoie a gestão de uma
+	loja grossista. Nesta aplicação existem os seguintes modelos:
+</p>
+
+<!-- Apresenta lista dos modelos (ul sem ordem), (ol com ordem num.) -->
+<ul>
+	@foreach (var item in ViewData["Enunciado"] as List<string>)
+	{
+		<li>@item</li>			@* // "li"" coloca "Dot" item = cada artigo de uma lista *@
+	}
+
+
+
+</ul>
+
+<!-- Categorias -->
+<h4>1.1. Categorias</h4>
+
+<p>
+	As categorias são um rótulo que agrupa diferentes produtos.
+
+</p>
+
+<p>
+	As categorias são compostas por:
+</p>
+<!-- Apresenta lista dos modelos (ul sem ordem), (ol com ordem num.) -->
+<ul>
+	@foreach (var item in TempData["Categorias"] as List<string>)
+	{
+		<li>@item</li>			@* // "li"" coloca "Dot" item = cada artigo de uma lista *@
+	}
+
+
+
+</ul>
+
+
+<!-- Produtos -->
+<h4>1.2. Produtos</h4>
+
+<p>
+	Os produtos são os artigos que serão vendidos.
+
+</p>
+
+
+<p>
+	Os produtos são compostos por:
+</p>
+
+<!-- Apresenta lista dos modelos (ul sem ordem), (ol com ordem num.) -->
+<ul>
+	@foreach (var item in ViewBag.Produtos)
+	{
+		<li>@item</li>			@* // item = cada artigo de uma lista *@
+	}
+	<b><li>Link foto</li></b>
+	<b><li>Unidade</li></b>   @* Unidade de medida kg, unitario, litro, etc*@
+</ul>
+
+
+<!-- Clientes -->
+<h4>1.3. Clientes</h4>
+<p>
+	Os clientes desta loja preenchem uma ficha na sua primeira venda com os
+	seguintes dados:
+</p>
+
+<!-- Apresenta lista dos modelos (ul sem ordem), (ol com ordem num.) -->
+<ul>
+	@foreach (var item in ViewData["Clientes"] as List<string>)
+	{
+		<li>@item</li>			@* // "li"" coloca "Dot" item = cada artigo de uma lista *@
+	}
+	<b>
+	<li>ValorCredito</li></b>
+	<li><b>DescontoCliente</b></li>
+
+
+</ul>
+
+
+<!-- Vendas -->
+<h4>1.4. Vendas (Orders/Invoices)</h4>
+<p>
+	A Venda é constituída pelos seguintes dados:
+</p>
+
+<!-- Apresenta lista dos modelos (ul sem ordem), (ol com ordem num.) -->
+<ul>
+	@foreach (var item in ViewData["Vendas"] as List<string>)
+	{
+		<li>@item</li>			@* // "li"" coloca "Dot" item = cada artigo de uma lista *@
+	}
+
+	<li><b>Incluir Quantidade e preço unitario por cada produto vendido</b></li>
+
+
+</ul>
+
+
+<!-- Funcionalidades -->
+<h2>2. Funcionalidades</h2>
+<p>
+	
+	De seguida serão listadas as funcionalidades a implementar na aplicação web:
+</p>
+
+<!-- Areas de categorias -->
+<h4>2.1. Área de Categorias</h4>
+
+<!-- Apresenta lista dos modelos (ul sem ordem), (ol com ordem num.) -->
+<ul>
+	@foreach (var item in ViewData["ACategorias"] as List<string>)
+	{
+		<p>@item</p>			@* // "li"" coloca "Dot" item = cada artigo de uma lista *@
+	}
+
+
+</ul>
+
+
+<!-- Areas de Produtos -->
+<h4>2.2. Área Produtos</h4>
+
+<!-- Apresenta lista dos modelos (ul sem ordem), (ol com ordem num.) -->
+<ul>
+	@foreach (var item in ViewData["AProdutos"] as List<string>)
+	{
+		<p>@item</p>			@* // "li"" coloca "Dot" item = cada artigo de uma lista *@
+	}
+
+
+</ul>
+
+
+<!-- Areas de clientes -->
+<h2>2.3. Área Clientes</h2>
+
+<!-- Apresenta lista dos modelos (ul sem ordem), (ol com ordem num.) -->
+<ul>
+	@foreach (var item in ViewData["AClientes"] as List<string>)
+	{
+		<p>@item</p>			@* // "li"" coloca "Dot" item = cada artigo de uma lista *@
+	}
+
+
+
+</ul>
+
+
+<!-- Area de Vendas -->
+<h2>2.4. Área de Vendas</h2>
+
+<p>
+		2.4.1. Listar as vendas. Filtrar por cliente. 
+</p> 
+<p>
+		2.4.2. Criar/Editar/Ver/Apagar uma venda. Uma venda passa por três passos:
+</p>
+
+<!-- 1 passo ou vistas das vendas -->
+
+<h4>1º Passo - Encomenda (Order)</h4>
+
+
+<ul>
+
+	@foreach (var item in ViewData["IPasso"] as List<string>)
+	{
+		<p>@item</p>			@* // "li"" coloca "Dot" item = cada artigo de uma lista *@
+	}
+
+</ul>
+
+<!-- 2 passo ou vistas das vendas -->
+
+<h4>2º Passo - Processamento (Purchasing Process)</h4>
+
+
+<ul>
+
+	@foreach (var item in ViewData["IIPasso"] as List<string>)
+	{
+		<p>@item</p>			@* // "li"" coloca "Dot" item = cada artigo de uma lista *@
+	}
+
+</ul>
+
+<!-- 3 passo ou vistas das vendas -->
+
+<h4>3º Passo - Envio (Invoice)</h4>
+
+
+<ul>
+
+	@foreach (var item in ViewData["IIIPasso"] as List<string>)
+	{
+		<p>@item</p>			@* // "li"" coloca "Dot" item = cada artigo de uma lista *@
+	}
+
+</ul>
+
+<!-- 4 passo ou vistas das vendas -->
+
+<p>
+	Têm de existir as seguintes vistas:
+</p>
+
+<ul>
+	
+	@foreach (var item in ViewData["IVPasso"] as List<string>)
+	{
+		<p>@item</p>			@* // "li"" coloca "Dot" item = cada artigo de uma lista *@
+	}
+
+</ul>
+
+<!--  2.4.4  --> 
+<p>
+	Ver o saldo corrente geral (somatório de vendas menos o somatório de
+	vendas pagas).
+
+</p>
+
+
+<!-- Internacionalizacao -->
+<h4>3. Internacionalização</h4>
+
+<p>
+	O site tem de estar feito em português e inglês.
+
+</p>
+
+
+<!-- Papeis -->
+<h4>4. Papéis</h4>
+
+<p>
+	Existem três tipos de papéis:
+
+</p>
+<!-- Apresenta lista dos modelos (ul sem ordem), (ol com ordem num.) -->
+<ol>
+	@foreach (var item in ViewData["TipoPapeis"] as List<string>)
+	{
+		<li>@item</li>			@* // "li"" coloca "Dot" item = cada artigo de uma lista *@
+	}
+</ol>
+
+<br />
+<br />
+
+<!-- Apresenta lista dos modelos (ul sem ordem), (ol com ordem num.) -->
+<ul>
+	@foreach (var item in ViewData["RegrasPapeis"] as List<string>)
+	{
+		<p>@item</p>			@* // "li"" coloca "Dot" item = cada artigo de uma lista *@
+	}
+</ul>
+
+<!-- Toastr -->
+<h4>5. Toastr</h4>
+
+<p>
+	Adicionar notificações de sucessor ou erro em todas as funcionalidades.
+
+</p>
+
+<br />
+<p>
+	Bom trabalho.
+
+</p>
+<br />
+<br />
+
+
+
+<b>Nota:</b>
+<li>Criar tabela Staff, com as Rolls, vendedor, Logistica e Administrador</li>
+<br />
+<li>Ver como apagar a base de dados produtos e migracao e criar uma nova, sem weight obrigatorio e c/ unid.</li>
+<br />
+
+
+<h4>Observações:</h4>
+<body>
+
+Na tabela produtos colocar um campo texto, com o link para a foto do produto <br />
+	o link, numa primeira fase não fica visivel quando faço a listagem, depois logo vejo como fazer <br />
+	para a foto aparecer na listagem de produtos.<br />
+	No prenchimento do produto de acordo com a categoria colocar campo qtd ou peso, devia haver antes um campo unidades no produto.<br />
+	Nao usar o campo peso, so qtd e ver como criar uma tabela com as unidades do tipo speciality<br />
+
+	1. Acoes a realizar:<br />
+	1.1. Criar as Tabelas, Category, Products, customers (usar o k ja está feito para os Customers) e Sales<br />
+	1.1.1. Adicionar ao cliente campo plafound/credito; com valor de debito atribuido a esse cliente (a iniciar em 20€)<br /> 
+	1.1.2. Adicionar ao cliente campo desconto ou classificacao (ouro,prata,bronze), correspondete ao desconto que tem
+	1.1.2. o numero do cliente devia ser de insercao automatica ...
+	1.1.3. O numero da venda ou identificador deve ter um padrao e ser de insercao automatica (tipo:V2024/A/001)
+	1.2. Seguir o que está estipulado no enunciado para essas tabelas <br />
+	<br />
+	2. Funcionalidades<br />
+	2.1. Criar as vistas com as tabelas, começar com as mais faceis (ex:Produtos)<br />
+	2.2. Criar boloes adicionais no topo da tabela, para funcoes adicionais, Inserir, como historico e saldo corrente<br />
+	<b>2.3. Ver a lista de produtos por categoria é para fazer na area de produtos e nao na categoria </b>
+	
+	<br />
+	3. Area de Vendas<br />
+	3.1. Fazer tabela com listagem de vendas, filtrar por cliente<br />
+	3.2. Botao inserir (encomenda)<br />
+	3.3. Prencher o identificador (é o utilizador que cria essa encomenda???) <br />
+	3.4. quando tenho a lista de encomendas, filtrar por cliente nesse momento vou ter botao processamento no topo<br />
+	3.5. julgo que a ideia é quando selecionar a vista dessa encomenda é que vou ter o botao para processamento
+	(nao faço a minima ideia de como fazer, encomendas, processamento e envio)<br />
+3.6. Ter nas vendas/encomendas um campo enviada, correspondente ao evio efectivo da encomenda<br />
+
+	<br />
+	Duvidas:<br />
+	Como fazer "saldo corrente" do cliente, se pode só aparecer quando se isola esse cliente numa vista<br />
+	o "Historico de vendas" do cliente é num vista à parte???<br />
+	Nao sei como selecionar o cliente, a venda, o envio para o cliente (R. Na vista da encomenda)<br />
+	Nao sei como fazer envio (R. Eventualmente Lista dos envios do dia da semana ou pendentes, com um pisco enviada para nao aparecer na lista)<br />
+	O que é o saldo corrente geral (será diferença do somatorio de vendas faturadas vs vendas liquidadas???)<br />
+	Ver se faz sentido ter um menu WareHouse<br />
+
+
+	<br />
+	<b>Perguntas:</b><br />
+	1. Qual a ideia do campo peso nos produtos  <br />
+	2. Uma ou duas formas de fazer deployment da solução, sendo uma mais simples por exemplo numa LAN<br />
+	3. Na internacionalização no caso da pagina polity, como fazer; na mesma pagina ter varias linguas ou varias ter paginas<br />
+		R.: SOlucao ter varias vistas, .pt; .uk; etc <br />
+	4. Tirar as minhas duvidas sobre a relacao das tabelas sale, e produtos, saber se para seguir a estrutura das tabelas, <br />
+		ou se pode fazer como apresento e se quais as vantagens e desvantagens em relacao ao pedido no enunciado. <br />
+		por exemplo se seguir como está no enunciado como faço para usar o registo principal...<br />
+		Julgo que faz sentido ter uma lista de produtos, em vez de um link para o produto <br />
+	5. Como Instalar esta Framework numa rede local, 1 ou duas sugestões <br /> 
+
+
+</body>
+<br />
+<br />
+
+
+<p>Aluno: </p>
+<!-- imprime variaveis definidas no controlador Listas dl,dt, dd -->
+
+<p>@TempData["Author"]</p>	 @* //@ vais buscar var, o que esta a seguir a @ é codigo C# *@
+<p> </p>
+<p>@TempData["Data"]</p>
+
+
+<!-- Comentario  (aparece no html com a arroba  nao aparece) -->
+@* <!-- @TempData["Author"].ToString() --> *@
+
+@*
+<p>@ViewBag.X</p>
+
+<p>@ViewData["Y"]</p>
+
+<!-- <p>@TempData["Data"]?.ToString()</p>-->
+*@
+
+
+
+
+<p>Page Counter: @Model</p>

@@ -1,0 +1,158 @@
+﻿@using Microsoft.AspNetCore.Identity 
+@using Microsoft.AspNetCore.Authorization
+
+
+@inject SignInManager<IdentityUser> SignInManager;
+
+@* agora temos uma politica nova que podemos usar *@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - CursoMod165</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/CursoMod165.styles.css" asp-append-version="true" />
+<!-- Adicionar a linha em baixo para poder usar o MVC grid-->
+    <link rel="stylesheet" href="~/css/mvc-grid/mvc-grid.css" asp-append-version="true" />
+
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">TrabalhoFinal</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        </li>
+
+                        <!-- Tab Job Statement-->
+                        <li class="nav-item">
+                            <!-- o que esta dentro de <> sao as propriedades -->
+                            <!-- faz aparecer "botao -> Mypage no cabecalho da pagina -->
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="JobStatement">Job Statement</a>
+                        </li>
+
+                        <!-- Tab Categories -->
+                        <li class="nav-item">
+                            <!-- o que esta dentro de <> sao as propriedades -->
+                            <!-- faz aparecer "botao -> Mypage no cabecalho da pagina -->
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Category" asp-action="Index">Categories</a>
+                        </li>
+
+
+                        <!-- Tab Products -->
+                        <li class="nav-item">
+                            <!-- o que esta dentro de <> sao as propriedades -->
+                            <!-- faz aparecer "botao -> Mypage no cabecalho da pagina -->
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Product" asp-action="Index">Products</a>
+                        </li>
+
+
+                        <!-- Tab Customers-->
+                        <li class="nav-item">
+                            <!-- Para adicionar o menu no topo ao lado do menu -->
+
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Customer" asp-action="Index">Customers</a>
+                        </li>
+
+
+                        <!-- Tab Sales-->
+                        <li class="nav-item">
+                            <!-- o que esta dentro de <> sao as propriedades -->
+                            <!-- faz aparecer "botao -> Sales com caminho para view Sales.Index -->
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Sale" asp-action="Index">Sales</a>
+                        </li>
+
+                        <!-- Tab WareHouse-->
+                        <li class="nav-item">
+                            <!-- Para adicionar o menu no topo ao lado do menu -->
+
+                            <a class="nav-link text-dark" asp-area="" asp-controller="WareHouse" asp-action="Index">WareHouse</a>
+                        </li>
+
+
+                        <!-- se não tiver logado nao mostra cabecalho -->
+                        @* @if (SignInManager.IsSignedIn(User)) 
+                        {*@
+                            @if ((await _authorizationService.AuthorizeAsync(User, CursoMod165Constants.POLICIES.APP_POLICY.NAME)).Succeeded)
+                            {
+                               <!-- aqui colocar customers -->
+
+                                <li class="nav-item">
+                                    <!-- Para adicionar o menu no topo ao lado do menu -->
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Appointment" asp-action="Index">Appointment</a>
+
+                                </li>
+
+                                
+
+                            }
+                            @if ((await _authorizationService.AuthorizeAsync(User, CursoMod165Constants.POLICIES.APP_POLICY_ADMIN.NAME)).Succeeded)
+                            {
+                                <!-- coloca Botao Staff no cabecalho; nav-item = item de navegacao  & cria link    -->
+                                <!-- Cria link para a diretoria staff e pagina por defeito Index.cshtml, nesta dir. estao as  vistas restantes  -->
+                                <li class="nav-item">
+                                    <!-- Para adicionar o menu no topo ao lado do menu -->
+                                    <a class="nav-link text-decoration-underline" asp-area="" asp-controller="Staff" asp-action="Index">.Staff.</a>
+
+                                </li>
+                            }
+                        @*} sai signinManager *@
+                    </ul>
+                    <partial name="_LoginPartial" />
+                    <partial name="_SelectLanguage" /> <!-- Foi adicionada para a  funcionalidade linguagem -->
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2024 - TrabalhoFinal - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <!-- adicina a linha seguinte para usar MVC grid; para facilitar posso arrastar o file para  a area do editor -->
+    <script src="~/js/mvc-grid/mvc-grid.js" asp-append-version="true"></script>
+
+    <script>
+        document.querySelectorAll(".mvc-grid").forEach(element => new MvcGrid(element));
+    </script>
+
+    <!-- procurar pacote sweete alert  http s://www.nuget.org/packages/CurrieTechnologies.Razor.SweetAlert2
+    CurrieTechnologies.Razor.SweetAlert2 5.6.0
+    A Razor class library for interacting with SweetAlert2.
+          Use in Blazor Server Apps or Blazor WebAssembly Apps.
+          Currently using sweetalert2@11.7.3-->
+    <!-- Adiciona JavaScritp e css a Vista (mensagens toast de erro: addicionado as bibilotecas) -->
+    @await Component.InvokeAsync("NToastNotify")
+    <!-- a linha em baixo faz a inclusão (* coloca aqui nesta pagina) dos (a)scripts que existe nas varias paginas -->
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
+
+
+
+
+<!--  Site com informacao HTML: http s://getbootstrap.com.br/docs/4.1/components/buttons/  -->

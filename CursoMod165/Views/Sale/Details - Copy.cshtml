@@ -1,0 +1,60 @@
+﻿@* @model CursoMod165.Models.Sale-->  *@
+@* @model IEnumerable<CursoMod165.Models.Sale> *@
+@* @model IEnumerable<CursoMod165.Models.ProductList> *@
+@model CursoMod165.Models.Sale
+
+<h1>Details</h1>
+
+<h4>Order</h4>
+
+<hr />
+
+
+
+
+
+<!--  Criar matriz para apresentacao dos dados  -->
+<div class="row">
+    <div class="col-md-12">
+
+        <form>
+            <!-- Nao é necessario o botao de accao no cabecalho -->
+            <!-- 1º Obter o ID da venda selecionada; que vem do controlador  -->
+            <!-- dinamic list <dl -->
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+
+            <dl class-"row">
+
+                <dt class="col-auto">@Html.DisplayNameFor(model => model.CodVenda)</dt>
+                <dd class="col-auto">@Html.DisplayFor(model => model.CodVenda)</dd>
+
+                <dt class="col col-lg-2">@Html.DisplayNameFor(model => model.Time)</dt>
+                <dd class="col col-lg-2">@Html.DisplayFor(model => model.Time)</dd>
+                
+                <dt class="col-sm-2">@Html.DisplayNameFor(model => model.Date)</dt>
+                <dd class="col">@Html.DisplayFor(model => model.Date)</dd>
+
+
+
+        
+            </dl>
+
+            
+
+        </form>
+
+
+
+    </div>
+
+</div>
+
+<!-- Aparece no fim da tabela   estava mal: <div class="row"  coloca os dados numa linha (row)  -->
+<div class="row">
+    <a asp-action="Edit" asp-route-id="@Model.ID"> Edit</a>
+    <a asp-action="Edit" asp-route-num="@Model.ID"> EditNum</a>
+
+    <a asp-action="Index"> <strong>Back to List </strong></a>
+
+</div>

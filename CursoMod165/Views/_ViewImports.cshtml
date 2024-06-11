@@ -1,0 +1,13 @@
+﻿@using CursoMod165
+@using CursoMod165.Models
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+<!-- adicionar a linha seguinte para poder usar o MVC grid, colocada aqui é comum a todo o projeto e já preciso de colocar em todas as vistas -->
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Mvc.Localization
+@using NonFactors.Mvc.Grid
+
+
+<!-- isto é uma ferrameta para traduzir HTML-->
+@inject IHtmlLocalizer<Resource> SharedLocalizer  
+<!-- serve localizar as palavras no ?? ; tinha um erro pk faltava um espaço a separar a palavra Shared...-->
+@inject IAuthorizationService _authorizationService;

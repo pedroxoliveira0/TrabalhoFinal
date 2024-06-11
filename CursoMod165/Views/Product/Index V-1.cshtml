@@ -1,0 +1,126 @@
+﻿@model IEnumerable<CursoMod165.Models.Product>
+<!--  IEnumera.. é uma lista!   -->
+@* aqui apresento uma lista com o conteudo da dBase *@
+
+
+<h1>Product Index</h1>
+
+<p>
+    <!--  a proxima linha faz uma acção; cria a opcao de criar um novo customer   -->
+    <a class="btn btn-outline-primary" asp-action="Create">Create New</a>
+</p>
+
+
+<!-- Apresento 1º cabecalho e de seguinda num ciclo for o conteudo linha a linha da base de dados -->
+<!-- Faz Cabecalho da tabela -->
+<table class="table">
+    <thead>
+        <tr>
+
+            <th>
+                <!--   está só =  Descricao    -->
+                @Html.DisplayNameFor(model => model.Description)
+
+            </th>
+
+            <th>
+                <!--  Preço  -->
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+
+            <th>
+                <!--  Quantidade  -->
+                @Html.DisplayNameFor(model => model.Quantity)
+            </th>
+                
+            <!-- Codigo da unidade th ou td bold ou nao-->
+            <th>
+                <!-- Nome do produto dentro da category -->
+                @Html.DisplayNameFor(model => model.SystemUnity)
+            </th>
+
+
+            @*  não aparece na Listagem
+            <th>
+                <!--  Peso  -->
+                @Html.DisplayNameFor(model => model.Weight)
+            </th>
+            *@
+
+            <!--// o proximo campo tem e ser obtido numa outra tabela com a chave estrangeira -->
+            <th>
+                <!--  Nome na tabela category  -->
+                @Html.DisplayNameFor(model => model.Category.Name)
+            </th>
+
+            <th>
+                <!-- Aqui vamos criar novos botoes na tabela: apagar, modificar etc  -->
+                <!-- o que é isto ??? -->
+                <!-- titulo da tab para as accoes possiveis na tabela -->
+                Actions
+            </th>
+        </tr>
+    </thead>
+    
+    <!-- Apresenta dados que estao na base de dados -->
+    <!-- se a tabela estiver vazia apresenta informacao que esta vazia -->
+    <tbody> 
+        @if (!Model.Any())
+        {
+            <tr>No Data (A base de dados nao tem qualquer valor preenchido) </tr>
+            
+        } 
+    <!-- para cada elemento do staff apresenta os seguintes campos -->
+    <!-- Os campos tem de coincidir com os de cima -->
+        @foreach (var product in Model)
+        {
+        <tr>
+
+
+            <td>
+                <!-- arroba description.Name -->
+                @Html.DisplayFor(modelItem => product.Description)
+            </td>
+
+            <td>
+                    <!-- arroba price -->
+                 @Html.DisplayFor(modelItem => product.Price)
+            </td>
+
+            <td>
+                    <!-- arroba quantity -->
+                    @Html.DisplayFor(modelItem => product.Quantity)
+            </td>
+
+            <!-- Codigo da unidade -->
+            <td>
+                    <!-- Nome do produto dentro da category -->
+                    @Html.DisplayFor(modelItem => product.SystemUnity)
+            </td>
+
+
+            @*  não aparece na Listagem
+            <td>
+                    <!-- arroba peso -->
+                    @Html.DisplayFor(modelItem => product.Weight)
+            </td>  *@
+
+                <!--// o proximo campo tem e ser obtido numa outra tabela com a chave estrangeira -->
+            <td>
+                    <!-- Nome do produto dentro da category -->
+                    @Html.DisplayFor(modelItem => product.Category.Name)
+            </td>
+            
+                <td>
+                <!--  td é uma celula ou coluna na pagina html -->
+                    @*<a class="btn btn-outline-success" asp-action="Details" asp-route-id="@product.ID">Details</a>*@
+                <a class="btn btn-outline-warning" asp-action="Edit" asp-route-id="@product.ID">Edit</a>
+                <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@product.ID">Delete</a>
+
+            </td>
+        </tr>
+        }
+    </tbody>
+    
+
+</table>

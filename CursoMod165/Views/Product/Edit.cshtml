@@ -1,0 +1,60 @@
+﻿@model CursoMod165.Models.Product
+@* aqui é o cabecalho ... da vista *@
+<h1>Edit</h1>
+
+<h4>Product</h4>
+
+<!-- VAlor de teste Count e -->
+<h6>  Passar lista de categorias Peso e count do produto selecionado </h6>
+
+<h5>@ViewBag.Titulo2</h5>
+
+@*
+<ul>
+    @foreach (var item in ViewData["CategoryList"] as List<string>)
+    {
+        <li>@item</li>			
+    }
+
+
+
+</ul>
+*@
+
+@*
+<h6>
+    <span>
+        (@ViewBag.CategoryList?)   <!--fazer for each ... @ViewBag.CategoryList?.ToShortDateString() -->
+    </span>
+
+</h6>
+*@
+
+<hr />
+
+<table class="table">
+    <thead>
+        <tr>
+
+            <th>
+                <!--   está só =  Descricao    -->
+                @Html.DisplayNameFor(model => model.Description)
+
+            </th>
+
+            <th>
+                <!--  Preço  -->
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+
+            
+
+            <!--// o proximo campo tem e ser obtido numa outra tabela com a chave estrangeira -->
+            <th>
+                <!--  Nome na tabela category  -->
+                @Html.DisplayNameFor(model => model.Category.Name)
+            </th>
+
+            
+        </tr>
+    </thead>
