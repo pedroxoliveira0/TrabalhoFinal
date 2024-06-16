@@ -17,6 +17,7 @@ namespace CursoMod165.Models
 
 
         [StringLength(255)]
+        [Display(Name = "Customer Name")]
         [Required]  // de preenchimento obrigatorio
         public string Name { get; set; }
 
@@ -52,34 +53,34 @@ namespace CursoMod165.Models
         // Novos Campos
         // ##########################
         // Localidade = City
-        //  [StringLength(255)]
-        //  [Required]
-        //  public string City { get; set; }
+        [StringLength(255)]
+        [Required]
+        public string City { get; set; }
 
         // Codigo Postal- ZipCode
-        //  [StringLength(20)]
-        //  [Required]
-        //  [Display(Name = "Zip Code")]
-        //  public string ZipCode { get; set; }
+        [StringLength(20)]
+        [Required]
+        [Display(Name = "Zip Code")]
+        public string ZipCode { get; set; }
 
 
         // Numero Cliente - CodCustomer
         // so um numero Incrementa uma uni 
-        //  [StringLength(30), Range(0, 999999999999)]  // ou regular expression  ou display format
-        //  [DisplayFormat(DataFormatString = "{0:d}")]
-        //  [Required]
-        //  [Display(Name = "Cod. Customer")]
-        //  public string CodCustomer { get; set; }
+        [StringLength(30), Range(0, 999999999999)]  // ou regular expression  ou display format
+        [DisplayFormat(DataFormatString = "{0:d}")]
+        [Required]
+        [Display(Name = "Num. Customer")]
+        public string CodCustomer { get; set; }
 
 
 
         // ###############################
         // Campos a Nao usar (Apagar)
         // ##############################
-        [StringLength(30), Range(0, 999999999999)]  // ou regular expression  ou display format
-        [DisplayFormat(DataFormatString = "{0:d}")]
-        [Required]
-        [Display(Name = "HealthCare User Number")]
-        public string USNS { get; set; }
+        //[StringLength(30), Range(0, 999999999999)]  // ou regular expression  ou display format
+        //[DisplayFormat(DataFormatString = "{0:d}")]
+        //[Required]
+        //[Display(Name = "HealthCare User Number")]
+        //public string USNS { get; set; }
     }
 }

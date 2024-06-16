@@ -32,8 +32,9 @@
 </div>
 
 <div class="form-group">
-    <label asp-for="Informations" class="form-label"></label>
-    <textarea asp-for="Informations" class="form-control" rows="5"></textarea>
+    <label asp-for="Informations" class="form-label" ></label>  <!-- class="form-label" -->
+    <textarea asp-for="Informations" class="form-control" rows="5"></textarea> <!-- class="form-control" rows="5"> -->
+    <!--"informations"=@ViewBag.campo1 =; -->
     <span asp-validation-for="Informations" class="text-danger"></span>
 </div>
 

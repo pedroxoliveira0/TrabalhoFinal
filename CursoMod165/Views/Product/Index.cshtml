@@ -24,10 +24,11 @@ Html
             columns.Add(ap => ap.Category.Name).Titled("Category");
             columns.Add(ap => ap.SystemUnity).Titled("Unity");
 
-            columns.Add(ap => Html.ActionLink("Edit", "Edit", new { id = ap.ID }, new { @class = "btn btn-outline-warning" })); // @class = "btn btn-primary"
+            columns.Add(ap => Html.ActionLink("Details", "Details", new { id = ap.ID }, new { @class = "btn btn-outline-success" })); // @class = "btn btn-primary"
             @* columns.Add(Model => Model.ID).RendeedAs(Model =>
                 Html.ActionLink("Edit", "Edit", new { id = Model.ID })).Css("btn")
             *@
+            columns.Add(ap => Html.ActionLink("Edit", "Edit", new { id = ap.ID }, new { @class = "btn btn-outline-warning" }));
             columns.Add(ap =>
                 Html.ActionLink("Delete", "Delete", new { id = ap.ID }, new { @class = "btn btn-outline-danger" })); // class = "btn btn - primary"
 

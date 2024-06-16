@@ -1,5 +1,6 @@
 ﻿using CursoMod165.Data;
 using CursoMod165.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -111,8 +112,13 @@ namespace CursoMod165.Controllers
         [HttpGet]
         public IActionResult Create()
         {
+            // Passar List Customer para a view
+            ViewBag.CustomerList = new SelectList(_context.Customers, "ID", "Name");
 
-          
+
+
+           
+
             return View();
             // return View();
         }
@@ -130,15 +136,40 @@ namespace CursoMod165.Controllers
                 // TO Do Criar novo Staff caso contrario;
                 // return view customer com dados anteriores
                 _context.Sales.Add(sale);
-                _context.SaveChanges();     // tens aqui varios pedido agora grava
+                _context.SaveChanges();
+
+                // So atualizo gravo depois de ter criado a venda  DateTime.Now
+                ViewBag.id = sale.ID;
+                
+                string ViewBagStr = "";
+                ViewBagStr = ViewBag.id.ToString();
+                ViewBagStr = ViewBagStr.PadLeft(3, '0');
+
+                // Falta Alterar a letra quando chego ao 999
+                // ViewBag.codVenda = String.Format("V{0}A" + sale.ID.ToString(),DateTime.Now.Year); // sale.ID.ToString()
+
+                ViewBag.codVenda = String.Format("V{0}A" + ViewBagStr,DateTime.Now.Year); // sale.ID.ToString()
+                sale.CodVenda = ViewBag.codVenda;
+                // tem de ser V + Date Now + A + Number
+                //Sale? sale = _context.Sales.Find(id);
+                //GetCodigoVenda(out startDate);
+
+                _context.Update(sale);     // tens aqui varios pedido agora grava
+                _context.SaveChanges();
+                // Obter as consultas
+                //ViewBag.CodVenda = startDate;
+
 
                 return RedirectToAction("Index");
                 // return RedirectToAction(nameof(index)); -> outra forma de apresentar igual
 
             }
-            
 
+            ViewBag.CustomerList = new SelectList(_context.Customers, "ID", "Name");
             return View(sale);
+
+
+
         }
 
 
@@ -148,8 +179,44 @@ namespace CursoMod165.Controllers
 
             ViewBag.NumVenda = sale.CodVenda;
             //ViewBag.Nome = sale.Customer.Name;
-            ViewBag.Obs = sale.Observations;
+            ViewBag.Obs = sale.Observations;    
             ViewBag.ClienteID = sale.CustomerID;
+
+            // DAdos do cliente
+            // retornar uma Lista com os Dados do cliente, para preencher cabecalho
+            Customer? clienteData = _context.Customers.Find(sale.CustomerID);
+            ViewBag.ClienteName = clienteData.Name;
+            ViewBag.City = clienteData.City;
+            ViewBag.Address = clienteData.Address;
+            ViewBag.Email= clienteData.Email;
+            ViewBag.Zipcode= clienteData.ZipCode;
+
+
+
+            // DAdos do cliente
+            // retornar uma Lista com os Dados do cliente, para preencher cabecalho
+            //var clienteData = _context
+            //                    .Sales
+            //                    .Include(s => s.Customer)
+            //                    .Where(s => s.CodVenda == sale.CodVenda)
+            //                    .ToList();
+
+
+            //ViewBag.Cliente = clienteData;
+
+
+
+
+            // retornar uma Lista com os Dados do cliente, para preencher cabecalho
+            //var clienteProductLists = _context
+            //                                 .ProductLists
+            //                                 .Include(p => p.Sale.Customer)  // ???? .Category
+            //                                 .Include(p => p.Sale)
+            //                                 .Where(p => p.SaleID == sale.ID)
+            //                                 .ToList();  // para ir à base de dados usar "_XXXXX"
+
+            //ViewBag.ClienteName = clienteProductLists;
+
 
 
             //IEnumerable<ProductList> productLists = _context
@@ -166,7 +233,7 @@ namespace CursoMod165.Controllers
                                               .Where(p => p.SaleID == sale.ID)
                                               .ToList();  // para ir à base de dados usar "_XXXXX"
 
-
+             
 
             if (orderProductLists == null) // se for diferente de null faz a vista
             {
@@ -181,9 +248,197 @@ namespace CursoMod165.Controllers
         }
 
 
-        
+
+        // delete 1
+
+        [HttpGet] //METODO QUE VAI DEVOLVER A VISTA DE DELETE 
+        [Authorize(Policy = POLICIES.APP_POLICY_ADMIN.NAME)]  //  so o admin é que poode aceder ao delete, para evitar que pelo lado da vista se chame a pagina delete por URL
+        public IActionResult Delete(int id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            ViewBag.CustomerList = new SelectList(_context.Customers, "ID", "Name");
+
+            Sale? sale = _context.Sales.Find(id);
+
+            if (sale == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View(sale);
+        }
 
 
+        // para apagar o sale só preciso do ID não preciso dos dados do sale
+        // aqui a vista mantem o nome delete, mas a acção é delete confirm
+        // Testar isto : http s://localhost:8000/Sale/Delete/1
+        [HttpPost, ActionName("Delete")]
+        [Authorize(Policy = POLICIES.APP_POLICY_ADMIN.NAME)]  //  delete so p/ admin , no lado do controlador para evitar que pelo lado da vista se chame a pagina delete por URL
+        public IActionResult DeleteConfirmed(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            Sale? sale = _context.Sales.Find(id);
+
+            if (sale != null)
+            {
+
+                _context.Sales.Remove(sale);        // atualiza
+                _context.SaveChanges();                     // grava _context.SaveChanges();
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View(sale);
+        }
+
+        // delete 1
+
+
+
+
+
+
+        // So é possivel obter a vista se fizer return da Vista:
+        public IActionResult AddProductToList()
+        {
+            IEnumerable<Product> products = _context
+                                                .Products
+                                                .Include(c => c.Category)
+                                                .ToList();  // para ir à base de dados usar "_XXXXX"
+                                                            // return View("../Home/Index");
+            return View(products);
+
+            // return View();
+        }
+
+
+
+        // aqui apenas tenho de usar o ID da Sale, que se mantem e adicionar Produto ID
+        // dentro da minha ProductList
+        [HttpGet]
+        public IActionResult AddToList(int id)  // private static void
+        {
+
+
+            // Passar List Products para a view
+            ViewBag.ProductList = new SelectList(_context.ProductLists, "ID", "Name");
+
+
+
+            // Aqui vou retornar ProductLista com COD.Venda fixo
+            var orderProductLists = _context
+                                              .ProductLists
+                                              .Include(p => p.Product)  // ???? .Category
+                                              .Include(p => p.Sale)
+                                              .Where(p => p.SaleID == id)
+                                              .ToList();  // para ir à base de dados usar "_XXXXX"
+
+            return View(orderProductLists);
+            // return View();
+            // aqui tenho de criar um registo no Product List, c/ n Venda 
+
+            // inicio
+            //Sale? sale = _context.Sales;  // _context.Sales.Find(id)
+
+            //_context.Sales.Add(sale);
+            //_context.SaveChanges();     // tens aqui varios pedido agora grava
+
+
+
+
+
+            // fim
+
+            //return View();
+        }
+
+
+
+
+        [HttpPost]
+        public IActionResult AddToList(ProductList productList)  // private static void
+        {
+            if (ModelState.IsValid)
+            {
+                // Se retora falso algo está mal preenchido, deve aparecer uma info e nao sair da pagina
+                // TO Do Criar novo Staff caso contrario;
+                // return view customer com dados anteriores
+                _context.ProductLists.Add(productList);
+                _context.SaveChanges();
+
+                return RedirectToAction("Index");
+
+            }
+
+            // Codigo de venda
+            // ViewBag.SaleList = new SelectList(_context.Sales, "ID", "CodVenda");
+            // Passar List Products para a view
+            //ViewBag.ProductList = new SelectList(_context.ProductLists, "ID", "Name");
+            ViewBag.ProductList = new SelectList(_context.Products, "ID", "Description");
+            return View();
+        }
+
+
+
+        // Adiciona produtos à ordem de venda
+        [HttpGet]
+        public IActionResult CreateProductList()
+        {
+
+            //ViewBag.SaleList = new SelectList(_context.Sales, "ID", "CodVenda");
+            // Passar List Products para a view
+            // ViewBag.ProductList = new SelectList(_context.ProductLists, "ID", "Name");
+            //ViewBag.ProductList = new SelectList(_context.Products, "ID", "Description");  // Description
+            // fazer uma lista nova incluindo acesso à base de dados categorias
+            var ProductListx = _context.Products
+                                               .Include(p => p.Category)  //inner join => a partir da chave estrangueiro quero o nome               
+                                               .Select(p => new {
+                                                   // coloca role à frente do nome na lista
+                                                   // funcao select [aparece nome do medico  combinado com a sua profissao]
+                                                   ID = p.ID,  // = p.ID
+                                                   Name = $"{p.Description} [{p.Category.Name}]"
+                                               });
+                                                
+
+
+            ViewBag.ProductList = new SelectList(ProductListx, "ID", "Name");
+
+            
+
+            // ViewBag.Categories = new SelectList(_context.Categories, "ID", "Name");
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult CreateProductList(ProductList productList)
+        {
+
+
+
+            if (ModelState.IsValid)
+            {
+
+                _context.ProductLists.Add(productList);
+                _context.SaveChanges();     // tens aqui varios pedido agora grava
+
+                // Toastr.SucessMessage tem de aparecer msg quando criar um novo
+                _toastNotification.AddSuccessToastMessage("Product sucessfully Created.");
+
+                return RedirectToAction("Index");
+                // return RedirectToAction(nameof(index)); -> outra forma de apresentar igual
+
+            }
+            //ViewBag.SaleList = new SelectList(_context.Sales, "ID", "CodVenda");
+            // Passar List Products para a view
+            //ViewBag.ProductList = new SelectList(_context.ProductLists, "ID", "Description");
+            return View(productList);
+        }
 
 
         private void SetupSales()
@@ -216,6 +471,18 @@ namespace CursoMod165.Controllers
         }
 
 
+
+        // Funcao para retorno do Codigo de venda
+        private static void GetCodigoVenda(out int codigoVenda)
+        {
+            int x = 1;
+            //if (DateTime.Today.DayOfWeek != DayOfWeek.Sunday)
+            //{
+            //    x = 8 - (int)DateTime.Today.DayOfWeek;
+            //}
+            
+            codigoVenda = (x + 4);
+        }
 
 
         // END

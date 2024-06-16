@@ -23,13 +23,13 @@
             <!-- Colocar o form name dentro de um grupo, para ficar mais organizado  -->
             <div class="form-group">
                 <label asp-for="EmployeeNumber" class="form-label"></label>
-                <input asp-for="EmployeeNumber" class="form-control" />
+                    <input asp-for="EmployeeNumber" class="form-control" />   <!--  asp-for="DateTime" -->
                 <span asp-validation-for="EmployeeNumber" class="text-danger"></span>
             </div>
             
             <div class="form-group">
                 <label asp-for="Name" class="form-label"></label>   <!--  Escreve Label class... é biblioteca bootstrap -->
-                <input asp-for="Name" class="form-control" />     <!-- recebe uma entrada de valor na var Name  -->
+                <input asp-for="Name" class="form-control" value="teste"/>     <!-- recebe uma entrada de valor na var Name  -->
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
 
@@ -63,7 +63,7 @@
 
             <div class="form-group">
                 <label asp-for="Birthday" class="form-label"></label>
-                <input asp-for="Birthday" class="form-control" />
+                    <input asp-for="Birthday" class="form-control" />   <!-- testar aqui DateTime nao funciona -->
                 <span asp-validation-for="Birthday" class="text-danger"></span>
             </div>
 

@@ -19,10 +19,19 @@
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
+
             <div class="form-group">
                 <!-- para copia o nome para nos novos camppos fazer shift + alt + "." "."-->
                 <!-- control-Label e não form-label -->
-                <label asp-for="Name" class="form-label"></label>  //
+                <!-- <label asp-for="CodCustomer" class="form-label"></label>    // Esconder Label -->
+                <input asp-for="CodCustomer" type="hidden" class="form-control" />  <!-- type="hidden" value="0001" disabled  ; value=(c)ViewBag.Num_Customer-->
+                <span asp-validation-for="CodCustomer " class="text-danger"></span> <!-- -->
+            </div>
+
+            <div class="form-group">
+                <!-- para copia o nome para nos novos camppos fazer shift + alt + "." "."-->
+                <!-- control-Label e não form-label -->
+                <label asp-for="Name" class="form-label"></label>  
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
@@ -31,6 +40,18 @@
                 <label asp-for="Address" class="form-label"></label>
                 <input asp-for="Address" class="form-control" />
                 <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ZipCode" class="form-label"></label>
+                <input asp-for="ZipCode" class="form-control" />
+                <span asp-validation-for="ZipCode" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="City" class="form-label"></label>
+                <input asp-for="City" class="form-control" />
+                <span asp-validation-for="City" class="text-danger"></span>
             </div>
 
             <div class="form-group">

@@ -1,4 +1,5 @@
-﻿@model CursoMod165.Models.Customer
+﻿<!-- aqui nao é um enumeravel, mas sim um registo com os respetivos campos -->
+@model CursoMod165.Models.Customer
 
 <h1>Create</h1>
 
@@ -13,6 +14,23 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
+            <!-- model.CodVenda -->
+            @* Nota: ESte numero deve de ser criado automaticamente, a partir de um viewbag ultimo nº + 1
+            http s://www.aspsnippets.com/questions/838569/Get-Id-of-last-Inserted-Record-using-Entity-Framework-in-ASPNet-Core-MVC/
+            *@
+              
+            <div class="form-group">
+                <!-- para copia o nome para nos novos camppos fazer shift + alt + "." "."-->
+                <!-- control-Label e não form-label -->
+                <!-- <label asp-for="CodCustomer " class="form-label"></label>   // Esconder Label -->
+                <input type="hidden" asp-for="CodCustomer " class="form-control" value="0" />  <!-- value="0001"  ; value=(c)ViewBag.Num_Customer-->
+                <span asp-validation-for="CodCustomer " class="text-danger"></span>
+            </div> 
+            
+            
+            
+            
+
             <div class="form-group">
                 <!-- para copia o nome para nos novos camppos fazer shift + alt + "." "."-->
                 <!-- control-Label e não form-label -->
@@ -26,6 +44,20 @@
                 <input asp-for="Address" class="form-control" />
                 <span asp-validation-for="Address" class="text-danger"></span>
             </div>
+
+            <div class="form-group">
+                <label asp-for="City" class="form-label"></label>
+                <input asp-for="City" class="form-control" />
+                <span asp-validation-for="City" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ZipCode" class="form-label"></label>
+                <input asp-for="ZipCode" class="form-control" />
+                <span asp-validation-for="ZipCode" class="text-danger"></span>
+            </div>
+
+            
 
             <div class="form-group">
                 <label asp-for="Birthday" class="form-label"></label>
@@ -54,10 +86,13 @@
             </div>
 
 
+
+
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
-
+            
+            
 
         </form>
 

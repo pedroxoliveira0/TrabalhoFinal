@@ -29,7 +29,7 @@ namespace CursoMod165.Models
         // Lista de produtos .... não sei bem como fazer
         [ValidateNever]         // exclude Attribute  from validation
         [ForeignKey("ProductID")]
-        public Customer Product { get; set; }
+        public Product Product { get; set; }
 
         [Display(Name = "Product")]
         [Required]

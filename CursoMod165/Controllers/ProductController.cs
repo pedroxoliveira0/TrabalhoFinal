@@ -1,9 +1,11 @@
 ﻿using CursoMod165.Data;
 using CursoMod165.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using NToastNotify;
+using static CursoMod165.CursoMod165Constants;
 
 namespace CursoMod165.Controllers
 {
@@ -72,6 +74,8 @@ namespace CursoMod165.Controllers
             // foi criado este metodo e assim tenho de tirar as linhas de codigo em cima que já estão no metodo
             this.SetupProductModel();
 
+            ViewBag.Categories = new SelectList(_context.Categories, "ID", "Name"); // teste para apagar
+
             return View();
             // return View();
         }
@@ -91,6 +95,9 @@ namespace CursoMod165.Controllers
                 _context.Products.Add(product);
                 _context.SaveChanges();     // tens aqui varios pedido agora grava
 
+                // Toastr.SucessMessage tem de aparecer msg quando criar um novo
+                _toastNotification.AddSuccessToastMessage("Product sucessfully Created.");
+
                 return RedirectToAction("Index");
                 // return RedirectToAction(nameof(index)); -> outra forma de apresentar igual
 
@@ -104,8 +111,35 @@ namespace CursoMod165.Controllers
             // foi criado este metodo e assim tenho de tirar as linhas de codigo em cima que já estão no metodo
             this.SetupProductModel();   // this.SetupStaffModel()
 
-            // Apresenta a Vista do product index
+            // Toastr.ERRORMessage aparecer msg em caso de falha 
+            _toastNotification.AddErrorToastMessage("Error - Product not Created.");
 
+            // Apresenta a Vista do product index
+            return View(product);
+        }
+
+
+        // #################################
+        //              Details 
+        // #################################
+        
+        //[HttpGet] // obtem dados da base de  dados, neste caso a partir do padrao
+        public IActionResult Details(int id)
+        {
+            
+
+            // retorna os dados da chave que entra aqui e vem da tabela
+            // usa-se ? porque pode não encontrar o dado e não pode ser null, quando colocamos o ? quer dizer que pode existir ou nao existir
+            Product? product = _context.Products.Find(id);  // Chave primaria = id
+
+
+            if (product == null) // se for diferente de null faz a vista
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            // Envia Lista de categorias para a vista
+            ViewBag.Categories = new SelectList(_context.Categories, "ID", "Name");
             return View(product);
         }
 
@@ -120,14 +154,6 @@ namespace CursoMod165.Controllers
             ViewBag.Titulo2 = "9 de Junho de 2024";
 
 
-            //ViewBag["CategoryList"] = new SelectList(_context.Customers, "ID", "Name");
-            ViewBag.CategoryList = new SelectList(_context.Categories, "ID", "Name");
-            //ViewBag.CategoryList = new SelectList(_context.Customers, "ID", "Name", "Description");
-
-            //ViewData["Enunciado"] = Enunciado;
-
-
-            //ViewBag["testID"] = new SelectList (_context.Products,"ID","Name");
 
             // retorna os dados da chave que entra aqui e vem da tabela
             // usa-se ? porque pode não encontrar o dado e não pode ser null, quando colocamos o ? quer dizer que pode existir ou nao existir
@@ -138,6 +164,9 @@ namespace CursoMod165.Controllers
             {
                 return RedirectToAction(nameof(Index));
             }
+
+            // Envia Lista de categorias para a vista
+            ViewBag.Categories = new SelectList(_context.Categories, "ID", "Name");
             return View(product);
         }
 
@@ -157,10 +186,66 @@ namespace CursoMod165.Controllers
 
             // Toastr.ERRORMessage aparecer msg em caso de falha 
             _toastNotification.AddErrorToastMessage("Error - Product not updated.");
+            //ViewBag.CategoryList = new SelectList(_context.Categories, "ID", "Name");
+            ViewBag.Categories = new SelectList(_context.Categories, "ID", "Name");
             return View();
         }
 
         // ####################################### end EDIT
+
+
+        [HttpGet] //METODO QUE VAI DEVOLVER A VISTA DE DELETE 
+        [Authorize(Policy = POLICIES.APP_POLICY_ADMIN.NAME)]  //  so o admin é que poode aceder ao delete, para evitar que pelo lado da vista se chame a pagina delete por URL
+        public IActionResult Delete(int id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            ViewBag.Categories = new SelectList(_context.Categories, "ID", "Name");
+            
+
+            Product? product = _context.Products.Find(id);
+
+            if (product == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View(product);
+        }
+
+
+        // para apagar o product só preciso do ID não preciso dos dados do product
+        // aqui a vista mantem o nome delete, mas a acção é delete confirm
+        // Testar isto : http s://localhost:8000/Product/Delete/1
+        [HttpPost, ActionName("Delete")]
+        [Authorize(Policy = POLICIES.APP_POLICY_ADMIN.NAME)]  //  delete so p/ admin , no lado do controlador para evitar que pelo lado da vista se chame a pagina delete por URL
+        public IActionResult DeleteConfirmed(int? id)
+        {
+            if (id == null)
+            {
+                // Toastr.ERRORMessage aparecer msg em caso de falha 
+                _toastNotification.AddErrorToastMessage("Error - Product not founded.");
+                return NotFound();
+            }
+
+            Product? product = _context.Products.Find(id);
+
+            if (product != null)
+            {
+
+                _context.Products.Remove(product);        // atualiza
+                _context.SaveChanges();                     // grava _context.SaveChanges();
+                // Toastr.SucessMessage tem de aparecer msg quando criar um novo
+                _toastNotification.AddSuccessToastMessage("Product sucessfully deleted.");
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View(product);
+        }
+
+        // delete 1
 
 
         // Funcao complementar, para troca de dados entre vista e controlador

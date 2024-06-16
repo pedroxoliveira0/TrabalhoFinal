@@ -1,50 +1,49 @@
 ﻿@model IEnumerable<CursoMod165.Models.ProductList>
+<!-- nao é: IEnumerable<CursoMod165.Models.ProductList> -->
 <!--  IEnumera.. é uma lista!   -->
-@* aqui apresento uma lista com o conteudo da dBase *@
 
 
-<h1>WareHouse Index</h1>
 
+<h1>Product List Index</h1>
 
 <p>
-    <!-- Usar interncionalizacao -->
     <!--  a proxima linha faz uma acção; cria a opcao de criar um novo customer   -->
-    <a class="btn btn-outline-primary" asp-action="Create">@SharedLocalizer["Create New"]</a>
-
-
+    <a class="btn btn-outline-primary" asp-action="Create">Create New</a>
 </p>
 
 
-
+<p>
+    <!--  a proxima linha faz uma acção; cria a opcao de criar um novo customer   -->
+    <a class="btn btn-outline-info" asp-action="Test1">Test 1</a>
+</p>
 
 <!-- Apresento 1º cabecalho e de seguinda num ciclo for o conteudo linha a linha da base de dados -->
 <!-- Faz Cabecalho da tabela -->
 <table class="table">
     <thead>
         <tr>
+            <th>
+                <!--  Nome  -->
+                @Html.DisplayNameFor(model => model.Sale.CodVenda)
+            </th>
 
             <th>
                 <!--   está só =  Descricao    -->
-                @Html.DisplayNameFor(model => model.Sale.Customer.Name)
+                @Html.DisplayNameFor(model => model.Product.Description)
 
             </th>
 
             <th>
-                <!--  Preço Product.Description -->
-                @Html.DisplayNameFor(model => model.Product.ID)
-            </th>
-
-            <th>
-                <!--  Quantidade  -->
+                <!--   está só =  Descricao    -->
                 @Html.DisplayNameFor(model => model.Quantity)
+
             </th>
 
-            <!-- Codigo da unidade th ou td bold ou nao-->
             <th>
-                <!-- Nome do produto dentro da category -->
+                <!--   está só =  Descricao    -->
                 @Html.DisplayNameFor(model => model.Price)
-            </th>
 
+            </th>
 
             <th>
                 <!-- Aqui vamos criar novos botoes na tabela: apagar, modificar etc  -->
@@ -65,38 +64,36 @@
         }
         <!-- para cada elemento do staff apresenta os seguintes campos -->
         <!-- Os campos tem de coincidir com os de cima -->
-        @foreach (var product in Model)
+        @foreach (var productList in Model)
         {
             <tr>
-
+                <td>
+                    <!-- arroba category.Name -->
+                    @Html.DisplayFor(modelItem => productList.Sale.CodVenda)
+                </td>
 
                 <td>
                     <!-- arroba description.Name -->
-                    @Html.DisplayFor(modelItem => product.Sale.Customer.Name)
+                    @Html.DisplayFor(modelItem => productList.Product.Description)
                 </td>
 
                 <td>
-                    <!-- arroba price -->
-                    @Html.DisplayFor(modelItem => product.Product.ID)
+                <td>
+                    <!-- arroba category.Name -->
+                        @Html.DisplayFor(modelItem => productList.Quantity)
                 </td>
 
                 <td>
-                    <!-- arroba quantity -->
-                    @Html.DisplayFor(modelItem => product.Quantity)
-                </td>
-
-
-
-                <td>
-                    <!-- Nome do produto dentro da category -->
-                    @Html.DisplayFor(modelItem => product.Price)
+                    <!-- arroba description.Name -->
+                        @Html.DisplayFor(modelItem => productList.Price)
                 </td>
 
                 <td>
                     <!--  td é uma celula ou coluna na pagina html -->
-                    @*<a class="btn btn-outline-success" asp-action="Details" asp-route-id="@product.ID">Details</a>*@
-                    <a class="btn btn-outline-warning" asp-action="Edit" asp-route-id="@product.ID">Edit</a>
-                    <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@product.ID">Delete</a>
+
+                    <a class="btn btn-outline-warning" asp-action="Edit" asp-route-id="@productList.ID">Edit</a>
+                    <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@productList.ID">Delete</a>
+                    <a class="btn btn-outline-secondary" asp-action="ProductsByCategory" asp-route-id="@productList.ID">Products By Category</a> @**@
 
                 </td>
             </tr>
@@ -105,3 +102,5 @@
 
 
 </table>
+
+

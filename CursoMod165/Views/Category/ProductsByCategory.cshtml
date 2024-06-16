@@ -1,15 +1,14 @@
-﻿@model IEnumerable<CursoMod165.Models.Category>
+﻿@model IEnumerable<CursoMod165.Models.Product>
 <!--  IEnumera.. é uma lista!   -->
 @* aqui apresento uma lista com o conteudo da dBase *@
 
 
-<h1>Category Index</h1>
+<h1>Products List By Category : </h1>
 
-<p>
-    <!--  a proxima linha faz uma acção; cria a opcao de criar um novo customer   -->
-    <a class="btn btn-outline-primary" asp-action="Create">Create New</a>
-</p>
+<h3>    @ViewBag.CategoryName</h3>
+<br />
 
+<!-- Apresenta lista de produtos por categoria -->
 
 <!-- Apresento 1º cabecalho e de seguinda num ciclo for o conteudo linha a linha da base de dados -->
 <!-- Faz Cabecalho da tabela -->
@@ -17,21 +16,23 @@
     <thead>
         <tr>
             <th>
-                <!--  Nome  -->
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-
-            <th>
-                <!--   está só =  Descricao    -->
+                <!--  Nome do Produto  -->
                 @Html.DisplayNameFor(model => model.Description)
-
             </th>
+
+            @*
+            <th>
+                <!--   Categoria associada    -->
+                @Html.DisplayNameFor(model => model.Category.Name)
+
+            </th> *@
+
            
             <th>
                 <!-- Aqui vamos criar novos botoes na tabela: apagar, modificar etc  -->
                 <!-- o que é isto ??? -->
                 <!-- titulo da tab para as accoes possiveis na tabela -->
-                Actions
+                @* Actions *@
             </th>
         </tr>
     </thead>
@@ -41,30 +42,28 @@
     <tbody> 
         @if (!Model.Any())
         {
-            <tr>No Data (A base de dados nao tem qualquer valor preenchido) </tr>
+            <tr>No Data  </tr> <!-- (A base de dados nao tem qualquer valor preenchido) -->
             
         } 
     <!-- para cada elemento do staff apresenta os seguintes campos -->
     <!-- Os campos tem de coincidir com os de cima -->
-        @foreach (var category in Model)
+        @foreach (var product in Model)
         {
         <tr>
             <td>
                 <!-- arroba category.Name -->
-                @Html.DisplayFor(modelItem => category.Name)
+                @Html.DisplayFor(modelItem => product.Description)
             </td>
 
+            @*
             <td>
                 <!-- arroba description.Name -->
-                @Html.DisplayFor(modelItem => category.Description)
-            </td>
+                    @Html.DisplayFor(modelItem => product.Category.Name)
+            </td> *@
 
             <td>
                 <!--  td é uma celula ou coluna na pagina html -->
-                   
-                <a class="btn btn-outline-warning" asp-action="Edit" asp-route-id="@category.ID">Edit</a>
-                <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@category.ID">Delete</a>
-                    <a class="btn btn-outline-secondary" asp-action="ProductsByCategory" asp-route-id="@category.ID">Products By Category</a> @**@
+                
 
             </td>
         </tr>
@@ -73,3 +72,10 @@
     
 
 </table>
+
+
+<div class="form-group">
+    <!--  fim do formulario   -->
+    <!-- link que Sai e volta para a Lista -->
+    <a asp-action="Index">Back to List</a>
+</div>

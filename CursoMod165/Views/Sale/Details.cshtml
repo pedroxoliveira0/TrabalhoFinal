@@ -7,13 +7,31 @@
 
 <hr />
 
-<br />
-<h3>Customer ID :    @ViewBag.ClienteID </h3>
+<p>
+    <!-- Usar interncionalizacao -->
+    <!--  a proxima linha faz uma acção; cria a opcao de criar um novo customer   -->
+    @* <a class="btn btn-outline-primary" asp-action="Create">@SharedLocalizer["Create New"]</a> *@
+
+    <a class="btn btn-outline-primary" asp-action="CreateProductList">CreateProductList</a>
+
+</p>
+
+<span><h4>Order Number :    @ViewBag.NumVenda      /      Customer ID :    @ViewBag.ClienteID </h4></span>
+
 <br />
 <div container>
     <div class="row">
-        <div class="col col-lg-2"><b>Order Number : </b></div>
-        <div class="col-md-auto"><p>@ViewBag.NumVenda</p</div>
+        <div class="col col-lg-2"><b>Customer Name: : </b></div>
+        <div class="col-md-auto"><p>@ViewBag.ClienteName</p</div>
+    </div>
+    <div class="row">
+        <div class="col col-lg-2"><b>Email : </b></div>
+        <div class="col-md-auto"><p>@ViewBag.Email</p</div>
+    </div>
+
+     <div class="row">
+        <div class="col col-lg-2"><b>Address : </b></div>
+        <div class="col-md-auto"><p>@ViewBag.Address @ViewBag.Zipcode @ViewBag.City</p</div>
     </div>
     <div class="row">
         <div class="col col-lg-2"><b>Observations : </b></div>
@@ -28,7 +46,9 @@
 <!--Falta create NEW -->
 <p>
     <!--  a proxima linha faz uma acção; cria a opcao de criar um novo customer   -->
-    <a class="btn btn-outline-primary" asp-action="Create">Add Product</a>
+    <!--  Posso enviar talvez o CodVenda aqui :-->
+    <!-- <a class="btn btn-outline-warning" asp-action="Edit" asp-route-id="(c)productList.ID">Edit</a> -->
+    <a class="btn btn-outline-primary" asp-action="AddProductToList">@ViewBag.NumVenda</a>
     <br />
 </p>
 
@@ -56,7 +76,7 @@
 
             <th>
                 <!--  Quantidade  -->
-                @Html.DisplayNameFor(model => model.Quantity)
+                @Html.DisplayNameFor(model => model.Product.Description)  <!--  Testar product.description / Quantity-->
             </th>
                 
             <!-- Codigo da unidade th ou td bold ou nao-->
@@ -108,7 +128,7 @@
 
             <td>
                     <!-- arroba quantity -->
-                    @Html.DisplayFor(modelItem => productList.Quantity)
+                    @Html.DisplayFor(modelItem => productList.Product.Description)
             </td>
 
             <!-- Codigo da unidade -->

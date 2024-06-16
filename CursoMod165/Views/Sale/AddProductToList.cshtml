@@ -1,0 +1,53 @@
+﻿ @model IEnumerable<CursoMod165.Models.Product> 
+ @* *@
+<!--  IEnumera.. é uma lista!   -->
+@* aqui apresento uma lista com o conteudo da dBase *@
+
+<h1>List Product Compose</h1>
+
+<!-- Dados resumo da venda so cabeçalho da venda; sem produtos -->
+<h4>Add Product to List Index</h4>
+
+<hr />
+
+
+
+
+
+<!-- GRid que permite ordenar Falta fazer tradução com sharelocalizer: -->
+@(
+Html
+        .Grid(Model)
+        .Build(columns =>
+        {
+            columns.Add(ap => ap.Description).Titled("Description");
+            columns.Add(ap => ap.Price).Titled("Unit. Price");
+            columns.Add(ap => ap.Quantity).Titled("Quantity");
+            columns.Add(ap => ap.Category.Name).Titled("Category");
+            columns.Add(ap => ap.SystemUnity).Titled("Unity");
+
+            // tenho de criar um registo no productList, com mesmo nº Venda e produto escolhido, se possivel 
+            // c/ quantidade e respetivo preço
+            columns.Add(ap => Html.ActionLink("AddToList", "AddToList", new { id = ap.ID }, new { @class = "btn btn-outline-success" })); // @class = "btn btn-primary"
+            @* columns.Add(Model => Model.ID).RendeedAs(Model =>
+                Html.ActionLink("Edit", "Edit", new { id = Model.ID })).Css("btn")
+            *@
+            @*
+            columns.Add(ap => Html.ActionLink("Edit", "Edit", new { id = ap.ID }, new { @class = "btn btn-outline-warning" }));
+            columns.Add(ap =>
+                Html.ActionLink("Delete", "Delete", new { id = ap.ID }, new { @class = "btn btn-outline-danger" })); // class = "btn btn - primary"
+            *@
+
+            
+        })
+        .Filterable()
+        .Sortable()
+
+)
+
+<div class="form-group">
+    
+    <a asp-action="Index">Back to Order Head</a> @* devia returnar para Details/id*@
+</div>
+
+@**@

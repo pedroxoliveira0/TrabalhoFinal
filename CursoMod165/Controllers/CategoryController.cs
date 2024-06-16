@@ -1,14 +1,20 @@
 ﻿using CursoMod165.Data;
 using CursoMod165.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Localization;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using NToastNotify;   // para poder usar os toastr notifications
+using System.Text;
 
 namespace CursoMod165.Controllers
 {
-	public class CategoryController : Controller
+    // só os utilizadores logados em acesso ao menu 
+    // (esta a dar erro:) [Authorize(Policy = POLICIES.APP_POLICY.NAME)]  // para activar o login nesta vista
+
+    public class CategoryController : Controller
 	{
 		
 		// aqui é definida a ligação para a base de dados
@@ -37,6 +43,9 @@ namespace CursoMod165.Controllers
 
 
 
+       
+
+
         // retorna dados base de dados para a view index
         public IActionResult Index()
         {
@@ -45,10 +54,27 @@ namespace CursoMod165.Controllers
             return View(categories);  // tenho de colocar aqui a tabela de base de dados se não dá erro por retornar Null
         }
 
-		
 
-		// Http Get - para criar novos registos
-		[HttpGet]
+        public IActionResult ProductsByCategory(int id)
+        {
+            Category? category = _context.Categories.Find(id);
+            ViewBag.CategoryName=category.Name;
+            
+            var productsbycategory = _context
+                                                .Products
+                                                .Include(c => c.Category)
+                                                .Where(c => c.Category.ID == id)    
+                                                .ToList();  // para ir à base de dados usar "_XXXXX"
+                                                            // return View("../Home/Index");
+
+             
+            return View(productsbycategory);  // tenho de colocar aqui a tabela de base de dados se não dá erro por retornar Null
+
+        }
+
+
+        // Http Get - para criar novos registos
+        [HttpGet]
 		public IActionResult Create()
 		{
 			return View();
