@@ -29,6 +29,20 @@ using System.Runtime.Intrinsics.X86;
 // pedroxoliveira0 (GitHub)
 // GitHub#1234
 
+// My GitHub:
+// http.s://github.com/pedroxoliveira0/TrabalhoFinal
+
+// Info:
+// http s://www.learnrazorpages.com/razor-pages/forms/dates-and-times
+// http s://ej2.syncfusion.com/aspnetcore/documentation/pivot-table/number-formatting
+// strings:  http s://learn.microsoft.com/en-us/dotnet/standard/base-types/creating-new  
+// insert Dbase Data on controller:  http s://learn.microsoft.com/en-us/aspnet/core/tutorials/first-mvc-app/working-with-sql?view=aspnetcore-8.0&tabs=visual-studio
+// Varias Tabelas para View: http s://stackoverflow.com/questions/43791585/asp-net-returning-multiple-variables-to-view
+
+// Questionario:
+// http s://formacao.cinel.pt/questionnaires.personal
+// http s://formacao.cinel.pt/#/
+// http s://formacao.cinel.pt/questionnaireevents/start.popup?courseaction_id=4378&trainer_code=0&coursemodule_id=36846&entity_code=28012&entity_type=3&entity_answer_type=3&questionnaire_code=QFORMANDO&token=b46d651e5f4591934bbc3f51482f7b8ba47b8cbf74e8e60df6809bd92e88d2f0
 namespace CursoMod165.Controllers
 {
     public class HomeController : Controller
@@ -57,7 +71,8 @@ namespace CursoMod165.Controllers
         }
 
 
-		// JOB STATEMENT
+
+        // JOB STATEMENT
         // controlo da pagina enunciado do trabalho
         public IActionResult JobStatement()
         {

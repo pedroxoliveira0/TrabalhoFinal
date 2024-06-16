@@ -208,6 +208,8 @@ namespace CursoMod165.Controllers
         {
 
             this.SetupAppointments();
+            ViewBag.campo1 = "10@";  // passar valores para a celula na vista
+            //appointment.Informations = ViewBag.campo1;  // ver se passa OK funciona
             return View();
         }
 
@@ -296,6 +298,8 @@ namespace CursoMod165.Controllers
             }
 
             this.SetupAppointments();
+            ViewBag.campo1 = "10@";  // passar valores para a celula na vista
+            appointment.Informations = ViewBag.campo1;  // ver se passa OK funciona
             return View(appointment);
 
         }
@@ -380,13 +384,14 @@ namespace CursoMod165.Controllers
             // uma possibilidade o role ser condicionado só tem acesso que nos queremos
             //_context.Staffs.Where(s => s.StaffRoleID != 1);     // esta solução é provisoria por nao ser escalável
 
-
+            // Quero construir um objecto (Lista) constituida por: o nome do ID + [ o nome do staff roll ]  staffroll = profissao
             //    esta é a solução correta ver staff roles models
             var staffList = _context.Staffs
                                     .Include(s => s.StaffRole)   // s são todos os elementos que estão no dB set
                                     .Where(s => s.StaffRole.CanDoAppointments == true)
                                     .Select(s => new {
-                                                        // coloca role à frente do nome na lista
+                                        // coloca role à frente do nome na lista
+                                        // funcao select [aparece nome do medico  combinado com a sua profissao]
                                                         ID = s.ID,
                                                         Name = $"{s.Name} [{s.StaffRole.Name}]"
                                                     });

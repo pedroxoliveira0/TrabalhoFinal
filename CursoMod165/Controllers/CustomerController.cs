@@ -2,8 +2,10 @@
 using CursoMod165.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 using static CursoMod165.CursoMod165Constants;
 
 namespace CursoMod165.Controllers
@@ -35,18 +37,46 @@ namespace CursoMod165.Controllers
         [HttpGet]
         public IActionResult Create() 
         {
+            //ViewBag.CustomerList = new SelectList(_context.Customers, "ID", "Name");
+
+            //ViewBag.CustomerList = new SelectList(_context.Customers, "ID");
+            //var l = ViewBag.CustomerList.Last();    
+            // Procura no ultimo registo:
+            //var lastcustomers = _context.Customers.l;  //  .Find().   last_insert_id() method.
+            //var c = _context.Customers.;
+            //var1 last_insert_id() method.context.Customers.last_insert_id()
+
+
+            // Teste passar valores para o campo na vista
+            //ViewBag.Num_Customer = l + 1;    // Esta OK; passar valores para a celula na vista
+
+
+            // O cod. Seguinte Esta ok: 
+            //var lastcustomers = _context.Customers.Find(1);
+            //ViewBag.Num_Customer = lastcustomers + 1;
+
             return View();
 
         }
         // 
         [HttpPost]
-        public IActionResult Create(Customer customer) 
+        public IActionResult Create(Customer customer)  // nao devia ser (int id) 
         {
+            //customer.USNS = "0";
             if (ModelState.IsValid)
             {
+                
                 // TO Do Criar novo customer caso contrario; return view customer com dados anteriores
                 _context.Customers.Add(customer);
+                //var Num = customer.ID;
+                //Customer? customer = _context.Customers.Find(Num);
+
+                //customer.CodCustomer=customer.ID.ToString();
                 _context.SaveChanges();     // tens aqui varios pedido agora grava
+                ViewBag.id = customer.ID; 
+                customer.CodCustomer= customer.ID.ToString();
+                _context.Customers.Update(customer);
+                _context.SaveChanges();
 
                 return RedirectToAction("Index");
 
@@ -73,20 +103,7 @@ namespace CursoMod165.Controllers
             return View(customer);
         }
 
-        // Edit NUm -> não sei se é para colocar isto
-        public IActionResult EditNum(int num)
-        {
-            // retorna os dados da chave que entra aqui e vem da tabela
-            // usa-se ? porque pode não encontrar o dado e não pode ser null, quando colocamos o ? quer dizer que pode existir ou nao existir
-            // o ? permite validar a entrada não deixando entrar erros
-            Customer? customer = _context.Customers.Find(num);  // Chave primaria = id  
-
-            if (customer == null) // se for diferente de null faz a vista
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            return View(customer);
-        }
+        
 
 
         // Fim Edit Num
@@ -113,6 +130,7 @@ namespace CursoMod165.Controllers
             { 
                 _context.Customers.Update(customer);        // atualiza
                 _context.SaveChanges();                     // grava
+                
                 return RedirectToAction(nameof(Index));   // volta para a pagina principal, para o cliente saber que gravou, mostra lista
             }
             
@@ -157,7 +175,7 @@ namespace CursoMod165.Controllers
             {
                 
                 _context.Customers.Remove(customer);        // atualiza
-                _context.SaveChanges();                     // grava
+                _context.SaveChanges();                     // grava _context.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
 

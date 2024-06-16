@@ -1,0 +1,88 @@
+﻿@model IEnumerable<CursoMod165.Models.ProductList>
+@* @model CursoMod165.Models.Sale *@
+
+<h1>Add To List Quantity</h1>
+
+<h4>Add Product to Order</h4>
+
+<hr />
+
+
+
+@*// ... stuff  *@
+<!-- So tenho de por na view (form) os valores que depois passam para aDBase (tabela) -->
+<!--  COlocar BAckground color  papayawhip; gainsboro  -->
+<body style="background-color:floralwhite">
+    <!--   -->
+    <!--  Criar matriz para apresentacao dos dados  -->
+    <div class="row">
+        <div class="col-md-4">
+
+            <form asp-action="Create">
+                <!-- se for dada a accao create  -->
+                <!--  valida formatos definidos no modelo -->
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                @*
+                <!-- Colocar o form name dentro de um grupo, para ficar mais organizado  -->
+                <div class="form-group">
+                    <!-- <label asp-for="CodVenda" class="form-label"></label>    retira titulo  -->
+                    <input type="hidden" asp-for="CodVenda" class="form-control" value="0" />   <!-- value="0" -->
+                    <span asp-validation-for="CodVenda  " class="text-danger"></span>
+                </div>
+
+                <!-- A quantidade é inserida pelo utilizador -->
+                <div class="form-group">
+                    <label asp-for="ProductList.Quantity" class="form-label"></label>   <!--  Escreve Label class... é biblioteca bootstrap -->
+                    <input asp-for="Quantity" class="form-control" />     <!-- recebe uma entrada de valor na var Quantity  -->
+                    <span asp-validation-for="Quantity" class="text-danger"></span>
+                </div>
+
+                
+                <!-- O preço é copiado da tabela dos produtos -->
+                <div class="form-group">
+                    <label asp-for="Price" class="form-label"></label>   <!--  Escreve Label class... é biblioteca bootstrap -->
+                    <input asp-for="Price" class="form-control" />     <!-- recebe uma entrada de valor na var Price  -->
+                    <span asp-validation-for="Price" class="text-danger"></span>
+                </div>
+
+
+
+                <!-- Temos de adicionar campo para preenchimento da Chave/nome role  -->
+                <div class="form-group">
+                    <label asp-for="CustomerID" class="form-label"></label>
+                    <!-- para termos acesso à informação da tabela secindaria temos de fazer uma lista de selecção -->
+                    <!-- Temos de passar uma variavel para casar com o numero da tabela secundaria roles -->
+                    <!--  <select asp-for="CategoryID" class="form-control" asp-items="ViewBag.StaffRoles"></select>  -->
+
+                    <select asp-for="CustomerID" class="form-control" asp-items="ViewBag.CustomerList">
+                        <!-- ViewBag.CategoryList / ViewBag.Categories-->
+                    </select>
+
+                    <span asp-validation-for="CustomerID" class="text-danger"></span>
+                </div>
+                *@
+
+                @*
+                // aqui passamos dados entre tabela Staffroles e Staff
+                ViewBag.Categories = new SelectList(_context.Categories, "ID", "Name");
+                ViewBag.FrutoCategoriesID = _context.Categories.First(c => c.Name == "Fruto").ID;
+                *@
+
+
+
+                <div class="form-group">
+                    <!--  fim do formulario   -->
+                    <input type="submit" value="Create" class="btn btn-primary" />  <!-- cria registo key -->
+                    <!-- este create é um do botao, final para submeter todos os dados  -->
+                </div>
+
+
+            </form>
+
+        </div>
+    </div>
+
+
+    <!-- Nova linha -->
+</body> 

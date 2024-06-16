@@ -46,43 +46,15 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="JobStatement">Job Statement</a>
                         </li>
 
-                        <!-- Tab Categories -->
+
+                        <!-- Pagina Test -->
+                        <!-- Tab Job Statement-->
                         <li class="nav-item">
                             <!-- o que esta dentro de <> sao as propriedades -->
                             <!-- faz aparecer "botao -> Mypage no cabecalho da pagina -->
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Category" asp-action="Index">Categories</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="ProductList" asp-action="Index">Order List</a>
                         </li>
 
-
-                        <!-- Tab Products -->
-                        <li class="nav-item">
-                            <!-- o que esta dentro de <> sao as propriedades -->
-                            <!-- faz aparecer "botao -> Mypage no cabecalho da pagina -->
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Product" asp-action="Index">Products</a>
-                        </li>
-
-
-                        <!-- Tab Customers-->
-                        <li class="nav-item">
-                            <!-- Para adicionar o menu no topo ao lado do menu -->
-
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Customer" asp-action="Index">Customers</a>
-                        </li>
-
-
-                        <!-- Tab Sales-->
-                        <li class="nav-item">
-                            <!-- o que esta dentro de <> sao as propriedades -->
-                            <!-- faz aparecer "botao -> Sales com caminho para view Sales.Index -->
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Sale" asp-action="Index">Sales</a>
-                        </li>
-
-                        <!-- Tab WareHouse-->
-                        <li class="nav-item">
-                            <!-- Para adicionar o menu no topo ao lado do menu -->
-
-                            <a class="nav-link text-dark" asp-area="" asp-controller="WareHouse" asp-action="Index">WareHouse</a>
-                        </li>
 
 
                         <!-- se não tiver logado nao mostra cabecalho -->
@@ -90,7 +62,40 @@
                         {*@
                             @if ((await _authorizationService.AuthorizeAsync(User, CursoMod165Constants.POLICIES.APP_POLICY.NAME)).Succeeded)
                             {
-                               <!-- aqui colocar customers -->
+
+                            <!-- Novos tabs do trabalho aqui: (Acesso condicionado Geral) -->
+                            <!-- Para aceder temos de estar Logados : -->
+                            <!-- Tab Categories -->
+                            <li class="nav-item">
+                                <!-- o que esta dentro de <> sao as propriedades -->
+                                <!-- faz aparecer "botao -> Mypage no cabecalho da pagina -->
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Category" asp-action="Index">Categories</a>
+                            </li>
+
+
+                            <!-- Tab Products -->
+                            <li class="nav-item">
+                                <!-- o que esta dentro de <> sao as propriedades -->
+                                <!-- faz aparecer "botao -> Mypage no cabecalho da pagina -->
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Product" asp-action="Index">Products</a>
+                            </li>
+                                
+                                <!-- aqui colocar customers -->
+                                <!-- Tab Customers-->
+                                <li class="nav-item">
+                                    <!-- Para adicionar o menu no topo ao lado do menu -->
+
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Customer" asp-action="Index">Customers</a>
+                                </li>
+
+
+                                <!-- Tab Sales-->
+                                <li class="nav-item">
+                                    <!-- o que esta dentro de <> sao as propriedades -->
+                                    <!-- faz aparecer "botao -> Sales com caminho para view Sales.Index -->
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Sale" asp-action="Index">Sales</a>
+                                </li>
+
 
                                 <li class="nav-item">
                                     <!-- Para adicionar o menu no topo ao lado do menu -->
@@ -98,7 +103,7 @@
 
                                 </li>
 
-                                
+            
 
                             }
                             @if ((await _authorizationService.AuthorizeAsync(User, CursoMod165Constants.POLICIES.APP_POLICY_ADMIN.NAME)).Succeeded)

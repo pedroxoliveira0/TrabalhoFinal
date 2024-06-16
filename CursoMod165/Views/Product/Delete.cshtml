@@ -4,4 +4,105 @@
 
 <h4>Product</h4>
 
+<h3 class="text-danger"> Are you sure you want to delete this Product?</h3>    <!--  alterámos a letra para ser mais perceptivel -->
+
+
 <hr />
+
+<div>
+    <!-- botao no topo -->
+    <a class="btn btn-outline-info" asp-action="Index">Back to List</a>    <!-- o "a" é para fazer link aparece a azul na pagina  -->
+
+</div>
+
+<body> <!--  style="background-color:darkolivegreen" -->
+
+
+    <!--  Criar matriz para apresentacao dos dados  -->
+    <div class="row">
+        <div class="col-md-4">
+
+            <form asp-action="Delete">
+                <!-- se for dada a accao create  -->
+                <!--  valida formatos definidos no modelo -->
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+
+                <!-- Colocar o form name dentro de um grupo, para ficar mais organizado  -->
+                <div class="form-group">
+                    <label asp-for="Description" class="form-label"></label>
+                    <input asp-for="Description" class="form-control" disabled />
+                    <span asp-validation-for="Description  " class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Price" class="form-label"></label>   <!--  Escreve Label class... é biblioteca bootstrap -->
+                    <input asp-for="Price" class="form-control" disabled />     <!-- recebe uma entrada de valor na var Price  -->
+                    <span asp-validation-for="Price" class="text-danger"></span>
+                </div>
+
+                <!--  Não estava a criar o registo pk o campo address não era preenchido -->
+                <div class="form-group">
+                    <label asp-for="Quantity" class="form-label"></label>
+                    <input asp-for="Quantity" class="form-control" disabled />
+                    <span asp-validation-for="Quantity" class="text-danger"></span>
+                </div>
+
+                <!-- Importante para envio dos produtos por transporte-->
+                <div class="form-group">
+                    <label asp-for="Weight" class="form-label"></label>
+                    <input asp-for="Weight" class="form-control" disabled />
+                    <span asp-validation-for="Weight" class="text-danger"></span>
+                </div>
+
+                <!--  ver se o Link Foto estava a dar problema ... -->
+                <div class="form-group">
+                    <label asp-for="LinkFoto" class="form-label"></label>
+                    <input asp-for="LinkFoto" class="form-control" disabled />
+                    <span asp-validation-for="LinkFoto" class="text-danger"></span>
+                </div>
+
+
+
+                <!-- Temos de adicionar campo para preenchimento da Chave/nome role  -->
+                <div class="form-group">
+                    <label asp-for="CategoryID" class="form-label"></label>
+                    <!-- para termos acesso à informação da tabela secindaria temos de fazer uma lista de selecção -->
+                    <!-- Temos de passar uma variavel para casar com o numero da tabela secundaria roles -->
+                    <!--  <select asp-for="CategoryID" class="form-control" asp-items="ViewBag.StaffRoles"></select>  -->
+
+                    <select asp-for="CategoryID" class="form-control" asp-items="ViewBag.Categories" disabled>
+                        <!-- ViewBag.CategoryList -->
+                    </select>
+
+                    <span asp-validation-for="CategoryID" class="text-danger"></span>
+                </div>
+
+
+                <!--  Agora temos de adicionar aqui group id= specialty-->
+                <div id="form-group-systemunity" class="form-group">
+                    <label asp-for="SystemUnity" class="form-label"></label>
+                    <select asp-for="SystemUnity" class="form-control" asp-items="Html.GetEnumSelectList<SystemUnity>()" disabled></select>
+                    <!--// Programacao dinamica  , devolve um parametrico (com se altera um dado do objecto altera todos) -->
+
+                    <span asp-validation-for="SystemUnity" class="text-danger"></span>
+                </div>
+
+
+
+                <div class="form-group">
+                    <!--  fim do formulario   -->
+                    <input type="submit" value="Delete" class="btn btn-danger" />  <!-- cria registo key -->
+                    <!-- este create é um do botao, final para submeter todos os dados  -->
+                </div>
+
+
+
+            </form>
+
+        </div>
+    </div>
+
+
+    <!-- Nova linha -->
+</body> 
