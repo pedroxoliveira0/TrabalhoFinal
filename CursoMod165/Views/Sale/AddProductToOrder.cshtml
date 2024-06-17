@@ -1,6 +1,6 @@
 ﻿@model CursoMod165.Models.ProductList
 @* aqui é o cabecalho ... da vista *@
-<h1>Create</h1>
+<h1>Add</h1>
 
 <h4>Add Product To Order List</h4>
 
@@ -19,6 +19,12 @@
     <!-- botao no topo -->
     <a class="btn btn-outline-info" asp-action="Index">Back to List</a>    <!-- o "a" é para fazer link aparece a azul na pagina  -->
 
+
+</div>
+
+<div>
+    <p>Codigo de Venda : </p>
+    <p> @ViewBag.SaleID </p>
 </div>
 
 
@@ -33,17 +39,17 @@
     <div class="row">
         <div class="col-md-4">
 
-            <form asp-action="Edit">
-                <!-- se for dada a accao create  -->
+            <form asp-action="AddProductToOrder">
+                <!-- se for dada a accao create  ^Nome da Vista  -->
                 <!--  valida formatos definidos no modelo -->
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
 
                
-
+                <!-- O valor do preço é atualizado automaticamente -->
                 <div class="form-group">
-                    <label asp-for="Price" class="form-label"></label>   <!--  Escreve Label class... é biblioteca bootstrap -->
-                    <input asp-for="Price" class="form-control" />     <!-- recebe uma entrada de valor na var Price  -->
+                    <!-- <label asp-for="Price" class="form-label"></label> -->  <!--  Escreve Label class... é biblioteca bootstrap -->
+                    <input asp-for="Price" type="hidden" class="form-control" value="0"/>     <!-- recebe uma entrada de valor na var Price  -->
                     <span asp-validation-for="Price" class="text-danger"></span>
                 </div>
 
@@ -66,14 +72,15 @@
                     <!--  <select asp-for="ProductID" class="form-control" asp-items="ViewBag.StaffRoles"></select>  -->
                     
                     <select asp-for="ProductID" class="form-control" asp-items="ViewBag.ProductList">
-                        <!-- ViewBag.ProductList -->
+                       
+                    
                     </select>
 
                     <span asp-validation-for="ProductID" class="text-danger"></span>
                 </div>
 
                
-                <!-- Temos de adicionar campo para preenchimento da Chave/nome role  -->
+                <!-- O nome da chave ja vem preenchido   -->
                 <div class="form-group">
                     <label asp-for="SaleID" class="form-label"></label>
                     <!-- para termos acesso à informação da tabela secindaria temos de fazer uma lista de selecção -->
@@ -81,30 +88,26 @@
                     <!--  <select asp-for="SaleID" class="form-control" asp-items="ViewBag.StaffRoles"></select>  -->
 
                     <select asp-for="SaleID" class="form-control" asp-items="ViewBag.SaleList">
+                        <!-- asp-items="ViewBag.SaleList"   ViewBag.SaleID-->
                         <!-- ViewBag.SaleList -->
                     </select>
 
                     <span asp-validation-for="SaleID" class="text-danger"></span>
                 </div>
 
-               
-
-               
-
-
-
+ 
 
                 <div class="form-group">
                     <!--  fim do formulario   -->
-                    <input type="submit" value="Create" class="btn btn-primary" />  <!-- cria registo key -->
+                    <input type="submit" value="Add" class="btn btn-primary" />  <!-- cria registo key -->
                     <!-- este create é um do botao, final para submeter todos os dados  -->
+                   
                 </div>
 
 
 
-
-
             </form>
+
 
         </div>
     </div>

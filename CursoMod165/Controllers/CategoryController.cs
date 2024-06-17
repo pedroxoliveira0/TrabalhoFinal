@@ -77,7 +77,13 @@ namespace CursoMod165.Controllers
         [HttpGet]
 		public IActionResult Create()
 		{
-			return View();
+			// Teste como criar um novo indice de dados:
+            // Category Nova_Categoria = new Category();
+            // Nova_Categoria.Name = "Especiarias";
+            // Nova_Categoria.Description = "Cat. do tipo Especiarias";
+
+
+            return View();
 		}
 
         

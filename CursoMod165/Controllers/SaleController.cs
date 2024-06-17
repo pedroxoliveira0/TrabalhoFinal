@@ -177,6 +177,7 @@ namespace CursoMod165.Controllers
         {
             Sale? sale = _context.Sales.Find(id);
 
+            ViewBag.SaleID = id;
             ViewBag.NumVenda = sale.CodVenda;
             //ViewBag.Nome = sale.Customer.Name;
             ViewBag.Obs = sale.Observations;    
@@ -388,35 +389,20 @@ namespace CursoMod165.Controllers
 
         // Adiciona produtos à ordem de venda
         [HttpGet]
-        public IActionResult CreateProductList()
+        public IActionResult AddProductToOrder()
         {
-
-            //ViewBag.SaleList = new SelectList(_context.Sales, "ID", "CodVenda");
-            // Passar List Products para a view
-            // ViewBag.ProductList = new SelectList(_context.ProductLists, "ID", "Name");
-            //ViewBag.ProductList = new SelectList(_context.Products, "ID", "Description");  // Description
-            // fazer uma lista nova incluindo acesso à base de dados categorias
-            var ProductListx = _context.Products
-                                               .Include(p => p.Category)  //inner join => a partir da chave estrangueiro quero o nome               
-                                               .Select(p => new {
-                                                   // coloca role à frente do nome na lista
-                                                   // funcao select [aparece nome do medico  combinado com a sua profissao]
-                                                   ID = p.ID,  // = p.ID
-                                                   Name = $"{p.Description} [{p.Category.Name}]"
-                                               });
-                                                
-
-
-            ViewBag.ProductList = new SelectList(ProductListx, "ID", "Name");
-
             
 
-            // ViewBag.Categories = new SelectList(_context.Categories, "ID", "Name");
+            // envia p vista lista Produtos e vendas
+            this.SetupProductList();
             return View();
         }
 
+
+
+
         [HttpPost]
-        public IActionResult CreateProductList(ProductList productList)
+        public IActionResult AddProductToOrder(ProductList productList)
         {
 
 
@@ -425,22 +411,37 @@ namespace CursoMod165.Controllers
             {
 
                 _context.ProductLists.Add(productList);
+                // Procurar preço com ProdutoID
+                Product? product = _context.Products.Find(productList.ProductID);
+                ViewBag.Price = product.Price; 
+
+                // Carrega valores automaticos , preço e cod de venda
+                productList.Price= ViewBag.Price;    // =0;  ViewBag.ClienteID # Esta a funcionar OK
+                
+                // productList.SaleID= 3;      
+
                 _context.SaveChanges();     // tens aqui varios pedido agora grava
+                // ViewBag.CodVenda=productList.SaleID;
 
                 // Toastr.SucessMessage tem de aparecer msg quando criar um novo
-                _toastNotification.AddSuccessToastMessage("Product sucessfully Created.");
+                _toastNotification.AddSuccessToastMessage("Product sucessfully Added to Order.");
 
-                return RedirectToAction("Index");
+                // Aqui passar com Details/{0},id ... parecido com isto 
+                return RedirectToAction("Index");  //  ("Details/{0}", ViewBag.CodVenda
                 // return RedirectToAction(nameof(index)); -> outra forma de apresentar igual
 
             }
-            //ViewBag.SaleList = new SelectList(_context.Sales, "ID", "CodVenda");
-            // Passar List Products para a view
-            //ViewBag.ProductList = new SelectList(_context.ProductLists, "ID", "Description");
+
+            // Toastr.ERRORMessage aparecer msg em caso de falha 
+            _toastNotification.AddErrorToastMessage("Error - Product not Added to Order.");
+
+            // Envia Listas  para a vista
+            //this.SetupProductList();
+
             return View(productList);
         }
 
-
+        // Funcoes diversas aqui :
         private void SetupSales()
         {
             ViewBag.CustomerList = new SelectList(_context.Customers, "ID", "Name");
@@ -470,6 +471,29 @@ namespace CursoMod165.Controllers
 
         }
 
+
+        
+        private void SetupProductList()
+        {
+            // retorna Listas dos produtos e Num. Venda para as Vistas
+            var ProductListx = _context.Products
+                                    .Include(p => p.Category)  //inner join => a partir da chave estrangueiro quero o nome               
+                                    .Select(p => new
+                                    {
+                                        // coloca role à frente do nome na lista
+                                        // funcao select [aparece nome do medico  combinado com a sua profissao]
+                                        ID = p.ID,  // = p.ID
+                                        Name = $"{p.Description} [{p.Category.Name}]"
+                                    });
+ 
+
+            ViewBag.ProductList = new SelectList(ProductListx, "ID", "Name");  //  ProductListx, "ID", "Name"
+
+
+            // ViewData["Titulo1"] = "Trabalho Final Curso ASP.NET 165";
+            ViewBag.SaleList = new SelectList(_context.Sales, "ID", "CodVenda");
+
+        }
 
 
         // Funcao para retorno do Codigo de venda

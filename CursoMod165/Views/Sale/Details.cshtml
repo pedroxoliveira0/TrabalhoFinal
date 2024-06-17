@@ -12,8 +12,10 @@
     <!--  a proxima linha faz uma acção; cria a opcao de criar um novo customer   -->
     @* <a class="btn btn-outline-primary" asp-action="Create">@SharedLocalizer["Create New"]</a> *@
 
-    <a class="btn btn-outline-primary" asp-action="CreateProductList">CreateProductList</a>
+    <a class="btn btn-outline-primary" asp-action="AddProductToOrder">Add Product To Order</a>  <!-- Add Product To Order</a> -->
 
+    
+    
 </p>
 
 <span><h4>Order Number :    @ViewBag.NumVenda      /      Customer ID :    @ViewBag.ClienteID </h4></span>
@@ -73,9 +75,12 @@
                 <!--  Preço  -->
                 @Html.DisplayNameFor(model => model.Price)
             </th>
-
             <th>
-                <!--  Quantidade  -->
+                <!--  Quantidade -->
+                @Html.DisplayNameFor(model => model.Quantity)
+            </th>
+            <th>
+                <!--  Nome  -->
                 @Html.DisplayNameFor(model => model.Product.Description)  <!--  Testar product.description / Quantity-->
             </th>
                 
@@ -124,6 +129,10 @@
             <td>
                     <!-- arroba price -->
                  @Html.DisplayFor(modelItem => productList.Price)
+            </td>
+             <td>
+                    <!-- arroba price -->
+                 @Html.DisplayFor(modelItem => productList.Quantity)
             </td>
 
             <td>

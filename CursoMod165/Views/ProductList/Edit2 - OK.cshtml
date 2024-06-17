@@ -1,9 +1,8 @@
 ﻿@model CursoMod165.Models.ProductList
 @* aqui é o cabecalho ... da vista *@
-<h1>Create</h1>
+<h1>Edit</h1>
 
-<h4>Add Product To Order List</h4>
-
+<h4>Product List Order</h4>
 
 @*
 <!-- VAlor de teste Count e -->
@@ -26,7 +25,7 @@
 @*// ... stuff  *@
 <!-- So tenho de por na view (form) os valores que depois passam para aDBase (tabela) -->
 <!--  COlocar BAckground color  papayawhip; gainsboro  -->
-<body>
+<body style="background-color:darkgrey">
 
 
     <!--  Criar matriz para apresentacao dos dados  -->
@@ -73,19 +72,7 @@
                 </div>
 
                
-                <!-- Temos de adicionar campo para preenchimento da Chave/nome role  -->
-                <div class="form-group">
-                    <label asp-for="SaleID" class="form-label"></label>
-                    <!-- para termos acesso à informação da tabela secindaria temos de fazer uma lista de selecção -->
-                    <!-- Temos de passar uma variavel para casar com o numero da tabela secundaria roles -->
-                    <!--  <select asp-for="SaleID" class="form-control" asp-items="ViewBag.StaffRoles"></select>  -->
 
-                    <select asp-for="SaleID" class="form-control" asp-items="ViewBag.SaleList">
-                        <!-- ViewBag.SaleList -->
-                    </select>
-
-                    <span asp-validation-for="SaleID" class="text-danger"></span>
-                </div>
 
                
 
@@ -96,7 +83,7 @@
 
                 <div class="form-group">
                     <!--  fim do formulario   -->
-                    <input type="submit" value="Create" class="btn btn-primary" />  <!-- cria registo key -->
+                    <input type="submit" value="Save" class="btn btn-primary" />  <!-- cria registo key -->
                     <!-- este create é um do botao, final para submeter todos os dados  -->
                 </div>
 
