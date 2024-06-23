@@ -36,7 +36,7 @@ namespace CursoMod165.Models
 
 
 
-		// peso do produto não faz muito sentido ...
+		// peso do produto util para calculo do peso da embalagem a transportar ...
 		[Precision(10, 3)]
 		public decimal Weight { get; set; }
 

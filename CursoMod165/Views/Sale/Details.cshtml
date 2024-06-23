@@ -12,36 +12,79 @@
     <!--  a proxima linha faz uma acção; cria a opcao de criar um novo customer   -->
     @* <a class="btn btn-outline-primary" asp-action="Create">@SharedLocalizer["Create New"]</a> *@
 
-    <a class="btn btn-outline-primary" asp-action="AddProductToOrder">Add Product To Order</a>  <!-- Add Product To Order</a> -->
+    <a class="btn btn-outline-primary" asp-action="AddProductToOrder" asp-route-id="@ViewBag.SaleID">Add Product To Order</a>  <!-- Add Product To Order</a> -->
+    <a class="btn btn-outline-primary" asp-action="AddProductToOrder" asp-route-id="@ViewBag.SaleID">Order Process</a>  <!-- Add Product To Order</a> -->
+    <a class="btn btn-outline-primary" asp-action="AddProductToOrder" asp-route-id="@ViewBag.SaleID">Sent Order</a>  <!-- Add Product To Order</a> -->
 
+
+ 
     
+    <br />
+    <h4 class="text-danger">Adicionar Index.Number para voltar a pagina Details,...ver o que se q...</h4>
+    <h4 class="text-danger">Adicionar botão para processar, verifica existencia em armazem, e atualizar dados, colocar processado.....se nao existir passar produto a zero e coloca, quantidades em stock.</h4>
+    <h4 class="text-danger">Colocar nas observacoes outofstck e actualizar info, colocar status processada... </h4>
+    <h4 class="text-danger"> Ver o que fazer a partir do ponto: PAsso 2 - Processamento; envio de emails</h4>
+    <h6 class="text-danger"> Adicionar coluna com total por linha de cada produto qtd x preco (não é obrigatorio) </h6>
+    <h6 class="text-danger"> Preencher de forma simples observacoes e identificador; ja tenho mas nao esta claro </h6>
+    <h6 class="text-danger"> Adicionar botao processamento, só pode ser primida se estiver no estado ordered </h6>
+    <h6 class="text-danger"> Criar botao envio quando premido atualiza stock, envia email e passa para estado seguinte, botao fica inacessivel, o melhor era este botao ir mudando de nome </h6>
+    <!-- Posso tentar passar valor usando uma celula invisivel... -->
     
 </p>
 
-<span><h4>Order Number :    @ViewBag.NumVenda      /      Customer ID :    @ViewBag.ClienteID </h4></span>
+<head>
+    <style>
+    table {
+        border-collapse: collapse;
+    }
+    th,
+    td {
+        border: 1px solid #cecfd5;
+        padding: 10px 15px;
+    }
+    </style>
+</head>
+
+<table>
+  <thead>
+    <tr>
+      <th scope="col-100">Order Number :     </th>
+      <th scope="col">Customer ID :      </th>
+      <th scope="col">Customer Name :    </th>
+      <th scope="col">Email              </th>
+      <th scope ="col">Address : </th>
+      <th scope="col">Status : </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>@ViewBag.NumVenda</td>
+      <td>@ViewBag.ClienteID</td>
+      <td>@ViewBag.ClienteName</td>
+      <td>@ViewBag.Email</td>
+      <td>@ViewBag.Address @ViewBag.Zipcode @ViewBag.City #@ViewBag.SaleID</td>
+      <td>@ViewBag.Status</td>      
+    </tr>
+  </tbody>
+</table>
 
 <br />
-<div container>
-    <div class="row">
-        <div class="col col-lg-2"><b>Customer Name: : </b></div>
-        <div class="col-md-auto"><p>@ViewBag.ClienteName</p</div>
-    </div>
-    <div class="row">
-        <div class="col col-lg-2"><b>Email : </b></div>
-        <div class="col-md-auto"><p>@ViewBag.Email</p</div>
-    </div>
 
-     <div class="row">
-        <div class="col col-lg-2"><b>Address : </b></div>
-        <div class="col-md-auto"><p>@ViewBag.Address @ViewBag.Zipcode @ViewBag.City</p</div>
-    </div>
-    <div class="row">
-        <div class="col col-lg-2"><b>Observations : </b></div>
-        <div class="col-md-auto"><p>@ViewBag.Obs</p</div>
-    </div>
-</div>
-<!-- <p>@ViewBag.Nome</p> -->
-<!--@ViewBag.Obs -->
+<table>
+  <tr>
+        <th scope="col">Observations : </th>
+  </tr>
+  <tr>
+        <td>@ViewBag.Obs</td>
+  </tr>
+</table>
+
+<br />
+
+
+
+<!-- <p>(c) ViewBag.Nome</p> -->
+<!--(c) ViewBag.Obs -->
 
 
 <!-- ????????????????????????????????????? -->
@@ -50,7 +93,8 @@
     <!--  a proxima linha faz uma acção; cria a opcao de criar um novo customer   -->
     <!--  Posso enviar talvez o CodVenda aqui :-->
     <!-- <a class="btn btn-outline-warning" asp-action="Edit" asp-route-id="(c)productList.ID">Edit</a> -->
-    <a class="btn btn-outline-primary" asp-action="AddProductToList">@ViewBag.NumVenda</a>
+    <a class="btn btn-outline-primary" asp-action="OrderList"> Add Product To List</a>  <!-- @ViewBag.NumVenda -->
+    <a class="btn btn-outline-secondary" asp-action="AddProductToList"> + </a>
     <br />
 </p>
 
@@ -59,6 +103,29 @@
 <!-- Apresento 1º cabecalho e de seguinda num ciclo for o conteudo linha a linha da base de dados -->
 
 
+<!-- Passar valores com script: -->
+<!-- 1 -->
+@{
+    ViewBag.MyData = "Ziggy, Rafiq Blog Post";
+}
+<input type="hidden" id="my-data" value="@ViewBag.MyData" />
+<script>
+    var myData = document.getElementById("my-data").value;
+    console.log(myData); // Output: "Ziggy, Rafiq Blog Post"
+</script>
+<!-- 1 -->
+
+<!-- 2 -->
+@{
+    ViewData["MyData"] = new { Name = "Lerzan", Age = 28 };
+}
+<script>
+    var myData = @Html.Raw(Json.Serialize(ViewData["MyData"]));
+    console.log(myData.Name); // Output: "Lerzan"
+    console.log(myData.Age); // Output: 28
+</script>
+
+<!-- 2 -->
 
 
 <table class="table">
@@ -70,7 +137,11 @@
                 @Html.DisplayNameFor(model => model.ID)
 
             </th>
-
+            <!-- Codigo da unidade th ou td bold ou nao-->
+            <th>
+                <!-- Nome do produto dentro da category -->
+                @Html.DisplayNameFor(model => model.Sale.CodVenda)
+            </th>
             <th>
                 <!--  Preço  -->
                 @Html.DisplayNameFor(model => model.Price)
@@ -84,11 +155,8 @@
                 @Html.DisplayNameFor(model => model.Product.Description)  <!--  Testar product.description / Quantity-->
             </th>
                 
-            <!-- Codigo da unidade th ou td bold ou nao-->
-            <th>
-                <!-- Nome do produto dentro da category -->
-                @Html.DisplayNameFor(model => model.Sale.CodVenda)
-            </th>
+
+
 
 
             @*
@@ -126,6 +194,12 @@
                 @Html.DisplayFor(modelItem => productList.ID)
             </td>
 
+                <!-- Codigo da unidade -->
+                <td>
+                    <!-- Nome do produto dentro da category -->
+                    @Html.DisplayFor(modelItem => productList.Sale.CodVenda)
+                </td>
+
             <td>
                     <!-- arroba price -->
                  @Html.DisplayFor(modelItem => productList.Price)
@@ -134,17 +208,14 @@
                     <!-- arroba price -->
                  @Html.DisplayFor(modelItem => productList.Quantity)
             </td>
-
+                
             <td>
                     <!-- arroba quantity -->
                     @Html.DisplayFor(modelItem => productList.Product.Description)
             </td>
 
-            <!-- Codigo da unidade -->
-            <td>
-                    <!-- Nome do produto dentro da category -->
-                    @Html.DisplayFor(modelItem => productList.Sale.CodVenda)
-            </td>
+
+
 
             @*
             <td>
@@ -162,7 +233,22 @@
             </td>
         </tr>
         }
+
+       
+        <table>
+        
+            <tr>
+                
+                <th scope ="col" style="background-color:cornflowerblue">                         </th> <!-- <th scope="col"> -->
+                <th width="330" style="background-color:cornflowerblue" align="right">  </th>
+            </tr>
+            <tr>
+                <td><b>Total Value :</b></td>
+                <td align="right">@ViewBag.Totals</td>   <!-- (c)Int32.Parse(@ViewBag.Totals) // .toFixed(2) -->
+            </tr>
+        </table>
+        
     </tbody>
     
-
+    
 </table>

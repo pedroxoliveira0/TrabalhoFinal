@@ -1,0 +1,118 @@
+﻿@model CursoMod165.Models.Sale
+@* aqui é o cabecalho ... da vista *@
+<h1>Edit</h1>
+
+<h4>Product List Order</h4>
+
+@*
+<!-- VAlor de teste Count e -->
+<h6>  Passar lista de categorias Peso e count do produto selecionado </h6>
+
+<h5>@ViewBag.Titulo2</h5>
+*@
+
+
+<hr />
+
+<div>
+    <!-- botao no topo -->
+        <!-- o "a" é para fazer link aparece a azul na pagina  -->
+
+</div>
+
+
+
+
+<!-- bootstrap dito pelos alunos, é uma biblioteca do css  -->
+<div class="row">
+    <div class="col-md-4">
+
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+
+            <!-- Colocar o form name dentro de um grupo, para ficar mais organizado  -->
+            <div class="form-group">
+                <label asp-for="CodVenda" class="form-label"></label>
+                <input asp-for="CodVenda" class="form-control" />
+                <span asp-validation-for="CodVenda  " class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Date" class="form-label"></label>   <!--  Escreve Label class... é biblioteca bootstrap -->
+                <input asp-for="Date" class="form-control" />     <!-- recebe uma entrada de valor na var Date  -->
+                <span asp-validation-for="Date" class="text-danger"></span>
+            </div>
+
+            <!--  Não estava a criar o registo pk o campo address não era preenchido -->
+            <div class="form-group">
+                <label asp-for="Time" class="form-label"></label>
+                <input asp-for="Time" class="form-control"  />
+                <span asp-validation-for="Time" class="text-danger"></span>
+            </div>
+
+            <!--  ver se o Link Foto estava a dar problema ... -->
+            <div class="form-group">
+                <label asp-for="Observations" class="form-label"></label>
+                <input asp-for="Observations" class="form-control"  />
+                <span asp-validation-for="Observations" class="text-danger"></span>
+            </div>
+
+
+            <!--  ver se o Link Foto estava a dar problema ... -->
+            <div class="form-group">
+                <label asp-for="IsPaid" class="form-check-label"></label>
+                <input asp-for="IsPaid" class="form-check-control"  />
+                <span asp-validation-for="IsPaid" class="text-danger"></span>
+            </div>
+
+
+
+            <!-- Temos de adicionar campo para preenchimento da Chave/nome role  -->
+            <div class="form-group">
+                <label asp-for="CustomerID" class="form-label"></label>
+
+                <select asp-for="CustomerID" class="form-control" asp-items="ViewBag.CustomerList" >
+                </select><span asp-validation-for="CustomerID" class="text-danger"></span>
+            </div>
+
+            
+
+
+
+            <!--  Agora temos de adicionar aqui group id= Status-->
+            <div id="form-group-status" class="form-group">
+                <label asp-for="Status" class="form-label"></label>
+                <select asp-for="Status" class="form-control" asp-items="Html.GetEnumSelectList<Status>()" ></select>
+
+
+                @* <span asp-validation-for="Status" class="text-danger"></span>  *@
+            </div>
+
+
+
+
+            <!-- Completar com restantes -->
+            <p> Completar com restantes campos </p><br />
+
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />   <!-- isto é um botao -->
+                @*<a asp-action="Index">Back to List</a> *@
+                <a class="btn btn-outline-info" asp-action="Index">Back to List</a>
+            </div>
+
+
+        </form>
+
+
+    </div>
+
+</div>
+
+
+
+
+
+
+
+    

@@ -1,20 +1,13 @@
 ﻿@model IEnumerable<CursoMod165.Models.ProductList>
 <!-- nao é: IEnumerable<CursoMod165.Models.ProductList> -->
 <!--  IEnumera.. é uma lista!   -->
-@* aqui apresento uma lista com o conteudo da dBase *@
 
 
-<h1>Product List Index</h1>
-
-<p>
-    <!--  a proxima linha faz uma acção; cria a opcao de criar um novo customer   -->
-    <a class="btn btn-outline-primary" asp-action="Create">Create New</a>
-</p>
-
+<h1>Product List Index By Orders</h1>
 
 <p>
     <!--  a proxima linha faz uma acção; cria a opcao de criar um novo customer   -->
-    <a class="btn btn-outline-info" asp-action="Test1">Test 1</a>
+    <a class="btn btn-outline-primary" asp-action="CreateL">Create New</a>
 </p>
 
 
@@ -79,7 +72,6 @@
                 </td>
 
                 <td>
-                <td>
                     <!-- arroba category.Name -->
                         @Html.DisplayFor(modelItem => productList.Quantity)
                 </td>
@@ -92,13 +84,14 @@
                 <td>
                     <!--  td é uma celula ou coluna na pagina html -->
 
-                    <a class="btn btn-outline-warning" asp-action="Edit" asp-route-id="@productList.ID">Edit</a>
+                    <a class="btn btn-outline-warning" asp-action="EditL" asp-route-id="@productList.ID">Edit</a>
                     <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@productList.ID">Delete</a>
-                    <a class="btn btn-outline-secondary" asp-action="ProductsByCategory" asp-route-id="@productList.ID">Products By Category</a> @**@
+                    <a class="btn btn-outline-secondary" asp-action="SetCodVenda" asp-route-id="@productList.SaleID">Set. Order</a> 
 
                 </td>
             </tr>
         }
+
     </tbody>
 
 

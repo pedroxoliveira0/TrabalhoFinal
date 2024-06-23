@@ -47,15 +47,6 @@
                         </li>
 
 
-                        <!-- Pagina Test -->
-                        <!-- Tab Job Statement-->
-                        <li class="nav-item">
-                            <!-- o que esta dentro de <> sao as propriedades -->
-                            <!-- faz aparecer "botao -> Mypage no cabecalho da pagina -->
-                            <a class="nav-link text-dark" asp-area="" asp-controller="ProductList" asp-action="Index">Order List</a>
-                        </li>
-
-
 
                         <!-- se não tiver logado nao mostra cabecalho -->
                         @* @if (SignInManager.IsSignedIn(User)) 
@@ -97,7 +88,15 @@
                                 </li>
 
 
-                                <li class="nav-item">
+                            <li class="nav-item">
+                                <!-- Para adicionar o menu no topo ao lado do menu -->
+                                <a class="nav-link text-dark" asp-area="" asp-controller="ShoppingBasket" asp-action="Index">Basket</a>
+
+                            </li>
+
+
+
+                            <li class="nav-item">
                                     <!-- Para adicionar o menu no topo ao lado do menu -->
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Appointment" asp-action="Index">Appointment</a>
 

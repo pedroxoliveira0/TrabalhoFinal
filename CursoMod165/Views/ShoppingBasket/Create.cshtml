@@ -1,8 +1,9 @@
 ﻿@model CursoMod165.Models.ProductList
 @* aqui é o cabecalho ... da vista *@
-<h1>Edit</h1>
+<h1>Create</h1>
 
-<h4>Product List Order</h4>
+<h4>Add Product To Order List</h4>
+
 
 @*
 <!-- VAlor de teste Count e -->
@@ -25,14 +26,14 @@
 @*// ... stuff  *@
 <!-- So tenho de por na view (form) os valores que depois passam para aDBase (tabela) -->
 <!--  COlocar BAckground color  papayawhip; gainsboro  -->
-<body style="background-color:darkgrey">
+<body>
 
 
     <!--  Criar matriz para apresentacao dos dados  -->
     <div class="row">
         <div class="col-md-4">
 
-            <form asp-action="Edit">
+            <form asp-action="Create">  <!--Edit -->
                 <!-- se for dada a accao create  -->
                 <!--  valida formatos definidos no modelo -->
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -41,8 +42,8 @@
                
 
                 <div class="form-group">
-                    <label asp-for="Price" class="form-label"></label>   <!--  Escreve Label class... é biblioteca bootstrap -->
-                    <input asp-for="Price" class="form-control" />     <!-- recebe uma entrada de valor na var Price  -->
+                    <!-- <label asp-for="Price" class="form-label"></label> -->  <!--  Escreve Label class... é biblioteca bootstrap -->
+                    <input asp-for="Price" type="hidden" class="form-control" value="0" />     <!-- recebe uma entrada de valor na var Price  -->
                     <span asp-validation-for="Price" class="text-danger"></span>
                 </div>
 
@@ -72,7 +73,19 @@
                 </div>
 
                
+                <!-- Temos de adicionar campo para preenchimento da Chave/nome role  -->
+                <div class="form-group">
+                    <label asp-for="SaleID" class="form-label"></label>
+                    <!-- para termos acesso à informação da tabela secindaria temos de fazer uma lista de selecção -->
+                    <!-- Temos de passar uma variavel para casar com o numero da tabela secundaria roles -->
+                    <!--  <select asp-for="SaleID" class="form-control" asp-items="ViewBag.StaffRoles"></select>  -->
 
+                    <select asp-for="SaleID" class="form-control" asp-items="ViewBag.SaleList">
+                        <!-- ViewBag.SaleList -->
+                    </select>
+
+                    <span asp-validation-for="SaleID" class="text-danger"></span>
+                </div>
 
                
 
@@ -83,7 +96,7 @@
 
                 <div class="form-group">
                     <!--  fim do formulario   -->
-                    <input type="submit" value="Save" class="btn btn-primary" />  <!-- cria registo key -->
+                    <input type="submit" value="Create" class="btn btn-primary" />  <!-- cria registo key -->
                     <!-- este create é um do botao, final para submeter todos os dados  -->
                 </div>
 

@@ -1,77 +1,11 @@
 ﻿@model IEnumerable<CursoMod165.Models.Sale>
-<!--  IEnumera.. é uma lista!   -->
+<!--  Apresenta diferenca entre Encomendas totais e encomendas pagas    -->
 @* aqui apresento uma lista com o conteudo da dBase *@
 
 
 <h1>Order Index</h1>
 
-<p>
-    <!-- Usar interncionalizacao -->
-    <!--  a proxima linha faz uma acção; cria a opcao de criar um novo customer   -->
-    <a class="btn btn-outline-primary" asp-action="Create">@SharedLocalizer["Create New"]</a>
-    <a class="btn btn-outline-primary" asp-action="TotalEquity">@SharedLocalizer["Total Equity"]</a>
 
-    <a class="btn btn-outline-secondary" asp-action="Ordered">@SharedLocalizer["Ordered"]</a>
-    <a class="btn btn-outline-secondary" asp-action="Processed">@SharedLocalizer["Processed"]</a>
-    <a class="btn btn-outline-secondary" asp-action="Sent">@SharedLocalizer["Sent"]</a>
-    <a class="btn btn-outline-secondary" asp-action="IsPaid">@SharedLocalizer["Is Paid"]</a>
-    
-
-</p>
-
-
-<br />
-
-
-
-
-<!-- GRID -->
-@(
-Html
-        .Grid(Model)
-        .Build(columns =>
-        {
-            // temos de traduzir tambem o que está dentro dos campos, ver appointment
-            columns.Add(ap => ap.CodVenda).Titled(SharedLocalizer["Num Venda"]);  // "descricao # "
-            columns.Add(ap => ap.Date).Titled(SharedLocalizer["Date"]).Formatted("{0:dd-MMM-yyyy}")
-                                                     .Filterable(GridFilterType.Double);   // aplicacao de filtro duplo
-            columns.Add(ap => ap.Time).Titled(SharedLocalizer["Time"]).Formatted("{0:t}");
-            columns.Add(ap => ap.Customer.Name).Titled(SharedLocalizer["Customer"]);
-            columns.Add(ap => ap.Status).Titled(SharedLocalizer["Status"]);
-            columns.Add(ap => ap.Observations).Titled(SharedLocalizer["Observation"]);
-            columns.Add(ap => ap.IsPaid).Titled(SharedLocalizer["Is Paid?"])
-                .RenderedAs(ap => (ap.IsPaid == true ? SharedLocalizer["Yes"] : SharedLocalizer["No"]))
-                .UsingFilterOptions(new[]
-                {
-                    new SelectListItem{ Value = "true", Text = SharedLocalizer["Yes"].Value },
-                    new SelectListItem{ Value = "false", Text = SharedLocalizer["No"].Value }
-                    // tive de adicionar .Value
-                });
-
-
-
-            columns.Add(ap =>
-                 Html.ActionLink(SharedLocalizer["Details"].Value, "Details", new { id = ap.ID }, new { @class = "btn btn-outline-success" }));
-
-
-            columns.Add(ap => Html.ActionLink(SharedLocalizer["Edit"].Value, "Edit", new { id = ap.ID }, new { @class = "btn btn-outline-warning" }));
-            @* columns.Add(Model => Model.ID).RendeedAs(Model =>
-                Html.ActionLink("Edit", "Edit", new { id = Model.ID })).Css("btn")
-            *@
- 
-            columns.Add(ap =>
-                Html.ActionLink(SharedLocalizer["Delete"].Value, "Delete", new { id = ap.ID }, new { @class = "btn btn-outline-danger" }));
-            
-                
-                // acrescentar .Value
-        })
-        .Filterable()
-        .Sortable()
-)
-<br />
-
-
-@*
 <!-- Apresento 1º cabecalho e de seguinda num ciclo for o conteudo linha a linha da base de dados -->
 <!-- Faz Cabecalho da tabela -->
 <table class="table">
@@ -116,14 +50,12 @@ Html
                 <!-- Nome do produto dentro da category -->
                 @Html.DisplayNameFor(model => model.IsPaid)
             </th>
-
-
             <th>
-                <!-- Aqui vamos criar novos botoes na tabela: apagar, modificar etc  -->
-                <!-- o que é isto ??? -->
-                <!-- titulo da tab para as accoes possiveis na tabela -->
-                Actions
+                <!-- Nome do produto dentro da category -->
+                @Html.DisplayNameFor(model => model.TotalPrice)
             </th>
+
+
         </tr>
     </thead>
 
@@ -180,19 +112,39 @@ Html
                 </td>
 
                 <td>
-                    <!--  td é uma celula ou coluna na pagina html -->
-                    <a class="btn btn-outline-success" asp-action="Details" asp-route-id="@sale.ID">Details</a>
-                    <a class="btn btn-outline-warning" asp-action="Edit" asp-route-id="@sale.ID">Edit</a>
-                    <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@sale.ID">Delete</a>
-
+                    <!-- Nome do produto dentro da category -->
+                    @Html.DisplayFor(modelItem => sale.TotalPrice)
                 </td>
+
             </tr>
         }
 
-        
+
+
+        <table>
+
+            <tr>
+
+                <th scope="col" style="background-color:cornflowerblue">                         </th> <!-- <th scope="col"> -->
+                <th width="330" style="background-color:cornflowerblue" align="right">  </th>
+            </tr>
+            <tr>
+                <td><b>Total Value :</b></td>
+                <td align="right">@ViewBag.TotalEquity</td>   <!-- (c)Int32.Parse(@ViewBag.Totals) // .toFixed(2) -->
+            </tr>
+        </table>
 
     </tbody>
+    <br />
+
+    <div>
+        @* <a asp-action="Edit" asp-route-id="@Model.ID">Edit</a> *@
+        
+        @* <a asp-action="Index"> Back to List</a> *@
+        <a class="btn btn-outline-info" asp-action="Index">Back to List</a>
+
+    </div>
 
 
 </table>
-*@
+

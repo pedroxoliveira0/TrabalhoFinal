@@ -120,6 +120,9 @@
   <data name="&lt;b&gt;Appointment # {0}&lt;/b&gt; successfully edited!" xml:space="preserve">
     <value>&lt;b&gt;Consulta # {0}&lt;/b&gt; editada com sucesso!</value>
   </data>
+  <data name="Actions" xml:space="preserve">
+    <value>Eventos</value>
+  </data>
   <data name="Administrative" xml:space="preserve">
     <value>Administrativo(a)</value>
   </data>
@@ -132,11 +135,20 @@
   <data name="Appointment Number" xml:space="preserve">
     <value>Consulta Número</value>
   </data>
+  <data name="Basket" xml:space="preserve">
+    <value>Cesto</value>
+  </data>
+  <data name="Categories" xml:space="preserve">
+    <value>Categorias</value>
+  </data>
+  <data name="Category" xml:space="preserve">
+    <value>Categoria</value>
+  </data>
   <data name="Create New" xml:space="preserve">
     <value>Criar Novo</value>
   </data>
   <data name="Customer" xml:space="preserve">
-    <value>Utente</value>
+    <value>Cliente</value>
   </data>
   <data name="Date" xml:space="preserve">
     <value>Data</value>
@@ -159,6 +171,12 @@
   <data name="Is Done?" xml:space="preserve">
     <value>Realizada?</value>
   </data>
+  <data name="Is Paid?" xml:space="preserve">
+    <value>Está Pago?</value>
+  </data>
+  <data name="Job Statmente" xml:space="preserve">
+    <value>Enunciado</value>
+  </data>
   <data name="Medic" xml:space="preserve">
     <value>Médico(a)</value>
   </data>
@@ -171,6 +189,33 @@
   <data name="Nurse" xml:space="preserve">
     <value>Enfermeiro(a)</value>
   </data>
+  <data name="Observation" xml:space="preserve">
+    <value>Observação</value>
+  </data>
+  <data name="Observations" xml:space="preserve">
+    <value>Observações</value>
+  </data>
+  <data name="Ordered" xml:space="preserve">
+    <value>Encomendado</value>
+  </data>
+  <data name="Price" xml:space="preserve">
+    <value>Preço</value>
+  </data>
+  <data name="Processed" xml:space="preserve">
+    <value>Processado</value>
+  </data>
+  <data name="Products" xml:space="preserve">
+    <value>Produtos</value>
+  </data>
+  <data name="Quantity" xml:space="preserve">
+    <value>Quantidade</value>
+  </data>
+  <data name="Sales" xml:space="preserve">
+    <value>Vendas</value>
+  </data>
+  <data name="Sent" xml:space="preserve">
+    <value>Enviado</value>
+  </data>
   <data name="Specialty" xml:space="preserve">
     <value>Especialidade</value>
   </data>
@@ -180,8 +225,14 @@
   <data name="Staff Role" xml:space="preserve">
     <value>Categoria</value>
   </data>
+  <data name="Status" xml:space="preserve">
+    <value>Estado</value>
+  </data>
   <data name="Time" xml:space="preserve">
     <value>Hora</value>
+  </data>
+  <data name="Total Equity" xml:space="preserve">
+    <value>Balanco Total</value>
   </data>
   <data name="Yes" xml:space="preserve">
     <value>Sim</value>

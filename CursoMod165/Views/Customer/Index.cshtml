@@ -1,13 +1,66 @@
 ﻿@model IEnumerable<CursoMod165.Models.Customer>
 <!--  IEnumera.. é uma lista!   -->
+<!-- Saldo = Balance or Equity;  Saber Saldo corrente (somatorio de vendas - somatorio de vendas pagas) -->
+<!-- Historico Vendas/Compras do cliente = Purchase ou Buy; (apresenta por cliente todas as encomendas) -->
 
 <h1>Customer Index</h1>
+<br />
 
 <p>
     <!--  a proxima linha faz uma acção; cria a opcao de criar um novo customer   -->   
     <a class="btn btn-outline-primary" asp-action="Create">Create New</a>
+    <!-- <a class="btn btn-outline-primary" asp-action="CurrenteBalance">Currente Balance</a> -->
 </p>
 
+
+
+<!-- GRid que permite ordenar Falta fazer tradução com sharelocalizer: -->
+@(
+Html
+        .Grid(Model)
+        .Build(columns =>
+        {
+            columns.Add(ap => ap.CodCustomer).Titled("Cod C.");
+            columns.Add(ap => ap.Name).Titled("Name");
+            columns.Add(ap => ap.Address).Titled("Address");
+            columns.Add(ap => ap.PhoneNumber).Titled("Phone Num."); // "Phone Number"
+            columns.Add(ap => ap.Email).Titled("E-Mail");
+            columns.Add(ap => ap.NIF).Titled("NIF");
+
+
+            columns.Add(ap => Html.ActionLink("Details", "Details", new { id = ap.ID }, new { @class = "btn btn-outline-success" })); // @class = "btn btn-primary"
+            @* columns.Add(Model => Model.ID).RendeedAs(Model =>
+                Html.ActionLink("Edit", "Edit", new { id = Model.ID })).Css("btn")
+            *@
+            columns.Add(ap => Html.ActionLink("Edit", "Edit", new { id = ap.ID }, new { @class = "btn btn-outline-warning" }));
+            columns.Add(ap => Html.ActionLink("Purchases", "Purchases", new { id = ap.ID }, new { @class = "btn btn-outline-secondary" }));
+            columns.Add(ap => Html.ActionLink("Equity", "Equity", new { id = ap.ID }, new { @class = "btn btn-outline-secondary" }));
+
+
+            if(User.IsInRole(CursoMod165Constants.ROLES.ADMIN)) // (c)
+                {
+                    columns.Add(ap =>
+                    Html.ActionLink("Del.", "Delete", new { id = ap.ID }, new { @class = "btn btn-outline-danger" })); // class = "btn btn - primary"
+                }
+            
+            // Teste
+            @* // exemplo alterativo ... redundante 
+            if((await _authorizationService.AuthorizeAsync(User, CursoMod165Constants.POLICIES.APP_POLICY_ADMIN.NAME)).Succeeded)
+                    {
+
+            } *@
+
+
+        })
+        .Filterable()
+        .Sortable()
+
+)<br />
+
+
+
+
+@*  Tabela antiga deixou de ser usada
 <!-- Nota falta emailpelo menos  -->
 <!-- Faz Cabecalho da tabela -->
 <table class="table">
@@ -80,25 +133,27 @@
                     <!-- e quero que adiciones /coloques no URL a chave Customer ID para o caminho (route) asp -->
                     <a class="btn btn-outline-success" asp-action="Details" asp-route-id="@customer.ID">Details</a>
                     <a class="btn btn-outline-warning" asp-action="Edit" asp-route-id="@customer.ID">Edit</a>
-                    @* Agora vamos colocar o botao delete so visivel para admin, mas tem falha de segurança, *@
-                    @* pk apartir do URL posso ir a View delete ... logo tenho de ir ao controlador evitar k tal  aconteca*@
+                    <a class="btn btn-outline-secondary" asp-action="Purchases" asp-route-id="@customer.ID">Purchases</a>
+                    <a class="btn btn-outline-secondary" asp-action="Equity" asp-route-id="@customer.ID">Equity</a>
+                    @* Agora vamos colocar o botao delete so visivel para admin, mas tem falha de segurança, * @
+                    @* pk apartir do URL posso ir a View delete ... logo tenho de ir ao controlador evitar k tal  aconteca * @
                     @if(User.IsInRole(CursoMod165Constants.ROLES.ADMIN))
                     {
                         <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@customer.ID">Delete</a>
                         <!-- A class vai buscar uma funcao/biblioteca no bootstarp com melhor grafismo  -->
                     }
                     
-                    @* // exemplo alterativo ... redundante *@
+                    @* // exemplo alterativo ... redundante * @
                     @if ((await  _authorizationService.AuthorizeAsync(User, CursoMod165Constants.POLICIES.APP_POLICY_ADMIN.NAME)).Succeeded)  
                     {
                         
                     }
 
-                    @* faz se o user for admin , nao podemos colocar if no customer*@
-                    @*@if (isAdmin)
+                    @* faz se o user for admin , nao podemos colocar if no customer  * @
+                    @* @if (isAdmin)
                     {
                         <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@customer.ID">Delete</a>
-                    }*@
+                    }* @
 
 
                 </td>
@@ -106,4 +161,13 @@
         }
     </tbody>
 </table>
+*@
 
+
+
+
+
+
+@*
+ver saldo do comprador -> somatório de vendas menos o somatório de vendas pagas)
+*@

@@ -1,50 +1,35 @@
 ﻿using CursoMod165.Data;
 using CursoMod165.Models;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Localization;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Microsoft.Extensions.Localization;
-using NToastNotify;   // para poder usar os toastr notifications
-using System.Text;
-
-
+using NToastNotify;
 
 namespace CursoMod165.Controllers
 {
-    public class ProductListController : Controller
+    public class ShoppingBasketController : Controller
     {
 
-
         // aqui é definida a ligação para a base de dados
-        private readonly ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context;  // premir com botão direito a lampada para tnasformar var _context
 
-
+        // definicao de variaveis 
         private readonly IToastNotification _toastNotification; // Singleton -> ou seja tudo é igual em todo o lado as mesmas regras
 
         // faz ligacao à base de dados - original
-        //public CategoryController(ApplicationDbContext context)
-        //{
-        //    _context = context;
-        //}
-
         // aqui defino var Toastr e ligacao à base de dados
         // IToastNotification toastNotification)
-        public ProductListController(ApplicationDbContext context,
+        public ShoppingBasketController(ApplicationDbContext context,
             IToastNotification toastNotification)
-
         {
             // ligação à base de dados; emulação da base de dados
             _context = context;
             _toastNotification = toastNotification;
-
         }
 
 
-        public IActionResult Index()
+
+        public IActionResult Index()   // OrderList()
         {
             //IEnumerable<ProductList> productLists = _context.ProductLists.ToList();    var productLists = _context
             var productLists = _context
@@ -63,12 +48,8 @@ namespace CursoMod165.Controllers
 
 
 
-
-        // ###################################################
-        //
-        //      Create
-        //
-        // #################################################
+        // #############################
+        // Create 
         // Adiciona produtos à ordem de venda...
         [HttpGet]
         public IActionResult Create()
@@ -114,6 +95,25 @@ namespace CursoMod165.Controllers
             if (ModelState.IsValid)
             {
 
+
+
+
+                // Ler preço do produto escolhido
+                // productList.Price = 111;
+                Product ? product = _context.Products.Find(productList.ProductID);
+                productList.Price = product.Price;
+
+
+                // Atualizar quantidades em stock; colocar if (product.Quantity>=productList.Quantity)
+                // isto nao é feito aqui so qd for para embalar ...
+                product.Quantity = product.Quantity - productList.Quantity;
+
+                // Atualizar Valor total da encomenda
+                Sale? sale = _context.Sales.Find(productList.SaleID);
+                sale.TotalPrice=sale.TotalPrice+(productList.Price * productList.Quantity);
+        
+
+
                 _context.ProductLists.Add(productList);
                 _context.SaveChanges();     // tens aqui varios pedido agora grava
 
@@ -123,22 +123,24 @@ namespace CursoMod165.Controllers
                 return RedirectToAction("Index");
                 // return RedirectToAction(nameof(index)); -> outra forma de apresentar igual
 
+                
             }
 
             // Toastr.ERRORMessage aparecer msg em caso de falha 
             _toastNotification.AddErrorToastMessage("Error - Product not Added to Order.");
 
-            //ViewBag.SaleList = new SelectList(_context.Sales, "ID", "CodVenda");
-            // Passar List Products para a view
-            //ViewBag.ProductList = new SelectList(_context.ProductLists, "ID", "Description");
+            
+
+            // Envia Listas  para a vista
+            this.SetupProductList();
+
             return View(productList);
         }
 
 
-
         // ###################################################
         //
-        //      Edit
+        //      EditL
         //
         // #################################################
         // Adiciona produtos à ordem de venda...
@@ -150,12 +152,12 @@ namespace CursoMod165.Controllers
 
             if (productList == null) // se for diferente de null faz a vista
             {
-                
+
 
                 return RedirectToAction(nameof(Index));
             }
 
-           
+
 
             // Envia Listas  para a vista
             this.SetupProductList();
@@ -192,61 +194,86 @@ namespace CursoMod165.Controllers
 
 
 
-
-        // Seleciona cod Venda e mostra produtos dessa venda
         // ###################################################
-        //      
-        //      SetCodVenda
+        //
+        //      Delete
         //
         // #################################################
-        public IActionResult SetCodVenda(int id)
+        // Adiciona produtos à ordem de venda...
+        [HttpGet]
+        public IActionResult Delete(int id)
         {
-            // Procura Cod de venda a partir do indice da Lista de produto
-            ProductList? productList = _context.ProductLists.Find(id); 
-            ViewBag.VendaID = productList.SaleID;
-            // Category? category = _context.Categories.Find(id);
-            // ViewBag.CategoryName = category.Name;
+            ProductList? productList = _context.ProductLists.Find(id);  // Chave primaria = id
 
-            // retorna lista com CodVenda como parametro de entrada
-            var produtListBySetCodVenda = _context
-                                                .ProductLists
-                                                .Include(p => p.Sale)
-                                                .Include(p => p.Sale.Customer)
-                                                .Include(p => p.Product)
-                                                .Include(p => p.Product.Category)
-                                                .Where(p => p.SaleID == id)  
-                                                .ToList(); 
 
-                                                
+            if (productList == null) // se for diferente de null faz a vista
+            {
 
-            return View(produtListBySetCodVenda);
 
+                return RedirectToAction(nameof(Index));
+            }
+
+
+
+            // Envia Listas  para a vista
+            this.SetupProductList();
+            // ViewBag.Categories = new SelectList(_context.Categories, "ID", "Name");
+            return View(productList);
         }
 
+        [HttpPost]   // envia dados para a base de dados
+        public IActionResult Delete(ProductList productList)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.ProductLists.Remove(productList);        // Apaga
+                _context.SaveChanges();                     // grava
+
+                // Toastr.SucessMessage tem de aparecer msg quando criar um novo
+                _toastNotification.AddSuccessToastMessage("Product order sucessfully updated.");
+
+                return RedirectToAction(nameof(Index));   // volta para a pagina principal, para o cliente saber que gravou, mostra lista
+            }
+
+            // Toastr.ERRORMessage aparecer msg em caso de falha 
+            _toastNotification.AddErrorToastMessage("Error - Product order not updated.");
+            //ViewBag.CategoryList = new SelectList(_context.Categories, "ID", "Name");
+
+            // Envia Listas  para a vista
+            this.SetupProductList();
+
+            return View();
+        }
+
+        // ####################################### end Delete
 
 
-        // Funcoes diversas aqui :
+
+
+        // ###########################
+        //  Metodos
+        // #######################
         private void SetupProductList()
         {
             // retorna Listas dos produtos e Num. Venda para as Vistas
             var ProductListx = _context.Products
-                                                  .Include(p => p.Category)  //inner join => a partir da chave estrangueiro quero o nome               
-                                                  .Select(p => new
-                                                  {
-                                                      // coloca role à frente do nome na lista
-                                                      // funcao select [aparece nome do medico  combinado com a sua profissao]
-                                                      ID = p.ID,  // = p.ID
-                                                      Name = $"{p.Description} [{p.Category.Name}]"
-                                                  });
-
+                                    .Include(p => p.Category)  //inner join => a partir da chave estrangueiro quero o nome               
+                                    .Select(p => new
+                                    {
+                                        // coloca role à frente do nome na lista
+                                        // funcao select [aparece nome do medico  combinado com a sua profissao]
+                                        ID = p.ID,  // = p.ID
+                                        Name = $"{p.Description} [{p.Category.Name}]"
+                                    });
 
 
             ViewBag.ProductList = new SelectList(ProductListx, "ID", "Name");  //  ProductListx, "ID", "Name"
 
+
+            // ViewData["Titulo1"] = "Trabalho Final Curso ASP.NET 165";
             ViewBag.SaleList = new SelectList(_context.Sales, "ID", "CodVenda");
 
         }
 
     }
 }
-

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using static CursoMod165.CursoMod165Constants;
@@ -181,8 +182,119 @@ namespace CursoMod165.Controllers
 
             return View(customer);
         }
+
+
+        // ##########################
+        //   Botoes adicionais da Tabela Equity & Purchase
+        // ########################
+        public IActionResult Purchases(int id)
+        {
+            // Aqui tenho de retornar a Lista de todas vendas cujo Customer =  id 
+            Customer? customer = _context.Customers.Find(id);  // Chave primaria = id  
+
+            
+            var customerPurchases = _context
+                                                .Sales
+                                                .Include(p => p.Customer)
+                                                .Where(p => p.CustomerID == id)
+                                                .ToList();
+
+
+
+
+
+            return View(customerPurchases);
+
+
+
+
+            if (customer == null) // se for diferente de null faz a vista
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+
+            return View(customer);
+        }
+
+
+        public IActionResult Equity(int id)
+        {
+            // Aqui tenho de retornar a Lista de todas vendas cujo Customer =  id 
+            Customer? customer = _context.Customers.Find(id);  // Chave primaria = id  
+
+
+            var customerPurchasesProductsIsPaid = _context
+                                               .ProductLists
+                                               .Include(p => p.Sale)
+                                               .Include(p => p.Sale.Customer)
+                                               .Where(p => p.Sale.CustomerID == id)
+                                               .Where(p => p.Sale.IsPaid == true)
+                                               .ToList();
+
+            var customerPurchasesProducts = _context
+                                                .ProductLists
+                                                .Include(p=>p.Sale)
+                                                .Include(p => p.Sale.Customer)
+                                                .Where(p => p.Sale.CustomerID == id)
+                                                .ToList();
+
+            // Contem valor de cada encomenda para calculo do Saldo
+            ViewBag.CustomerProductList= customerPurchasesProducts;
+
+            // Atualiza campo TotalPrice in Sale
+
+
+
+            // Soma de todas as Vendas/encomenda (pagas e nao pagas) 
+            var TotalSumAll = customerPurchasesProducts.Sum(p => p.Quantity * p.Price);
+
+            // Soma das vendas/encomenda pagas
+            var TotalSumIsPaid = customerPurchasesProductsIsPaid.Sum(p => p.Quantity * p.Price);
+
+            ViewBag.Equity = Math.Round(TotalSumAll- TotalSumIsPaid, 2);
+            // var num = Math.Round(TotalSum, 2)  Math.Round(TotalSumAll, 2);
+
+
+
+
+            var customerPurchases = _context
+                                                .Sales
+                                                .Include(p => p.Customer)
+                                                .Where(p => p.CustomerID == id)
+                                                .ToList();
+
+            return View(customerPurchases);
+
+
+
+
+            if (customer == null) // se for diferente de null faz a vista
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+
+            return View(customer);
+        }
+
+
+
+        // ###########################
+        //  Metodos do Customer
+        // ####################
+
+
+
     }
 }
+
+
+
+
+
+
+
 
 
 
