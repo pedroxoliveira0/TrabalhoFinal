@@ -28,7 +28,7 @@ namespace CursoMod165.Services
             {
                 // pode ser feito como se fosse telnet; cursoMOD165PADO@gmail.com;   gcuqqbzlmhzeepxe
                 // cursoMOD165Pado2@gmail.com;  dgfm orbt zzgu yslr
-                From = new MailAddress("oliveiraxpedro@gmail.com", "Seguro Saúde Municipal"),
+                From = new MailAddress("oliveiraxpedro@gmail.com", "Curso MOD165 : Cloud & Cloud - OnLine Store"),
                 Subject = subject,
                 Body = htmlMessage,
                 IsBodyHtml = true,

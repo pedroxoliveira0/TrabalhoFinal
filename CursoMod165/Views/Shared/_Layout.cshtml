@@ -32,20 +32,23 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">@SharedLocalizer["Home"]</a>
                         </li>
                         
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">@SharedLocalizer["Privacy"]</a>
                         </li>
 
-                        <!-- Tab Job Statement-->
-                        <li class="nav-item">
-                            <!-- o que esta dentro de <> sao as propriedades -->
-                            <!-- faz aparecer "botao -> Mypage no cabecalho da pagina -->
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="JobStatement">Job Statement</a>
-                        </li>
 
+                         @if ((await _authorizationService.AuthorizeAsync(User, CursoMod165Constants.POLICIES.APP_POLICY_ADMIN.NAME)).Succeeded)
+                            {
+                            <!-- Tab Job Statement-->
+                            <li class="nav-item">
+                                <!-- o que esta dentro de <> sao as propriedades -->
+                                <!-- faz aparecer "botao -> Mypage no cabecalho da pagina -->
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="JobStatement">@SharedLocalizer["Job Statement"]</a>
+                            </li>
+                            }
 
 
                         <!-- se não tiver logado nao mostra cabecalho -->
@@ -54,66 +57,62 @@
                             @if ((await _authorizationService.AuthorizeAsync(User, CursoMod165Constants.POLICIES.APP_POLICY.NAME)).Succeeded)
                             {
 
-                            <!-- Novos tabs do trabalho aqui: (Acesso condicionado Geral) -->
-                            <!-- Para aceder temos de estar Logados : -->
-                            <!-- Tab Categories -->
-                            <li class="nav-item">
-                                <!-- o que esta dentro de <> sao as propriedades -->
-                                <!-- faz aparecer "botao -> Mypage no cabecalho da pagina -->
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Category" asp-action="Index">Categories</a>
-                            </li>
-
-
-                            <!-- Tab Products -->
-                            <li class="nav-item">
-                                <!-- o que esta dentro de <> sao as propriedades -->
-                                <!-- faz aparecer "botao -> Mypage no cabecalho da pagina -->
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Product" asp-action="Index">Products</a>
-                            </li>
-                                
-                                <!-- aqui colocar customers -->
-                                <!-- Tab Customers-->
-                                <li class="nav-item">
-                                    <!-- Para adicionar o menu no topo ao lado do menu -->
-
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Customer" asp-action="Index">Customers</a>
-                                </li>
-
-
                                 <!-- Tab Sales-->
                                 <li class="nav-item">
                                     <!-- o que esta dentro de <> sao as propriedades -->
                                     <!-- faz aparecer "botao -> Sales com caminho para view Sales.Index -->
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Sale" asp-action="Index">Sales</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Sale" asp-action="Index">@SharedLocalizer["Sales"]</a>
                                 </li>
 
-
-                            <li class="nav-item">
-                                <!-- Para adicionar o menu no topo ao lado do menu -->
-                                <a class="nav-link text-dark" asp-area="" asp-controller="ShoppingBasket" asp-action="Index">Basket</a>
-
-                            </li>
-
-
-
-                            <li class="nav-item">
-                                    <!-- Para adicionar o menu no topo ao lado do menu -->
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Appointment" asp-action="Index">Appointment</a>
-
-                                </li>
-
-            
 
                             }
+                            
+                            <!-- New Policy VENDOR -->
+                            @* @if (SignInManager.IsSignedIn(User))
+                            {*@
+                            @if ((await _authorizationService.AuthorizeAsync(User, CursoMod165Constants.POLICIES.APP_POLICY_VENDOR.NAME)).Succeeded)
+                            {
+
+                                <!-- Tab Products -->
+                                <li class="nav-item">
+                                    <!-- o que esta dentro de <> sao as propriedades -->
+                                    <!-- faz aparecer "botao -> Mypage no cabecalho da pagina -->
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Product" asp-action="Index">@SharedLocalizer["Products"]</a>
+                                </li>
+
+                        }
+                            
+                            
+                            
                             @if ((await _authorizationService.AuthorizeAsync(User, CursoMod165Constants.POLICIES.APP_POLICY_ADMIN.NAME)).Succeeded)
                             {
-                                <!-- coloca Botao Staff no cabecalho; nav-item = item de navegacao  & cria link    -->
-                                <!-- Cria link para a diretoria staff e pagina por defeito Index.cshtml, nesta dir. estao as  vistas restantes  -->
+
+                                <!-- Tab Categories -->
+                                <li class="nav-item">
+                                    <!-- o que esta dentro de <> sao as propriedades -->
+                                    <!-- faz aparecer "botao -> Mypage no cabecalho da pagina -->
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Category" asp-action="Index">@SharedLocalizer["Categories"]</a>
+                                </li>
+
+                                <!-- Tab Customers-->
                                 <li class="nav-item">
                                     <!-- Para adicionar o menu no topo ao lado do menu -->
-                                    <a class="nav-link text-decoration-underline" asp-area="" asp-controller="Staff" asp-action="Index">.Staff.</a>
 
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Customer" asp-action="Index">@SharedLocalizer["Customers"]</a>
                                 </li>
+
+                                
+                                @*  Botao e Teste
+                                <li class="nav-item">
+                                    <!-- Para adicionar o menu no topo ao lado do menu -->
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="ShoppingBasket" asp-action="Index">@SharedLocalizer["Basket"]</a>
+
+                                </li> 
+                                    *@
+
+                               
+
+                               
                             }
                         @*} sai signinManager *@
                     </ul>

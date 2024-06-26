@@ -106,7 +106,7 @@ namespace CursoMod165.Controllers
 
                 // Atualizar quantidades em stock; colocar if (product.Quantity>=productList.Quantity)
                 // isto nao é feito aqui so qd for para embalar ...
-                product.Quantity = product.Quantity - productList.Quantity;
+                // product.Quantity = product.Quantity - productList.Quantity;
 
                 // Atualizar Valor total da encomenda
                 Sale? sale = _context.Sales.Find(productList.SaleID);
@@ -232,7 +232,9 @@ namespace CursoMod165.Controllers
                 // Toastr.SucessMessage tem de aparecer msg quando criar um novo
                 _toastNotification.AddSuccessToastMessage("Product order sucessfully updated.");
 
-                return RedirectToAction(nameof(Index));   // volta para a pagina principal, para o cliente saber que gravou, mostra lista
+                // return RedirectToAction(nameof(Index));   // volta para a pagina principal, para o cliente saber que gravou, mostra lista
+                // return Redirect("~/Sale/Index.cshtml");  
+                return RedirectToAction(actionName: "Index", controllerName: "Sale");
             }
 
             // Toastr.ERRORMessage aparecer msg em caso de falha 

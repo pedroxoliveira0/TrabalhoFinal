@@ -1,7 +1,9 @@
 ﻿using CursoMod165.Data;
 using CursoMod165.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Localization;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
@@ -19,27 +21,76 @@ namespace CursoMod165.Controllers
 
         // definicao de variaveis 
         private readonly IToastNotification _toastNotification; // Singleton -> ou seja tudo é igual em todo o lado as mesmas regras
+        private readonly IHtmlLocalizer<Resource> _sharedLocalizer;
+        private readonly IStringLocalizer<Resource> _localizer;
+        private readonly IEmailSender _emailSender;
+        private object htmlBody;
+
 
         // faz ligacao à base de dados - original
         // aqui defino var Toastr e ligacao à base de dados
         // IToastNotification toastNotification)
         public SaleController(ApplicationDbContext context,
-            IToastNotification toastNotification)
-        {
+            IToastNotification toastNotification,
+            IHtmlLocalizer<Resource> sharedLocalizer,
+            IStringLocalizer<Resource> localizer,
+            IEmailSender emailSender)
+            {
             // ligação à base de dados; emulação da base de dados
             _context = context;
             _toastNotification = toastNotification;
-        }
+            _sharedLocalizer = sharedLocalizer;
+            _localizer = localizer;
+            _emailSender = emailSender;
+            }
 
-        
+
+
+
+
         public IActionResult Index()
         {
-            IEnumerable<Sale> sales = _context
+
+            var salesif = _context
                                                 .Sales
                                                 .Include(s => s.Customer)
-                                                .ToList();  // para ir à base de dados usar "_XXXXX"
-                                                            // return View("../Home/Index");
-            return View(sales);  // tenho de colocar aqui a tabela de base de dados se não dá erro por retornar Null
+                                                .ToList();
+            // Resultados Vendor
+            if (User.IsInRole(CursoMod165Constants.ROLES.VENDOR)) // (c)
+            {
+                var salesifvendor = _context
+                                                .Sales
+                                                .Include(s => s.Customer)
+                                                .Where(s=>s.Status==Status.Ordered)
+                                                .ToList();
+                salesif = salesifvendor;
+            }
+
+            // Resultados WareHouse
+            if (User.IsInRole(CursoMod165Constants.ROLES.WAREHOUSEMAN)) // (c)
+            {
+                var salesifwarehouse = _context
+                                                .Sales
+                                                .Include(s => s.Customer)
+                                                .Where(s => s.Status != Status.Ordered)
+                                                .Where(s => s.Status != Status.Sent)
+                                                .ToList();
+                salesif = salesifwarehouse;
+            }
+
+            // Resultados se for Admin:
+            //if (User.IsInRole(CursoMod165Constants.ROLES.ADMIN) // (c)
+            //{
+             //   var salesifadmin = _context
+             //                                   .Sales
+             //                                   .Include(s => s.Customer)
+             //                                   .ToList();
+            // }
+
+            // @if (User.IsInRole(CursoMod165Constants.ROLES.VENDOR) || (User.IsInRole(CursoMod165Constants.ROLES.ADMIN))) // (c)
+
+
+            return View(salesif);  // (sales) tenho de colocar aqui a tabela de base de dados se não dá erro por retornar Null
             // return View();
         }
 
@@ -64,6 +115,7 @@ namespace CursoMod165.Controllers
         // ##############################
         //  Metodos: Ordered, Processed, Sent, IsPaid
         // #############################
+        [Authorize(Policy = POLICIES.APP_POLICY_VENDOR.NAME)]
         public IActionResult Ordered()
         {
             // tranco as chaves estrangeiras e com condição date == data de amanhã
@@ -77,6 +129,7 @@ namespace CursoMod165.Controllers
             return View(PurchaseOrdered);
         }
 
+        [Authorize(Policy = POLICIES.APP_POLICY_WAREHOUSEMAN.NAME)]
         public IActionResult Processed()
         {
             // tranco as chaves estrangeiras e com condição date == data de amanhã
@@ -90,6 +143,7 @@ namespace CursoMod165.Controllers
             return View(ProcessedOrdered);
         }
 
+        [Authorize(Policy = POLICIES.APP_POLICY_WAREHOUSEMAN.NAME)]
         public IActionResult Sent()
         {
             // tranco as chaves estrangeiras e com condição date == data de amanhã
@@ -103,6 +157,7 @@ namespace CursoMod165.Controllers
             return View(SentOrdered);
         }
 
+        [Authorize(Policy = POLICIES.APP_POLICY_WAREHOUSEMAN.NAME)]
         public IActionResult IsPaid()
         {
             // tranco as chaves estrangeiras e com condição date == data de amanhã
@@ -406,28 +461,143 @@ namespace CursoMod165.Controllers
 
 
 
+
+
+        public IActionResult ChoiceFromAllProductList(int id)
+        {
+            // IEnumerable<Product> products = _context
+            // 
+            // Esta é a minha Lista de produtos ...
+            var ProductOrderList = _context
+                                      .ProductLists
+                                      .Include(c => c.Product)
+                                      .Include(c => c.Sale)
+                                      .Include(c => c.Product.Category)
+                                      .ToList();  // para ir à base de dados usar "_XXXXX"
+                                                  // return View("../Home/Index");
+
+            var Allproducts = _context
+                                .Products
+                                .Include(c => c.Category)
+                                .ToList();
+            
+            ViewBag.Quantity = 0;
+            ViewBag.OrderID = id;
+            ViewBag.AllProductsList = Allproducts;
+            return View(ProductOrderList);
+            // return View();
+
+        }
+
+
+        // ##############################
+        //  So é possivel obter a vista se fizer return da Vista:
+        //  Aqui adiciona produto à encomenda
+        // #######################
+        // 1º Devolve a Lista de produtos 
+        [HttpGet]
+        public IActionResult AddProductToList(int id)
+        {
+
+            // IEnumerable<Product> products = _context
+            var products = _context
+                                      .Products
+                                      .Include(c => c.Category)
+                                      .ToList();  // para ir à base de dados usar "_XXXXX"
+                                                  // return View("../Home/Index");
+
+            ViewBag.Quantity = 0;
+            ViewBag.OrderID = id;
+            ViewBag.AllProductsList = products;
+            return View(products);
+            // return View();
+        }
+
+        // ###################
+        // Aqui vou adicionar o produto à venda na qtd escrita no campo
+        // mas nao saio da mesma vista qd primo botao ADD
+        // #################
+        [HttpPost]
+        public IActionResult AddProductToList(Product product, int id) //devolve ID do Produto a adicionar
+        {
+
+           
+
+
+            if (ModelState.IsValid)
+            {
+
+                ProductList? productList = _context.ProductLists.Find(id);
+                
+                //_context.ProductLists.Add(productList);
+                // Procurar preço com ProdutoID
+                // Dados do produto em Stock
+                Product? productx = _context.Products.Find(ViewBag.OrderID);  //  productList.ProductID
+                ViewBag.Price = productx.Price;
+
+                // Quantidade é igual ao valor da celula
+                productList.Quantity=0;
+
+                ViewBag.Quantity = productList.Quantity;
+
+                // Atualizar quantidade no Stock
+                // O stock é so atualizado no Package product.Quantity = product.Quantity - ViewBag.Quantity;
+
+                // Vai buscar Classe Sale
+                // Sale? sale = _context.Sales.Find(productList.SaleID);
+                // ViewBag.Sale = sale.ID;
+                // sale.Observations = " ";
+
+                // Vai buscar Classe Sale
+                // Customer? customer = _context.Customers.Find(sale.CustomerID);
+                // ViewBag.Customer = customer.ID;
+
+                // Carrega valores automaticos , preço e cod de venda
+                productList.Price = ViewBag.Price;    // =0;  ViewBag.ClienteID # Esta a funcionar OK
+                //productList.SaleID = ViewBag.Saleid; // Novo teste 18-06
+                // productList.SaleID= 3;
+                productList.SaleID = ViewBag.Sale;
+
+                // Atualiza TotalPrice da Encomenda
+                //ViewBag.TotalPrice = sale.TotalPrice;
+                //sale.TotalPrice = ViewBag.TotalPrice + (ViewBag.Price * ViewBag.Quantity);
+
+                Category? category = _context.Categories.Find(product.CategoryID);
+                ViewBag.Category = category.ID;
+
+                // Coloca a Zero para poder criar Novo
+                productList.ID = 0;
+                //_context.ProductLists.Update(productList);  // update ???
+                _context.ProductLists.Add(productList);
+                _context.SaveChanges();     // tens aqui varios pedido agora grava
+                // ViewBag.CodVenda=productList.SaleID;
+
+                
+         
+
+                return RedirectToAction(nameof(Index)); //Index
+            }
+
+            
+
+            // Envia Listas  para a vista
+            // this.SetupProductList();
+
+            //return View(productList);
         
 
 
 
-        // So é possivel obter a vista se fizer return da Vista:
-        public IActionResult AddProductToList()
-        {
-            IEnumerable<Product> products = _context
-                                                .Products
-                                                .Include(c => c.Category)
-                                                .ToList();  // para ir à base de dados usar "_XXXXX"
-                                                            // return View("../Home/Index");
-            return View(products);
+           
 
-            // return View();
+            return View(ViewBag.AllProductsList);
         }
 
 
 
-        // aqui apenas tenho de usar o ID da Sale, que se mantem e adicionar Produto ID
-        // dentro da minha ProductList
-        [HttpGet]
+            // aqui apenas tenho de usar o ID da Sale, que se mantem e adicionar Produto ID
+            // dentro da minha ProductList
+            [HttpGet]
         public IActionResult AddToList(int id)  // private static void
         {
 
@@ -467,6 +637,8 @@ namespace CursoMod165.Controllers
 
 
 
+
+
         [HttpPost]
         public IActionResult AddToList(ProductList productList)  // private static void
         {
@@ -494,6 +666,7 @@ namespace CursoMod165.Controllers
 
         // Adiciona produtos à ordem de venda
         // este metodo transporta o SaleID
+        [Authorize(Policy = POLICIES.APP_POLICY_VENDOR.NAME)]  //  so o admin e vendedor é que poode aceder
         [HttpGet]
         public IActionResult AddProductToOrder(int id)  // (int id)
         {
@@ -509,7 +682,7 @@ namespace CursoMod165.Controllers
 
 
 
-
+        [Authorize(Policy = POLICIES.APP_POLICY_VENDOR.NAME)]  //  so o admin e vendedor é que poode aceder
         [HttpPost]
         public IActionResult AddProductToOrder(ProductList productList)
         {
@@ -526,7 +699,7 @@ namespace CursoMod165.Controllers
                 ViewBag.Quantity = productList.Quantity;
 
                 // Atualizar quantidade no Stock
-                product.Quantity = product.Quantity - ViewBag.Quantity;
+                // O stock é so atualizado no Package product.Quantity = product.Quantity - ViewBag.Quantity;
 
                 // Vai buscar Classe Sale
                 Sale? sale = _context.Sales.Find(productList.SaleID);
@@ -550,8 +723,10 @@ namespace CursoMod165.Controllers
                 Category? category = _context.Categories.Find(product.CategoryID);
                 ViewBag.Category = category.ID;
 
+                // Coloca a Zero para poder criar Novo
+                productList.ID = 0;  
                 //_context.ProductLists.Update(productList);  // update ???
-                _context.ProductLists.Update(productList);
+                _context.ProductLists.Add(productList);
                 _context.SaveChanges();     // tens aqui varios pedido agora grava
                 // ViewBag.CodVenda=productList.SaleID;
 
@@ -754,6 +929,7 @@ namespace CursoMod165.Controllers
         // #################################
         //  TotalEquity
         // #########################
+        [Authorize(Policy = POLICIES.APP_POLICY_ADMIN.NAME)]
         public IActionResult TotalEquity()
         {
 
@@ -789,43 +965,396 @@ namespace CursoMod165.Controllers
 
         }
 
+        // ###########################
+        //  Order Process
+        // ########################
+        // 1- Colocar a venda em processamento,
+        // 2- Verificar a existencia do produto (corrigir a subtracao da qtd na criacao da venda), colocar obs se nao existir e abater preço
+        // 3- depois de validada, passa encomenda a processada, ver como fazer isto
+        public async Task<IActionResult> OrderProcess(ProductList productList, int id)  // (ProductList productList, int id)
+        {
+            Sale? sale = await _context.Sales.FindAsync(id);
+
+            //  sale == null || sale.Status!=Status.Package && (sale.Status == Status.Ordered || sale.Status == Status.Purchase_Process)
+            if (sale != null && (sale.Status == Status.Ordered))
+            {
+                // identificacao das variaveis venda e customer
+                ViewBag.SaleID = id;
+                ViewBag.CustomerID = sale.CustomerID;
+                ViewBag.NumVenda = sale.CodVenda;
+                // inicia var
+                ViewBag.Obs = sale.Observations;
+                ViewBag.SoldOut = false;
+
+                // Verifica existencia em stock e caso não exista, adiciono comentario nas observacoes
+                // criar uma string, para incluir todos os produtos
+                // Retorna a Lista de produtos pelo ID venda 
+                var produtListBySetCodVenda = _context
+                                        .ProductLists
+                                        .Include(p => p.Sale)
+                                        .Include(p => p.Sale.Customer)
+                                        .Include(p => p.Product)
+                                        .Include(p => p.Product.Category)
+                                        .Where(p => p.SaleID == id)
+                                        .ToList();
+
+
+                // Verifca existencia em stock e regista em caso de falta 
+                foreach (var p in produtListBySetCodVenda)
+                {
+                    // Atualizar Status
+                    p.Sale.Status = Status.Purchase_Process;
+
+                    //p.Product.Quantity = p.Product.Quantity - p.Quantity;
+                    if (p.Product.Quantity < p.Quantity)
+                    {
+                        p.Price = 0;
+                        ViewBag.Obs = "Attention : " + p.Product.Description + " near Sold Out. " + ViewBag.Obs;
+                        // + "Produto, {0} com rutura de stock", p.Product.Description.ToString();
+                        ViewBag.SoldOut = true;
+                    }
+
+                    // A informacao mais antiga fica no fim
+                    p.Sale.Observations = ViewBag.Obs;
+
+
+
+                }
+                if (ViewBag.Soldout)
+                {
+                    // Toastr.ERRORMessage aparecer msg em caso de falha 
+                    _toastNotification.AddErrorToastMessage("Sold Out.");
+
+                }
+
+
+                // Toastr.SucessMessage tem de aparecer msg quando criar um novo
+                _toastNotification.AddSuccessToastMessage("Order sucessfully updated.");
+
+
+
+                // atualiza DBase
+                _context.Sales.Update(sale);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction("Index");
+
+
+            }
+
+            // Toastr.ERRORMessage aparecer msg em caso de falha 
+            _toastNotification.AddErrorToastMessage("Error - Order not updated.");
+
+            //return NotFound();
+            return View();
+
+
+        }
+        // ###########################
+        //  Validation to Package
+        // ########################           
+        // Verificado pelo operador e passa para embalado
+        public async Task<IActionResult> PackageOrder(ProductList productList, int id)  // (ProductList productList, int id)
+        {
+            Sale? sale = await _context.Sales.FindAsync(id);
+
+            //  sale == null || sale.Status!=Status.Package
+            if (sale != null && sale.Status == Status.Purchase_Process)
+            {
+                // identificacao das variaveis venda e customer
+                ViewBag.SaleID = id;
+                ViewBag.CustomerID = sale.CustomerID;
+                ViewBag.NumVenda = sale.CodVenda;
+
+                // passa para Pachage (embalado) por accao do operador
+                sale.Status = Status.Package;
+
+
+                // atualiza DBase
+                _context.Sales.Update(sale);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction("Index");
+            }
+
+            // Toastr.ERRORMessage aparecer msg em caso de falha 
+            _toastNotification.AddErrorToastMessage("Error - Order not updated.");
+
+            //return NotFound();
+            return View();
+
+
+        }
+
+
+
+            // ##########################
+            // Sent Order
+            // ##########################
+            // 1 - O operador vai buscar os produtos da encomenda
+            // 2 - os stock são atualizados, só aqui é que o stock é subtraido
+            // 3 - a encomenda é empacotada e enviada para empresa de transportes
+            // 4 - è enviado email cliente
+
+
+
+
+            public async Task<IActionResult> SentOrder(ProductList productList, int id)  // (ProductList productList, int id)
+            {
+
+
+            Sale? sale = await _context.Sales.FindAsync(id);
+
+                 //  sale == null || sale.Status!=Status.Package
+                if (sale != null && sale.Status == Status.Package)  
+                {
+                    // identificacao das variaveis venda e customer
+                    ViewBag.SaleID = id;
+                    ViewBag.CustomerID = sale.CustomerID;
+                    ViewBag.NumVenda = sale.CodVenda;
+
+                    // Atualiza Stock, tenho de correr cada um dos produtos da encomenda e atualizar stock
+                    //sale.TotalPrice = sale.TotalPrice + (productList.Price * productList.Quantity);
+                    // Retorna a Lista de produtos pelo ID venda 
+                    var produtListBySetCodVenda = _context
+                                        .ProductLists
+                                        .Include(p => p.Sale)
+                                        .Include(p => p.Sale.Customer)
+                                        .Include(p => p.Product)
+                                        .Include(p => p.Product.Category)
+                                        .Where(p => p.SaleID == id)
+                                        .ToList();
+
+                    // Atualiza quantidades em stock
+                    foreach (var p in produtListBySetCodVenda)
+                    {
+                        p.Product.Quantity = p.Product.Quantity - p.Quantity;
+                    }
+
+                    // var TotalSumAll = produtListBySetCodVenda.Sum(p => p.TotalPrice);
+
+                    // Passa Venda para Sent (Apenas se está em Package, confirmado no inicio)
+                    sale.Status = Status.Sent;
+                    // atualiza DBase
+                    _context.Sales.Update(sale);
+                    await _context.SaveChangesAsync();     // tens aqui varios pedido agora grava
+
+                    // Envia email para cliente
+                    Customer? customer = await _context.Customers.FindAsync(sale.CustomerID);
+                    ViewBag.CustomerName = customer.Name;
+                    ViewBag.CustomerEmail = customer.Email;
+
+                    // como obter a lingua selecionada na view do Browser do cliente :
+                    var culture = Thread.CurrentThread.CurrentUICulture;
+
+
+                    // agora temos de carregar o template do email, que não é mais do que uma string enorme, a raiz da dir é CursoMod165
+                    // vai á diretoria do projecto "EmailTemplates"
+                    string template = System.IO.File.ReadAllText(
+                    Path.Combine(
+                        Directory.GetCurrentDirectory(),
+                        "EmailTemplates",
+                        $"sent_order.{culture.Name}.html"
+                        )
+                    );
+
+
+                    StringBuilder htmlBody = new StringBuilder(template);
+                    htmlBody.Replace("##CUSTOMER_NAME##", customer.Name);
+                    htmlBody.Replace("##COD_ORDER##", sale.CodVenda);
+                    htmlBody.Replace("##TOTAL_PRICE##", sale.TotalPrice.ToString());  // sale.TotalPrice
+
+
+                    //Aqui enviamos um email ...
+                    // (customer.Email,
+                    // Obtem email do cliente no regisot de cliente do mesmo
+                    _emailSender.SendEmailAsync(ViewBag.CustomerEmail, "Sent Order",
+                        htmlBody.ToString());
+
+
+
+                    // Toastr.SucessMessage tem de aparecer msg quando criar um novo
+                    _toastNotification.AddSuccessToastMessage("Order sucessfully updated.");
+
+                    // Mostra Toast a informar que enviou emails
+                    _toastNotification.AddSuccessToastMessage($" {sale.CodVenda} Emails sucessfully sent.");
+
+                    return RedirectToAction("Index");
+
+                }
+
+
+                // Toastr.ERRORMessage aparecer msg em caso de falha 
+                _toastNotification.AddErrorToastMessage("Error - Order not updated.");
+
+                //return NotFound();
+                return View();
+
+
+            }
+
+
+        // ###########################
+        // BOTAO - example-Teste async   if (ModelState.IsValid) / if (product == null)
+        // #########################
+        
+        //public async Task<IActionResult> botao(ProductList productList,int id)
+        //{
+        //
+        //
+        //    Sale? sale = await _context.Sales.FindAsync(id);
+            
+
+         //   if (sale == null)
+         //   {
+         //       return View(); 
+         //   }
+
+            // teste muda estado encomenda para sent
+         //   ViewBag.SaleID = id;
+         //   sale.Status = Status.Sent;
+            //sale.TotalPrice = sale.TotalPrice + (productList.Price * productList.Quantity);
+
+            // atualiza DBase
+         //   _context.Sales.Update(sale);
+         //   await _context.SaveChangesAsync();     // tens aqui varios pedido agora grava
+            
+
+         //   return RedirectToAction("Index"); // tenho de retornar uma vista ...
+            // return RedirectToAction(nameof(index)); -> outra forma de apresentar igual
+
+
+        // }
+
+        // ##########################
+        // Create do Basket (Botao)
+        // ###################
+
+        // #############################
+        // Create 
+        // Adiciona produtos à ordem de venda...
+        [HttpGet]
+        public IActionResult Botao()
+        {
+
+            //ViewBag.SaleList = new SelectList(_context.Sales, "ID", "CodVenda");
+            // Passar List Products para a view
+            // ViewBag.ProductList = new SelectList(_context.ProductLists, "ID", "Name");
+            //ViewBag.ProductList = new SelectList(_context.Products, "ID", "Description");  // Description
+            // fazer uma lista nova incluindo acesso à base de dados categorias
+            var ProductListx = _context.Products
+                                               .Include(p => p.Category)  //inner join => a partir da chave estrangueiro quero o nome               
+                                               .Select(p => new
+                                               {
+                                                   // coloca role à frente do nome na lista
+                                                   // funcao select [aparece nome do medico  combinado com a sua profissao]
+                                                   ID = p.ID,  // = p.ID
+                                                   Name = $"{p.Description} [{p.Category.Name}]"
+                                               });
+
+
+
+            ViewBag.ProductList = new SelectList(ProductListx, "ID", "Name");  //  ProductListx, "ID", "Name"
+
+
+            // ViewData["Titulo1"] = "Trabalho Final Curso ASP.NET 165";
+            ViewBag.SaleList = new SelectList(_context.Sales, "ID", "CodVenda");
+
+
+
+            // NOVO Envia Dbase par a avista
+            var productLists = _context
+                                                .ProductLists
+                                                .Include(p => p.Sale)
+                                                .Include(p => p.Sale.Customer)
+                                                .Include(p => p.Product)
+                                                .Include(p => p.Product.Category)
+                                                .OrderBy(p => p.SaleID)
+                                                .ToList();  // para ir à base de dados usar "_XXXXX"
+
+
+
+            // Teste codigo :
+
+
+
+
+
+
+            // Teste cofigo - FIM
+
+            //return View(productLists);
+
+            // Fim NOVO
+
+            // ViewBag.Categories = new SelectList(_context.Categories, "ID", "Name");
+            return View();  
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Botao(ProductList productList)
+        {
+
+           
+
+            if (ModelState.IsValid)
+            {
+
+                // Ler preço do produto escolhido
+                // productList.Price = 111;
+                
+                Product? product = await _context.Products.FindAsync(productList.ProductID);
+                productList.Price = product.Price;
+
+
+                // Atualizar quantidades em stock; colocar if (product.Quantity>=productList.Quantity)
+                // isto nao é feito aqui so qd for para embalar ...
+                // product.Quantity = product.Quantity - productList.Quantity;
+
+                //  Atualizar Valor total da encomenda
+                Sale? sale = await _context.Sales.FindAsync(productList.SaleID);
+                sale.TotalPrice = sale.TotalPrice + (productList.Price * productList.Quantity);
+
+
+                productList.ID = 0;  // Ver o que dá ...o ID devia aparecer a Zero e aparece com valor 
+                _context.ProductLists.Add(productList);
+                await _context.SaveChangesAsync();     // tens aqui varios pedido agora grava
+
+                // Toastr.SucessMessage tem de aparecer msg quando criar um novo
+                _toastNotification.AddSuccessToastMessage("Product sucessfully Added to Order.");
+
+                return RedirectToAction("Index");
+                // return RedirectToAction(nameof(index)); -> outra forma de apresentar igual
+
+
+            }
+
+            // Toastr.ERRORMessage aparecer msg em caso de falha 
+            _toastNotification.AddErrorToastMessage("Error - Product not Added to Order.");
+
+
+
+            // Envia Listas  para a vista
+            this.SetupProductList();
+
+            return View(productList);
+        }
+
+
+
+
+
+        // ########################
+        // Fim - Create do Basket (botao)
+        // ######################
+
 
 
 
         // ##################################
         // Funcoes diversas aqui :
         // #############################
-        private void SetupSales()
-        {
-            ViewBag.CustomerList = new SelectList(_context.Customers, "ID", "Name");
-
-            // uma possibilidade o role ser condicionado só tem acesso que nos queremos
-            //_context.Staffs.Where(s => s.StaffRoleID != 1);     // esta solução é provisoria por nao ser escalável
-
-
-            //    esta é a solução correta ver staff roles models
-            var staffList = _context.Staffs
-                                    .Include(s => s.StaffRole)   // s são todos os elementos que estão no dB set
-                                    .Where(s => s.StaffRole.CanDoAppointments == true)
-                                    .Select(s => new {
-                                        // coloca role à frente do nome na lista
-                                        ID = s.ID,
-                                        Name = $"{s.Name} [{s.StaffRole.Name}]"
-                                    });
-
-            ViewBag.StaffList = new SelectList(staffList, "ID", "Name");
-
-
-            // em SQL faz-se assim: (por convenção é assim)
-            //      selectList *
-            //      From staff s
-            //      INNER JOIN staffRoles sr
-            //      ON s.StaffRoleID = sr.ID;
-
-        }
-
-
-        
+               
         private void SetupProductList()
         {
             // retorna Listas dos produtos e Num. Venda para as Vistas
@@ -863,6 +1392,36 @@ namespace CursoMod165.Controllers
 
 
         // END
+
+
+
+        // #########################
+        //    Teste metod
+        // ######################
+
+
+
+        public IActionResult ButtonClick()
+        {
+            return View();
+        }
+        public IActionResult check(string button)
+        {
+            if (!string.IsNullOrEmpty(button))
+            {
+                TempData["ButtonValue"] = string.Format("{0} button clicked.", button);
+            }
+            else
+            {
+                TempData["ButtonValue"] = "No button click!";
+            }
+            return RedirectToAction("Botao");  // "ButtonClick" 
+        }
+
+
+
+
+
     }
 
 }

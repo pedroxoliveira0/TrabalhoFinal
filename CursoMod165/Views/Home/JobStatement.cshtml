@@ -299,66 +299,53 @@
 
 
 
-<b>Nota:</b>
-<li>Criar tabela Staff, com as Rolls, vendedor, Logistica e Administrador</li>
-<br />
-<li>Ver como apagar a base de dados produtos e migracao e criar uma nova, sem weight obrigatorio e c/ unid.</li>
-<br />
+
 
 
 <h4>Observações:</h4>
 <body>
 
-Na tabela produtos colocar um campo texto, com o link para a foto do produto <br />
-	o link, numa primeira fase não fica visivel quando faço a listagem, depois logo vejo como fazer <br />
-	para a foto aparecer na listagem de produtos.<br />
-	No prenchimento do produto de acordo com a categoria colocar campo qtd ou peso, devia haver antes um campo unidades no produto.<br />
-	Nao usar o campo peso, so qtd e ver como criar uma tabela com as unidades do tipo speciality<br />
+	
 
 	1. Acoes a realizar:<br />
-	1.1. Criar as Tabelas, Category, Products, customers (usar o k ja está feito para os Customers) e Sales<br />
-	1.1.1. Adicionar ao cliente campo plafound/credito; com valor de debito atribuido a esse cliente (a iniciar em 20€)<br /> 
-	1.1.2. Adicionar ao cliente campo desconto ou classificacao (ouro,prata,bronze), correspondete ao desconto que tem
-	1.1.2. o numero do cliente devia ser de insercao automatica ...
-	1.1.3. O numero da venda ou identificador deve ter um padrao e ser de insercao automatica (tipo:V2024/A/001)
-	1.2. Seguir o que está estipulado no enunciado para essas tabelas <br />
-	<br />
-	2. Funcionalidades<br />
-	2.1. Criar as vistas com as tabelas, começar com as mais faceis (ex:Produtos)<br />
-	2.2. Criar boloes adicionais no topo da tabela, para funcoes adicionais, Inserir, como historico e saldo corrente<br />
-	<b>2.3. Ver a lista de produtos por categoria é para fazer na area de produtos e nao na categoria </b>
+
 	
 	<br />
 	3. Area de Vendas<br />
 	3.1. Fazer tabela com listagem de vendas, filtrar por cliente<br />
-	3.2. Botao inserir (encomenda)<br />
-	3.3. Prencher o identificador (é o utilizador que cria essa encomenda???) <br />
 	3.4. quando tenho a lista de encomendas, filtrar por cliente nesse momento vou ter botao processamento no topo<br />
 	3.5. julgo que a ideia é quando selecionar a vista dessa encomenda é que vou ter o botao para processamento
 	(nao faço a minima ideia de como fazer, encomendas, processamento e envio)<br />
 3.6. Ter nas vendas/encomendas um campo enviada, correspondente ao evio efectivo da encomenda<br />
 
 	<br />
-	Duvidas:<br />
-	Como fazer "saldo corrente" do cliente, se pode só aparecer quando se isola esse cliente numa vista<br />
-	o "Historico de vendas" do cliente é num vista à parte???<br />
-	Nao sei como selecionar o cliente, a venda, o envio para o cliente (R. Na vista da encomenda)<br />
-	Nao sei como fazer envio (R. Eventualmente Lista dos envios do dia da semana ou pendentes, com um pisco enviada para nao aparecer na lista)<br />
-	O que é o saldo corrente geral (será diferença do somatorio de vendas faturadas vs vendas liquidadas???)<br />
-	Ver se faz sentido ter um menu WareHouse<br />
+
+	Em Falta:
+	Na criacao de produtos adicionar o campo peso (usado para envio de mercadorias, será peso por unidade, kd for igual a kilo é )
+	Criar Formatacao para codigo postal
+	Na criacao de produtos adicionar o campo peso (usado para envio de mercadorias, será peso por unidade, kd for igual a kilo é )
+	<p> Falta Alterar a letra quando chego ao 999 </p>
+	<p> Melhorar centecimas e decimas do campo quantidade e preço </p>
+	<p> Alterar cor das views para cinza/grey </p>
+	<p> zip code nao tem formatacao </p>
+	<p> Colocar email na Lista/index de customers </p>
+	<p> Edit customer nao funciona </p>
+	<p> Alterar Cod. Customer para String 000000 </p>
+	<p> Ver placeholder="mm/dd/yyyy" -> julgo k é formatacao </p>
+	<p> Falta back list nos products Index </p>
+	<p> Colocar Status da order visivel na listagem de ordens </p>
+	<p> passar eventualmente # para o nº Ordem, ver aula onde é aplicado </p>
+	<p> Analisar codigo script do CursoMod165 </p>
+	<p> falta ver o k acoontece se apagar uma categoria que já é usada por determinado produto</p>
+	<h6 class="text-danger">Adicionar Index.Number para voltar a pagina Details,...ver o que se q...</h6>
 
 
-	<br />
-	<b>Perguntas:</b><br />
-	1. Qual a ideia do campo peso nos produtos  <br />
-	2. Uma ou duas formas de fazer deployment da solução, sendo uma mais simples por exemplo numa LAN<br />
-	3. Na internacionalização no caso da pagina polity, como fazer; na mesma pagina ter varias linguas ou varias ter paginas<br />
-		R.: SOlucao ter varias vistas, .pt; .uk; etc <br />
-	4. Tirar as minhas duvidas sobre a relacao das tabelas sale, e produtos, saber se para seguir a estrutura das tabelas, <br />
-		ou se pode fazer como apresento e se quais as vantagens e desvantagens em relacao ao pedido no enunciado. <br />
-		por exemplo se seguir como está no enunciado como faço para usar o registo principal...<br />
-		Julgo que faz sentido ter uma lista de produtos, em vez de um link para o produto <br />
-	5. Como Instalar esta Framework numa rede local, 1 ou duas sugestões <br /> 
+	<h6 class="text-danger"> Adicionar coluna com total por linha de cada produto qtd x preco (não é obrigatorio) </h6>
+	<h6 class="text-danger"> Preencher de forma simples observacoes e identificador; ja tenho mas nao esta claro </h6>
+	<h6 class="text-danger"> Ver como numeros do URL ficam encriptados videos </h6>
+	<h6 class="text-danger"> Falta internacionalizacao Sales,Produtos,Order ... </h6>
+	<h6 class="text-danger"> Verificar se as mensagens toastr sao internacionias ... </h6>
+
 
 
 </body>

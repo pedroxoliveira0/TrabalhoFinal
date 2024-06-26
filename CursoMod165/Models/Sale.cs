@@ -19,7 +19,7 @@ namespace CursoMod165.Models
 		[StringLength(30)]
 		[DataType(DataType.Text)]
         [Required]
-        [Display(Name = "Cod. Venda")]  
+        [Display(Name = "Cod. Order")]  
 		public string CodVenda { get; set; }
 
 

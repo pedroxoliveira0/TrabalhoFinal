@@ -3,7 +3,7 @@
 @* aqui apresento uma lista com o conteudo da dBase *@
 
 
-<h1>Order Index</h1>
+<h1>@SharedLocalizer["Order"]</h1>
 
 
 <!-- Apresento 1º cabecalho e de seguinda num ciclo for o conteudo linha a linha da base de dados -->
@@ -14,45 +14,45 @@
 
             <th>
                 <!--   está só =  Descricao    -->
-                @Html.DisplayNameFor(model => model.CodVenda)
+                @SharedLocalizer[@Html.DisplayNameFor(model => model.CodVenda)]
             </th>
 
             <th>
                 <!--  Preço  -->
-                @Html.DisplayNameFor(model => model.Date)
+                @SharedLocalizer[@Html.DisplayNameFor(model => model.Date)]
             </th>
 
             <th>
                 <!--  Quantidade  -->
-                @Html.DisplayNameFor(model => model.Time)
+                @SharedLocalizer[@Html.DisplayNameFor(model => model.Time)]
             </th>
 
             <!--// o proximo campo tem e ser obtido numa outra tabela com a chave estrangeira -->
             <th>
                 <!--  Nome na tabela category  -->
-                @Html.DisplayNameFor(model => model.Customer.Name)
+                @SharedLocalizer[@Html.DisplayNameFor(model => model.Customer.Name)]
             </th>
 
             <!-- Codigo da unidade th ou td bold ou nao-->
             <th>
                 <!-- Nome do produto dentro da category -->
-                @Html.DisplayNameFor(model => model.Status)
+                @SharedLocalizer[@Html.DisplayNameFor(model => model.Status)]
             </th>
 
             <!-- Codigo da unidade th ou td bold ou nao -->
             <th>
                 <!-- Nome do produto dentro da category -->
-                @Html.DisplayNameFor(model => model.Observations)
+                @SharedLocalizer[@Html.DisplayNameFor(model => model.Observations)]
             </th>
 
             <!-- Codigo da unidade th ou td bold ou nao-->
             <th>
                 <!-- Nome do produto dentro da category -->
-                @Html.DisplayNameFor(model => model.IsPaid)
+                @SharedLocalizer[@Html.DisplayNameFor(model => model.IsPaid)]
             </th>
             <th>
                 <!-- Nome do produto dentro da category -->
-                @Html.DisplayNameFor(model => model.TotalPrice)
+                @SharedLocalizer[@Html.DisplayNameFor(model => model.TotalPrice)]
             </th>
 
 
@@ -64,7 +64,8 @@
     <tbody>
         @if (!Model.Any())
         {
-            <tr>No Data (A base de dados nao tem qualquer valor preenchido) </tr>
+            <!-- (A base de dados nao tem qualquer valor preenchido) -->
+            <tr>@SharedLocalizer["No Data"]  </tr>
 
         }
         <!-- para cada elemento do staff apresenta os seguintes campos -->
@@ -129,7 +130,7 @@
                 <th width="330" style="background-color:cornflowerblue" align="right">  </th>
             </tr>
             <tr>
-                <td><b>Total Value :</b></td>
+                <td><b>@SharedLocalizer["Totals"] : </b></td>
                 <td align="right">@ViewBag.TotalEquity</td>   <!-- (c)Int32.Parse(@ViewBag.Totals) // .toFixed(2) -->
             </tr>
         </table>
@@ -141,7 +142,7 @@
         @* <a asp-action="Edit" asp-route-id="@Model.ID">Edit</a> *@
         
         @* <a asp-action="Index"> Back to List</a> *@
-        <a class="btn btn-outline-info" asp-action="Index">Back to List</a>
+        <a class="btn btn-outline-info" asp-action="Index">@SharedLocalizer["Back to List"]</a>
 
     </div>
 

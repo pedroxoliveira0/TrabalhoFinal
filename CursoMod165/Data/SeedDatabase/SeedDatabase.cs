@@ -38,27 +38,27 @@ namespace CursoMod165.Data.SeedDatabase
             }
 
 
-                var dbAdministrative = await userManager.FindByNameAsync(CursoMod165Constants.USERS.ADMINISTRATIVE.USERNAME); // era admin para ao que está existente vamos ver se a base de dados tem algum user admin
+                var dbAdministrative = await userManager.FindByNameAsync(CursoMod165Constants.USERS.WAREHOUSEMAN.USERNAME); // era admin para ao que está existente vamos ver se a base de dados tem algum user admin
 
                 if (dbAdministrative == null)
                 {
                     // aqui vamos fazer ciclo para criar registos de utilizadores
                     IdentityUser userAdministrative = new IdentityUser()
                     {
-                        UserName = CursoMod165Constants.USERS.ADMINISTRATIVE.USERNAME  // Admin passa para CursoMod165Constants para não haver erros de typing, deve-se ter as constantes corresponentes aos users 
+                        UserName = CursoMod165Constants.USERS.WAREHOUSEMAN.USERNAME  // Admin passa para CursoMod165Constants para não haver erros de typing, deve-se ter as constantes corresponentes aos users 
                     };
-                    var result = await userManager.CreateAsync(userAdministrative, CursoMod165Constants.USERS.ADMINISTRATIVE.PASSWORD);  // await espera, se admin nao existe entao cria.
+                    var result = await userManager.CreateAsync(userAdministrative, CursoMod165Constants.USERS.WAREHOUSEMAN.PASSWORD);  // await espera, se admin nao existe entao cria.
                 
                     // aqui cria utilizador e atribui um role ...
                     if (result.Succeeded== true)
                     {
-                        dbAdministrative = await userManager.FindByNameAsync(CursoMod165Constants.USERS.ADMINISTRATIVE.USERNAME);
-                        await userManager.AddToRoleAsync(dbAdministrative!, CursoMod165Constants.ROLES.ADMINISTRATIVE); // ! pk sabemos que existe, foi criado no passo anterior
+                        dbAdministrative = await userManager.FindByNameAsync(CursoMod165Constants.USERS.WAREHOUSEMAN.USERNAME);
+                        await userManager.AddToRoleAsync(dbAdministrative!, CursoMod165Constants.ROLES.WAREHOUSEMAN); // ! pk sabemos que existe, foi criado no passo anterior
                     }
                 }
 
 
-                var dbDriver = await userManager.FindByNameAsync(CursoMod165Constants.USERS.DRIVER.USERNAME);
+                var dbDriver = await userManager.FindByNameAsync(CursoMod165Constants.USERS.VENDOR.USERNAME);
 
                 if (dbDriver == null)
                 {
@@ -66,15 +66,15 @@ namespace CursoMod165.Data.SeedDatabase
                     // aqui vamos fazer ciclo para criar registos de utilizadores
                     IdentityUser userDriver = new IdentityUser()
                     {
-                        UserName = CursoMod165Constants.USERS.DRIVER.USERNAME  // Admin passa para CursoMod165Constants para não haver erros de typing, deve-se ter as constantes corresponentes aos users 
+                        UserName = CursoMod165Constants.USERS.VENDOR.USERNAME  // Admin passa para CursoMod165Constants para não haver erros de typing, deve-se ter as constantes corresponentes aos users 
                     };
-                    var result = await userManager.CreateAsync(userDriver, CursoMod165Constants.USERS.DRIVER.PASSWORD);  // await espera, se admin nao existe entao cria.
+                    var result = await userManager.CreateAsync(userDriver, CursoMod165Constants.USERS.VENDOR.PASSWORD);  // await espera, se admin nao existe entao cria.
                 
 
                     if (result.Succeeded == true)
                     {
-                        dbDriver = await userManager.FindByNameAsync(CursoMod165Constants.USERS.DRIVER.USERNAME);
-                        await userManager.AddToRoleAsync(dbDriver!, CursoMod165Constants.ROLES.DRIVER); // ! pk sabemos que existe, foi criado no passo anterior
+                        dbDriver = await userManager.FindByNameAsync(CursoMod165Constants.USERS.VENDOR.USERNAME);
+                        await userManager.AddToRoleAsync(dbDriver!, CursoMod165Constants.ROLES.VENDOR); // ! pk sabemos que existe, foi criado no passo anterior
                     }
                 }
 
@@ -99,51 +99,51 @@ namespace CursoMod165.Data.SeedDatabase
             }
         
 
-        // ADMINISTRATIVE
+        // WAREHOUSEMAN
        
             // não queremos usar strings diretamente "ADMIN" para protecao, passamos para cosntantes 
-            roleCheck = await roleManager.RoleExistsAsync(CursoMod165Constants.ROLES.ADMINISTRATIVE);  // lOGO COLOcamos nas constantes
+            roleCheck = await roleManager.RoleExistsAsync(CursoMod165Constants.ROLES.WAREHOUSEMAN);  // lOGO COLOcamos nas constantes
 
             if (!roleCheck)
             {
-                var administrativeRole = new IdentityRole
+                var warehousemanRole = new IdentityRole
                 {
-                    Name = CursoMod165Constants.ROLES.ADMINISTRATIVE
+                    Name = CursoMod165Constants.ROLES.WAREHOUSEMAN
                 };
 
-                await roleManager.CreateAsync(administrativeRole);
+                await roleManager.CreateAsync(warehousemanRole);
             }
         
 
-        // DRIVER
+        // VENDOR
         
             // não queremos usar strings diretamente "ADMIN" para protecao, passamos para cosntantes 
-            roleCheck = await roleManager.RoleExistsAsync(CursoMod165Constants.ROLES.DRIVER);  // lOGO COLOcamos nas constantes
+            roleCheck = await roleManager.RoleExistsAsync(CursoMod165Constants.ROLES.VENDOR);  // lOGO COLOcamos nas constantes
 
             if (!roleCheck)
             {
-                var driverRole = new IdentityRole
+                var vendorRole = new IdentityRole
                 {
-                    Name = CursoMod165Constants.ROLES.DRIVER
+                    Name = CursoMod165Constants.ROLES.VENDOR
                 };
 
-                await roleManager.CreateAsync(driverRole);
+                await roleManager.CreateAsync(vendorRole);
             }
         
 
-        // HEALTH_STAFF
+        // ASSISTANT
        
             // não queremos usar strings diretamente "ADMIN" para protecao, passamos para cosntantes 
-            roleCheck = await roleManager.RoleExistsAsync(CursoMod165Constants.ROLES.HEALTH_STAFF);  // lOGO COLOcamos nas constantes
+            roleCheck = await roleManager.RoleExistsAsync(CursoMod165Constants.ROLES.ASSISTANT);  // lOGO COLOcamos nas constantes
 
             if (!roleCheck)
             {
-                var health_staffRole = new IdentityRole
+                var assistantRole = new IdentityRole
                 {
-                    Name = CursoMod165Constants.ROLES.HEALTH_STAFF
+                    Name = CursoMod165Constants.ROLES.ASSISTANT
                 };
 
-                await roleManager.CreateAsync(health_staffRole);  // no main project é "healthstaffRole"
+                await roleManager.CreateAsync(assistantRole);  // no main project é "healthstaffRole"
             }
 
         }

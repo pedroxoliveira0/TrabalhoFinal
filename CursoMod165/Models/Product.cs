@@ -31,13 +31,13 @@ namespace CursoMod165.Models
 		// Quantidade do produto em Stock
 		// que pode ser em Kg
 		[Required]
-		[Precision(10, 3)]
+		[Precision(10, 0)]
 		public decimal Quantity { get; set; }
 
 
 
 		// peso do produto util para calculo do peso da embalagem a transportar ...
-		[Precision(10, 3)]
+		[Precision(10, 1)]
 		public decimal Weight { get; set; }
 
 

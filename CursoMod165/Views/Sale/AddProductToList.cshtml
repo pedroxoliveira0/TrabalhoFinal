@@ -10,16 +10,184 @@
 
 <hr />
 
-<!-- Um campo básico -->
-<!-- LABEL -->
-<label for="Qtd">Quantidade : </label>
-<!-- Inserir quantidade no campo -->
-<input type="text" name="input" value="Digite aqui quantidade a adicionar" />
-<input type="text" id="name" name="name" required minlength="4" maxlength="8" size="10" />
+
+
+<form>
+    <div>
+        <label for="uname">Quantity: </label>
+        <input type="int" id="uname" name="name" placeholder="0" value="1"/>  <!-- Name = Variavel -->
+    </div>
+    <div>
+        <button>Submit</button>
+    </div>
+
+
+</form>
+
+
+@ViewBag.Quantity
+
+
+<input type="button" onclick="BtnClick()" value="Update" />
+
+      </div>
+    </div>
+@section Scripts {
+    <script>
+    function BtnClick() {
+        $ajax({
+            alert("Funciton is working"); // change confirm function is working
+              url: "@Url.Action("Create", "Sale")", // change using Url Helper to create valid URL
+            method: "POST",
+            success: function (data) {
+                if (data == true) {
+                    alert("created sucessfully ok");
+                }
+                else {
+                    alert("exception happend when creating pdf not ok");
+                }
+
+            },
+            error: function () {
+                alert("not ok")
+            }
+        })
+    }
+
+</script>
+}
+
+
+@* exemplo mod165 
+@section Scripts {
+    <script type="text/javascript" on-content-loaded="true">
+
+        const medicStaffRoleID = @(ViewBag.MedicStaffRoleID);
+
+        function visibleFormGroupSpecialty() {
+            let selectedStaffRoleID = $("select#StaffRoleID").val();
+
+            let formGroupSpecialty = $("div#form-group-specialty");
+
+            console.log(selectedStaffRoleID);
+
+            if (selectedStaffRoleID == medicStaffRoleID) {
+                formGroupSpecialty.css('visibility', 'visible');
+                $("select#Specialty").val('@((int)Specialty.Generalist)');
+            }
+            else {
+                formGroupSpecialty.css('visibility', 'hidden');
+                $("select#Specialty").val(null);
+            }
+        }
+
+
+        $("select#StaffRoleID").change(visibleFormGroupSpecialty);
+
+        // Inicializar o form-group-specialty
+        visibleFormGroupSpecialty();
+
+    </script>
+    }*@
+
+
 <br />
 
+@* ViewBag.Quantity="@id"; *@
 
 
+@*
+<div>
+    <label asp-for="Description" class="form-label"></label>
+    <input asp-for="Description" class="form-control" />
+    <span asp-validation-for="Description  " class="text-danger"></span>
+</div>
+*@
+
+<!-- Tabela mais simples para encontrar a soluçao que permita escolher os produtos da lista  -->
+<!-- Faz Cabecalho da tabela -->
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <!--   está só =  Descricao    -->
+                @SharedLocalizer[@Html.DisplayNameFor(model => model.Description)]
+
+            </th>
+            
+            <th>
+                <!--  Nome  -->
+                <!-- (c) Html.DisplayNameFor(model => model.Name) -->
+                @SharedLocalizer[@Html.DisplayNameFor(model => model.Quantity)]
+            </th>
+            <th>
+                <!--   está só =  Descricao    -->
+                @SharedLocalizer[@Html.DisplayNameFor(model => model.Price)]
+
+            </th>
+            
+
+            <th>
+                <!-- Aqui vamos criar novos botoes na tabela: apagar, modificar etc  -->
+                <!-- o que é isto ??? -->
+                <!-- titulo da tab para as accoes possiveis na tabela -->
+                @SharedLocalizer["Actions"]
+            </th>
+        </tr>
+    </thead>
+
+    <!-- Apresenta dados que estao na base de dados -->
+    <!-- se a tabela estiver vazia apresenta informacao que esta vazia -->
+    <tbody>
+        @if (!Model.Any())
+        {
+            <!-- (A base de dados nao tem qualquer valor preenchido) -->
+            <tr>@SharedLocalizer["No Data"]  </tr>
+
+        }
+        <!-- para cada elemento do staff apresenta os seguintes campos -->
+        <!-- Os campos tem de coincidir com os de cima -->
+        @foreach (var product in Model)
+        {
+            <tr>
+                <td>
+                    <!-- arroba description.Name -->
+                    @Html.DisplayFor(modelItem => product.Description)
+                </td>
+                <td>
+                    <!-- arroba product.Name -->
+                    @Html.DisplayFor(modelItem => product.Quantity)
+                </td>
+                <td>
+                    <!-- arroba product.Name -->
+                    @Html.DisplayFor(modelItem => product.Price)
+                </td>
+
+                <td>
+                    <!--  td é uma celula ou coluna na pagina html -->
+                    <!-- <input type="submit" value="++++" class="btn btn-outline-success" />   id="(c)category.ID (c)ViewBag.OrderID -->
+                    <a class="btn btn-outline-success" asp-action="AddProductToListPost" asp-route-id=@product.ID> +++ </a>  <!--...  id="(c)category.ID (c)ViewBag.OrderID-->
+
+                    <button type="button" class="btn btn-outline-success" onclick="location.href='@Url.Action("AddProductToListPost", "Sale")'" />
+                    
+                    <!-- <input type="submit" value="Create" class="btn btn-primary" /> -->
+                    <!-- <a class="btn btn-outline-success" asp-action="AddProductToList" asp-route-id=(c)product.ID>(c)SharedLocalizer["+++"]</input>  ...  id="(c)category.ID (c)ViewBag.OrderID-->  
+                    <!-- <a class="btn btn-outline-secondary" asp-action="ProductsByCategory" asp-route-id="(c)category.ID">(c)SharedLocalizer["Products By Category"]</a> -->
+
+                </td>
+            </tr>
+        }
+    </tbody>
+
+
+</table>
+
+
+
+
+
+
+@*
 <!-- GRid que permite ordenar Falta fazer tradução com sharelocalizer: -->
 @(
 Html
@@ -34,15 +202,16 @@ Html
 
             // tenho de criar um registo no productList, com mesmo nº Venda e produto escolhido, se possivel 
             // c/ quantidade e respetivo preço
-            columns.Add(ap => Html.ActionLink("AddToList", "AddToList", new { id = ap.ID }, new { @class = "btn btn-outline-success" })); // @class = "btn btn-primary"
+            // tlz manter na mesma pagina e adicionar produto no controller
+            columns.Add(ap => Html.ActionLink(" ++ ", "AddProductToList", new { id = ap.ID }, new { @class = "btn btn-outline-success" })); // @class = "btn btn-primary" { id = ap.ID }
             @* columns.Add(Model => Model.ID).RendeedAs(Model =>
                 Html.ActionLink("Edit", "Edit", new { id = Model.ID })).Css("btn")
-            *@
+            * @
             @*
             columns.Add(ap => Html.ActionLink("Edit", "Edit", new { id = ap.ID }, new { @class = "btn btn-outline-warning" }));
             columns.Add(ap =>
                 Html.ActionLink("Delete", "Delete", new { id = ap.ID }, new { @class = "btn btn-outline-danger" })); // class = "btn btn - primary"
-            *@
+            * @
 
             
         })
@@ -50,6 +219,7 @@ Html
         .Sortable()
 
 )
+*@
 
 <div class="form-group">
     

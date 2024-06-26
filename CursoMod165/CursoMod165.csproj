@@ -8,10 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Views\Staff\Delete.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="Views\Shared\MvcGrid\_Grid.cshtml" />
     <None Include="Views\Shared\MvcGrid\_Pager.cshtml" />
     <None Include="wwwroot\js\mvc-grid\mvc-grid.js" />

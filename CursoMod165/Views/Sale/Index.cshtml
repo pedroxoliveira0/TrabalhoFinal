@@ -3,7 +3,7 @@
 @* aqui apresento uma lista com o conteudo da dBase *@
 
 
-<h1>Order Index</h1>
+<h1>@SharedLocalizer["Orders"]</h1>
 
 <p>
     <!-- Usar interncionalizacao -->
@@ -32,7 +32,7 @@ Html
         .Build(columns =>
         {
             // temos de traduzir tambem o que está dentro dos campos, ver appointment
-            columns.Add(ap => ap.CodVenda).Titled(SharedLocalizer["Num Venda"]);  // "descricao # "
+            columns.Add(ap => ap.CodVenda).Titled(SharedLocalizer["Cod. Order"]);  // "descricao # "
             columns.Add(ap => ap.Date).Titled(SharedLocalizer["Date"]).Formatted("{0:dd-MMM-yyyy}")
                                                      .Filterable(GridFilterType.Double);   // aplicacao de filtro duplo
             columns.Add(ap => ap.Time).Titled(SharedLocalizer["Time"]).Formatted("{0:t}");
