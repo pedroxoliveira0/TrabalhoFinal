@@ -10,16 +10,220 @@
 
 <hr />
 
-<!-- Um campo básico -->
-<!-- LABEL -->
-<label for="Qtd">Quantidade : </label>
-<!-- Inserir quantidade no campo -->
-<input type="text" name="input" value="Digite aqui quantidade a adicionar" />
-<input type="text" id="name" name="name" required minlength="4" maxlength="8" size="10" />
+
+
+<form>
+    <div>
+        <label for="uname">Quantity: </label>
+        <input type="int" id="Qtd" name="Qtd" placeholder="1" value="1" />  <!-- Name = Variavel value="111"  -->
+        <!-- <label for="uname">Order ID: </label> -->
+        <input type="hidden" type="int" id="Order_ID" name="Order_ID" placeholder="1" value=@(ViewBag.OrderID) />  <!-- Name = Variavel value="111"  -->
+        <!--<label for="uname">Teste: </label> -->
+        <input type="hidden"  type="text" class="form-control" maxlength="11" id="ViewBagSale" name="Teste" placeholder="1"
+               value=@(ViewBag.Quantity)>
+  
+           
+           
+    </div>
+   @*
+    <div>
+        <button>Submit</button>
+    </div>
+    *@
+
+</form>
+
+@*
+<p>Quantity</p>
+@ViewBag.Quantity
+<p>Order ID -  @ViewBag.OrderID  -</p>
+
+<p>Order Sale -  @ViewBag.Sale  -</p>
+@ViewBag.Sale
+*@
+
+<!-- Preencher Inputs -->
+@*
+<input type="text" class="form-control" maxlength="11" id="ViewBagSale" name="ViewBagSale" placeholder="ViewBag Sale"
+       value=@(ViewBag.Sale)>
+*@
+
+@* var id = document.getElementsByName("id")[0].value; *@
+
+@* Executa funcão 
+<input type="button" onclick="BtnClick()" value="Update" />
+*@
+
+
+@* data: { name: Tname },  //  name: "Daniel" *@
+
+
 <br />
 
+@* ViewBag.Quantity="@id"; *@
 
 
+
+
+<!-- Tabela mais simples para encontrar a soluçao que permita escolher os produtos da lista  -->
+<!-- Faz Cabecalho da tabela -->
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <!--   está só =  Descricao    -->
+                @SharedLocalizer[@Html.DisplayNameFor(model => model.Description)]
+
+            </th>
+            
+            <th>
+                <!--  Nome  -->
+                <!-- (c) Html.DisplayNameFor(model => model.Name) -->
+                @SharedLocalizer[@Html.DisplayNameFor(model => model.Quantity)]
+            </th>
+            <th>
+                <!--   está só =  Descricao    -->
+                @SharedLocalizer[@Html.DisplayNameFor(model => model.Price)]
+
+            </th>
+            
+
+            <th>
+                <!-- Aqui vamos criar novos botoes na tabela: apagar, modificar etc  -->
+                <!-- o que é isto ??? -->
+                <!-- titulo da tab para as accoes possiveis na tabela -->
+                @SharedLocalizer["Actions"]
+            </th>
+        </tr>
+    </thead>
+
+    <!-- Apresenta dados que estao na base de dados -->
+    <!-- se a tabela estiver vazia apresenta informacao que esta vazia -->
+    <tbody>
+        @if (!Model.Any())
+        {
+            <!-- (A base de dados nao tem qualquer valor preenchido) -->
+            <tr>@SharedLocalizer["No Data"]  </tr>
+
+        }
+        <!-- para cada elemento do staff apresenta os seguintes campos -->
+        <!-- Os campos tem de coincidir com os de cima -->
+        @foreach (var product in Model)
+        {
+            <tr>
+                <td>
+                    <!-- arroba description.Name -->
+                    @Html.DisplayFor(modelItem => product.Description)
+                </td>
+                <td>
+                    <!-- arroba product.Name -->
+                    @Html.DisplayFor(modelItem => product.Quantity)
+                </td>
+                <td>
+                    <!-- arroba product.Name -->
+                    @Html.DisplayFor(modelItem => product.Price)
+                </td>
+
+                <td>
+                    <!--  td é uma celula ou coluna na pagina html -->
+                    <!-- <input type="submit" value="++++" class="btn btn-outline-success" />   id="(c)category.ID (c)ViewBag.OrderID -->
+                    <!-- <a class="btn btn-outline-success" onclick="BtnClick()"  asp-route-id=(c)product.ID> +++ </a>  ...  id="(c)category.ID (c)ViewBag.OrderID-->
+
+                    <!-- <button type="button" class="btn btn-outline-success" onclick="location.href='(c)Url.Action("AddProductToListPost", "Sale")'" /> -->
+                    <input type="button" class="btn btn-outline-success" onclick="BtnClick(@product.ID)" value="+" @ViewBag.ProductID=@product.ID />
+                    <!-- <input type="submit" value="Create" class="btn btn-primary" /> -->
+                    <!-- <a class="btn btn-outline-success" asp-action="AddProductToList" asp-route-id=(c)product.ID>(c)SharedLocalizer["+++"]</input>  ...  id="(c)category.ID (c)ViewBag.OrderID-->  
+                    <!-- <a class="btn btn-outline-secondary" asp-action="ProductsByCategory" asp-route-id="(c)category.ID">(c)SharedLocalizer["Products By Category"]</a> -->
+                    <!--
+                    <label for="uname">Product ID: </label>
+                    <input type="text" class="form-control" maxlength="11" id="ViewBagSale" name="Oname" placeholder="1"
+                           value=(c)(Html.DisplayFor(modelItem => product.ID))>
+                           -->
+
+                   
+
+
+                </td>
+            </tr>
+        }
+    </tbody>
+
+
+</table>
+
+@*  
+ <div class="form-group">
+                        <label asp-for="product.I" class="form-check-label"></label>
+                        <input asp-for="IsPaid" class="form-check-control" />
+                        <span asp-validation-for="IsPaid" class="text-danger"></span>
+                    </div>
+
+
+*@
+
+
+
+
+@* var id = document.getElementsByName("Tname")[0].value;   // OK *@
+@* var id = @(ViewBag.Quantity);  // OK*@
+@* @Html.Raw(Json.Encode(ViewBag.PieChart)); *@
+@* var id2 = @(ViewBag.OrderID); *@
+@* var id2 = document.getElementsByName("Order_ID")[0].value; *@
+
+@section Scripts {
+
+    <script>
+        function BtnClick(n) {
+
+
+            $(document).ready(function () {
+
+                var id1 = document.getElementsByName("Qtd")[0].value;
+                var id2 = document.getElementsByName("Order_ID")[0].value;
+                var id3 = n;
+                
+                
+
+                $.ajax({
+                    type: "GET",
+                    url: "@Url.Action("GetNames")",
+                    dataType: "json",
+                    success: function (result) {
+                        console.log(result);
+                    },
+                    error: function (req, status, error) {
+                        console.log(status);
+                    }
+                });
+
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("PostName")",
+                    dataType: "json",
+                    data: { Qtd: id1,
+                        Order_ID: id2,
+                            Prod_ID: id3},
+                    success: function (result) {
+                        console.log(result);
+
+                    },
+                    error: function (req, status, error) {
+                        console.log(status);
+                    }
+                });
+
+
+            });
+
+
+
+        }
+    </script>
+
+}
+
+
+@*
 <!-- GRid que permite ordenar Falta fazer tradução com sharelocalizer: -->
 @(
 Html
@@ -34,15 +238,16 @@ Html
 
             // tenho de criar um registo no productList, com mesmo nº Venda e produto escolhido, se possivel 
             // c/ quantidade e respetivo preço
-            columns.Add(ap => Html.ActionLink("AddToList", "AddToList", new { id = ap.ID }, new { @class = "btn btn-outline-success" })); // @class = "btn btn-primary"
+            // tlz manter na mesma pagina e adicionar produto no controller
+            columns.Add(ap => Html.ActionLink(" ++ ", "AddProductToList", new { id = ap.ID }, new { @class = "btn btn-outline-success" })); // @class = "btn btn-primary" { id = ap.ID }
             @* columns.Add(Model => Model.ID).RendeedAs(Model =>
                 Html.ActionLink("Edit", "Edit", new { id = Model.ID })).Css("btn")
-            *@
+            * @
             @*
             columns.Add(ap => Html.ActionLink("Edit", "Edit", new { id = ap.ID }, new { @class = "btn btn-outline-warning" }));
             columns.Add(ap =>
                 Html.ActionLink("Delete", "Delete", new { id = ap.ID }, new { @class = "btn btn-outline-danger" })); // class = "btn btn - primary"
-            *@
+            * @
 
             
         })
@@ -50,6 +255,7 @@ Html
         .Sortable()
 
 )
+*@
 
 <div class="form-group">
     

@@ -22,45 +22,6 @@ namespace CursoMod165.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("CursoMod165.Models.Appointment", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
-                    b.Property<int>("CustomerID")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Informations")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDone")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Number")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("StaffID")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("Time")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("CustomerID");
-
-                    b.HasIndex("StaffID");
-
-                    b.ToTable("Appointments");
-                });
-
             modelBuilder.Entity("CursoMod165.Models.Category", b =>
                 {
                     b.Property<int>("ID")
@@ -194,15 +155,15 @@ namespace CursoMod165.Data.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("Quantity")
-                        .HasPrecision(10, 3)
-                        .HasColumnType("decimal(10,3)");
+                        .HasPrecision(10)
+                        .HasColumnType("decimal(10,0)");
 
                     b.Property<int>("SystemUnity")
                         .HasColumnType("int");
 
                     b.Property<decimal>("Weight")
-                        .HasPrecision(10, 3)
-                        .HasColumnType("decimal(10,3)");
+                        .HasPrecision(10, 1)
+                        .HasColumnType("decimal(10,1)");
 
                     b.HasKey("ID");
 
@@ -282,85 +243,6 @@ namespace CursoMod165.Data.Migrations
                     b.HasIndex("CustomerID");
 
                     b.ToTable("Sales");
-                });
-
-            modelBuilder.Entity("CursoMod165.Models.Staff", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<DateOnly>("Birthday")
-                        .HasColumnType("date");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<string>("EmployeeNumber")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.Property<string>("NTF")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.Property<decimal>("Salary")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("Specialty")
-                        .HasColumnType("int");
-
-                    b.Property<int>("StaffRoleID")
-                        .HasColumnType("int");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("StaffRoleID");
-
-                    b.ToTable("Staffs");
-                });
-
-            modelBuilder.Entity("CursoMod165.Models.StaffRole", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
-                    b.Property<bool>("CanDoAppointments")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("StaffRoles");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -565,25 +447,6 @@ namespace CursoMod165.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("CursoMod165.Models.Appointment", b =>
-                {
-                    b.HasOne("CursoMod165.Models.Customer", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CursoMod165.Models.Staff", "Staff")
-                        .WithMany()
-                        .HasForeignKey("StaffID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Customer");
-
-                    b.Navigation("Staff");
-                });
-
             modelBuilder.Entity("CursoMod165.Models.Product", b =>
                 {
                     b.HasOne("CursoMod165.Models.Category", "Category")
@@ -623,17 +486,6 @@ namespace CursoMod165.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Customer");
-                });
-
-            modelBuilder.Entity("CursoMod165.Models.Staff", b =>
-                {
-                    b.HasOne("CursoMod165.Models.StaffRole", "StaffRole")
-                        .WithMany()
-                        .HasForeignKey("StaffRoleID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("StaffRole");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

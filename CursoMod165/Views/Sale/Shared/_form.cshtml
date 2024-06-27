@@ -8,41 +8,41 @@
 
             <th>
                 <!--   está só =  Descricao    -->
-                @Html.DisplayNameFor(model => model.CodVenda)
+                @SharedLocalizer[@Html.DisplayNameFor(model => model.CodVenda)]
             </th>
 
             <th>
                 <!--  Preço  -->
-                @Html.DisplayNameFor(model => model.Date)
+                @SharedLocalizer[@Html.DisplayNameFor(model => model.Date)]
             </th>
 
             <th>
                 <!--  Quantidade  -->
-                @Html.DisplayNameFor(model => model.Time)
+                @SharedLocalizer[@Html.DisplayNameFor(model => model.Time)]
             </th>
 
             <!--// o proximo campo tem e ser obtido numa outra tabela com a chave estrangeira -->
             <th>
                 <!--  Nome na tabela category  -->
-                @Html.DisplayNameFor(model => model.Customer.Name)
+                @SharedLocalizer[@Html.DisplayNameFor(model => model.Customer.Name)]
             </th>
 
             <!-- Codigo da unidade th ou td bold ou nao-->
             <th>
                 <!-- Nome do produto dentro da category -->
-                @Html.DisplayNameFor(model => model.Status)
+                @SharedLocalizer[@Html.DisplayNameFor(model => model.Status)]
             </th>
 
             <!-- Codigo da unidade th ou td bold ou nao -->
             <th>
                 <!-- Nome do produto dentro da category -->
-                @Html.DisplayNameFor(model => model.Observations)
+                @SharedLocalizer[@Html.DisplayNameFor(model => model.Observations)]
             </th>
 
             <!-- Codigo da unidade th ou td bold ou nao-->
             <th>
                 <!-- Nome do produto dentro da category -->
-                @Html.DisplayNameFor(model => model.IsPaid)
+                @SharedLocalizer[@Html.DisplayNameFor(model => model.IsPaid)]
             </th>
 
 
@@ -55,7 +55,8 @@
     <tbody>
         @if (!Model.Any())
         {
-            <tr>No Data (A base de dados nao tem qualquer valor preenchido) </tr>
+            <!-- (A base de dados nao tem qualquer valor preenchido) -->
+            <tr>@SharedLocalizer["No Data"]  </tr>
 
         }
         <!-- para cada elemento do staff apresenta os seguintes campos -->

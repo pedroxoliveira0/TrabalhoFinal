@@ -11,23 +11,33 @@
     <!-- Usar interncionalizacao -->
     <!--  a proxima linha faz uma acção; cria a opcao de criar um novo customer   -->
     @* <a class="btn btn-outline-primary" asp-action="Create">@SharedLocalizer["Create New"]</a> *@
+    @if (ViewBag.Status != Status.Sent) // se já foi enviado nao posso adicionar mais produtos à venda
+    {
+        @if (User.IsInRole(CursoMod165Constants.ROLES.VENDOR) || (User.IsInRole(CursoMod165Constants.ROLES.ADMIN))) // (c)
+        {
+            <a class="btn btn-outline-primary" asp-action="AddProductToOrder" asp-route-id="@ViewBag.SaleID">Add Product To Order</a>  <!-- Add Product To Order</a> -->
+        }
+    }
 
-    <a class="btn btn-outline-primary" asp-action="AddProductToOrder" asp-route-id="@ViewBag.SaleID">Add Product To Order</a>  <!-- Add Product To Order</a> -->
-    <a class="btn btn-outline-primary" asp-action="AddProductToOrder" asp-route-id="@ViewBag.SaleID">Order Process</a>  <!-- Add Product To Order</a> -->
-    <a class="btn btn-outline-primary" asp-action="AddProductToOrder" asp-route-id="@ViewBag.SaleID">Sent Order</a>  <!-- Add Product To Order</a> -->
 
+    @if (ViewBag.Status == Status.Ordered){
+        <a class="btn btn-outline-primary" asp-action="OrderProcess" asp-route-id="@ViewBag.SaleID">Order Process</a> } <!-- Add Product To Order</a> -->
+    @if (ViewBag.Status == Status.Purchase_Process)
+    { // So aparece botao se tiver em status Purchase Process
+    <a class="btn btn-outline-warning" asp-action="PackageOrder" asp-route-id="@ViewBag.SaleID">Package Validation</a>
+    }
+    @if (ViewBag.Status == Status.Package)
+    {
+        <a class="btn btn-outline-primary" asp-action="SentOrder" asp-route-id="@ViewBag.SaleID">Sent Order</a> } <!-- Add Product To Order</a> -->
+
+    <!-- teste botao - Para adicionar produtos à lista de produtos da encomenda -->
+    <!-- <a class="btn btn-outline-info" asp-action="Botao" asp-route-id="(c)ViewBag.SaleID">Botao</a>   -->
 
  
     
     <br />
-    <h4 class="text-danger">Adicionar Index.Number para voltar a pagina Details,...ver o que se q...</h4>
-    <h4 class="text-danger">Adicionar botão para processar, verifica existencia em armazem, e atualizar dados, colocar processado.....se nao existir passar produto a zero e coloca, quantidades em stock.</h4>
-    <h4 class="text-danger">Colocar nas observacoes outofstck e actualizar info, colocar status processada... </h4>
-    <h4 class="text-danger"> Ver o que fazer a partir do ponto: PAsso 2 - Processamento; envio de emails</h4>
-    <h6 class="text-danger"> Adicionar coluna com total por linha de cada produto qtd x preco (não é obrigatorio) </h6>
-    <h6 class="text-danger"> Preencher de forma simples observacoes e identificador; ja tenho mas nao esta claro </h6>
-    <h6 class="text-danger"> Adicionar botao processamento, só pode ser primida se estiver no estado ordered </h6>
-    <h6 class="text-danger"> Criar botao envio quando premido atualiza stock, envia email e passa para estado seguinte, botao fica inacessivel, o melhor era este botao ir mudando de nome </h6>
+    
+    
     <!-- Posso tentar passar valor usando uma celula invisivel... -->
     
 </p>
@@ -93,8 +103,13 @@
     <!--  a proxima linha faz uma acção; cria a opcao de criar um novo customer   -->
     <!--  Posso enviar talvez o CodVenda aqui :-->
     <!-- <a class="btn btn-outline-warning" asp-action="Edit" asp-route-id="(c)productList.ID">Edit</a> -->
-    <a class="btn btn-outline-primary" asp-action="OrderList"> Add Product To List</a>  <!-- @ViewBag.NumVenda -->
-    <a class="btn btn-outline-secondary" asp-action="AddProductToList"> + </a>
+    @if (User.IsInRole(CursoMod165Constants.ROLES.VENDOR) || (User.IsInRole(CursoMod165Constants.ROLES.ADMIN))) // (c)
+    {
+        <!-- <a class="btn btn-outline-primary" asp-action="OrderList"> Add Product To List</a>   (c)ViewBag.NumVenda -->
+        
+        <!-- Não está a funcionar -->
+        <a class="btn btn-success" asp-action="AddProductToList" asp-route-id="@ViewBag.SaleID"> + </a> <!---->
+    }
     <br />
 </p>
 
@@ -103,29 +118,6 @@
 <!-- Apresento 1º cabecalho e de seguinda num ciclo for o conteudo linha a linha da base de dados -->
 
 
-<!-- Passar valores com script: -->
-<!-- 1 -->
-@{
-    ViewBag.MyData = "Ziggy, Rafiq Blog Post";
-}
-<input type="hidden" id="my-data" value="@ViewBag.MyData" />
-<script>
-    var myData = document.getElementById("my-data").value;
-    console.log(myData); // Output: "Ziggy, Rafiq Blog Post"
-</script>
-<!-- 1 -->
-
-<!-- 2 -->
-@{
-    ViewData["MyData"] = new { Name = "Lerzan", Age = 28 };
-}
-<script>
-    var myData = @Html.Raw(Json.Serialize(ViewData["MyData"]));
-    console.log(myData.Name); // Output: "Lerzan"
-    console.log(myData.Age); // Output: 28
-</script>
-
-<!-- 2 -->
 
 
 <table class="table">
@@ -179,7 +171,8 @@
     <tbody> 
         @if (!Model.Any())
         {
-            <tr>No Data (Carrinho de compras vazio - Adicione Produto) </tr>
+            <!-- (Carrinho de compras vazio - Adicione Produto) -->
+            <tr>No Data  </tr>
             
         } 
         <!-- para cada elemento do staff apresenta os seguintes campos -->
@@ -227,9 +220,12 @@
                 <td>
                 <!--  td é uma celula ou coluna na pagina html -->
                     @*<a class="btn btn-outline-success" asp-action="Details" asp-route-id="@product.ID">Details</a>*@
-                <a class="btn btn-outline-warning" asp-action="Edit" asp-route-id="@productList.ID">Edit</a>
-                <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@productList.ID">Delete</a>
+                    @*<a class="btn btn-outline-warning" asp-action="Edit" asp-route-id="@productList.ID">Edit</a> *@
+                    @*<a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@productList.ID">Delete</a> *@
+                    <!-- Confirmar se produto a apagar é o pretendido  -->
+                    <a class="btn btn-outline-danger" asp-area="" asp-controller="ShoppingBasket" asp-action="Delete" asp-route-id="@productList.ID">Delete</a>
 
+                   @* asp-action="Index" *@
             </td>
         </tr>
         }

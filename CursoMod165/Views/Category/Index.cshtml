@@ -3,14 +3,41 @@
 @* aqui apresento uma lista com o conteudo da dBase *@
 
 
-<h1>Category Index</h1>
+<h1>@SharedLocalizer["Categories"]</h1> <!-- Category Index -->
 
 <p>
     <!--  a proxima linha faz uma acção; cria a opcao de criar um novo customer   -->
-    <a class="btn btn-outline-primary" asp-action="Create">Create New</a>
-
+    <!-- <a class="btn btn-outline-primary" asp-action="Create">Create New</a> -->
+    <a class="btn btn-outline-primary" asp-action="Create">@SharedLocalizer["Create New"]</a>
     
 </p>
+
+
+@*
+<!-- Teste - INICIO -->
+<!-- Using JavaScript -->
+$(document).ready(function() {
+    $("#categoriaId").change(function() {
+        var categoriaId = $(this).val(); // Obtém o valor selecionado do dropdown
+
+        $.ajax({
+            url: "/Produtos/Index", // URL do método Index do controlador Produtos
+            type: "GET", // Tipo de requisição (GET)
+            data: { categoriaId: categoriaId }, // Dados a serem enviados no corpo da requisição
+            success: function(result) {
+                // Manipule a resposta aqui
+                console.log(result); // Exemplo: exiba a resposta no console
+                // Atualize a parte da página que deseja com o resultado retornado do controlador
+                $("#resultado").html(result); // Atualiza a div #resultado com o conteúdo retornado
+            },
+            error: function(error) {
+                console.error("Erro na requisição AJAX:", error);
+            }
+        });
+    });
+});
+<!-- Teste - FIM ->
+*@
 
 
 <!-- Apresento 1º cabecalho e de seguinda num ciclo for o conteudo linha a linha da base de dados -->
@@ -20,12 +47,13 @@
         <tr>
             <th>
                 <!--  Nome  -->
-                @Html.DisplayNameFor(model => model.Name)
+                <!-- (c) Html.DisplayNameFor(model => model.Name) -->
+                @SharedLocalizer[@Html.DisplayNameFor(model => model.Name)]
             </th>
 
             <th>
                 <!--   está só =  Descricao    -->
-                @Html.DisplayNameFor(model => model.Description)
+                @SharedLocalizer[@Html.DisplayNameFor(model => model.Description)]
 
             </th>
            
@@ -33,7 +61,7 @@
                 <!-- Aqui vamos criar novos botoes na tabela: apagar, modificar etc  -->
                 <!-- o que é isto ??? -->
                 <!-- titulo da tab para as accoes possiveis na tabela -->
-                Actions
+                @SharedLocalizer["Actions"]
             </th>
         </tr>
     </thead>
@@ -43,7 +71,8 @@
     <tbody> 
         @if (!Model.Any())
         {
-            <tr>No Data (A base de dados nao tem qualquer valor preenchido) </tr>
+            <!-- (A base de dados nao tem qualquer valor preenchido) -->
+            <tr>@SharedLocalizer["No Data"]  </tr>
             
         } 
     <!-- para cada elemento do staff apresenta os seguintes campos -->
@@ -64,9 +93,9 @@
             <td>
                 <!--  td é uma celula ou coluna na pagina html -->
                    
-                <a class="btn btn-outline-warning" asp-action="Edit" asp-route-id="@category.ID">Edit</a>
-                <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@category.ID">Delete</a>
-                    <a class="btn btn-outline-secondary" asp-action="ProductsByCategory" asp-route-id="@category.ID">Products By Category</a> @**@
+                <a class="btn btn-outline-warning" asp-action="Edit" asp-route-id="@category.ID">@SharedLocalizer["Edit"]</a>
+                <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@category.ID">@SharedLocalizer["Delete"]</a>
+                <a class="btn btn-outline-secondary" asp-action="ProductsByCategory" asp-route-id="@category.ID">@SharedLocalizer["Products By Category"]</a> @**@
 
             </td>
         </tr>

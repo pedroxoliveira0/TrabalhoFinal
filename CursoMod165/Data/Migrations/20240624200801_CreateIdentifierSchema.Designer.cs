@@ -12,18 +12,40 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CursoMod165.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240326200428_AddedSpecialtyToStaff")]
-    partial class AddedSpecialtyToStaff
+    [Migration("20240624200801_CreateIdentifierSchema")]
+    partial class CreateIdentifierSchema
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.2")
+                .HasAnnotation("ProductVersion", "8.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("CursoMod165.Models.Category", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Categories");
+                });
 
             modelBuilder.Entity("CursoMod165.Models.Customer", b =>
                 {
@@ -40,6 +62,16 @@ namespace CursoMod165.Data.Migrations
 
                     b.Property<DateOnly>("Birthday")
                         .HasColumnType("date");
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("CodCustomer")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime2");
@@ -64,17 +96,17 @@ namespace CursoMod165.Data.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<string>("USNS")
+                    b.Property<string>("ZipCode")
                         .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.HasKey("ID");
 
                     b.ToTable("Customers");
                 });
 
-            modelBuilder.Entity("CursoMod165.Models.Staff", b =>
+            modelBuilder.Entity("CursoMod165.Models.Identifier", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -82,57 +114,68 @@ namespace CursoMod165.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
-                    b.Property<string>("Address")
+                    b.Property<string>("COD")
                         .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
-                    b.Property<DateOnly>("Birthday")
+                    b.Property<string>("Number")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<DateOnly>("Year")
                         .HasColumnType("date");
 
-                    b.Property<string>("Email")
+                    b.HasKey("ID");
+
+                    b.ToTable("Identifiers");
+                });
+
+            modelBuilder.Entity("CursoMod165.Models.Product", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<int>("CategoryID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<string>("EmployeeNumber")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.Property<string>("NTF")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.Property<string>("Name")
+                    b.Property<string>("LinkFoto")
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.Property<decimal>("Salary")
+                    b.Property<decimal>("Price")
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("Specialty")
+                    b.Property<decimal>("Quantity")
+                        .HasPrecision(10)
+                        .HasColumnType("decimal(10,0)");
+
+                    b.Property<int>("SystemUnity")
                         .HasColumnType("int");
 
-                    b.Property<int>("StaffRoleID")
-                        .HasColumnType("int");
+                    b.Property<decimal>("Weight")
+                        .HasPrecision(10, 1)
+                        .HasColumnType("decimal(10,1)");
 
                     b.HasKey("ID");
 
-                    b.HasIndex("StaffRoleID");
+                    b.HasIndex("CategoryID");
 
-                    b.ToTable("Staffs");
+                    b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("CursoMod165.Models.StaffRole", b =>
+            modelBuilder.Entity("CursoMod165.Models.ProductList", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -140,14 +183,69 @@ namespace CursoMod165.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                    b.Property<decimal>("Price")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("ProductID")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Quantity")
+                        .HasPrecision(10, 3)
+                        .HasColumnType("decimal(10,3)");
+
+                    b.Property<int>("SaleID")
+                        .HasColumnType("int");
 
                     b.HasKey("ID");
 
-                    b.ToTable("StaffRoles");
+                    b.HasIndex("ProductID");
+
+                    b.HasIndex("SaleID");
+
+                    b.ToTable("ProductLists");
+                });
+
+            modelBuilder.Entity("CursoMod165.Models.Sale", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<string>("CodVenda")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<int>("CustomerID")
+                        .HasColumnType("int");
+
+                    b.Property<DateOnly>("Date")
+                        .HasColumnType("date");
+
+                    b.Property<bool>("IsPaid")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Observations")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<TimeOnly>("Time")
+                        .HasColumnType("time");
+
+                    b.Property<decimal>("TotalPrice")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("CustomerID");
+
+                    b.ToTable("Sales");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -352,15 +450,45 @@ namespace CursoMod165.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("CursoMod165.Models.Staff", b =>
+            modelBuilder.Entity("CursoMod165.Models.Product", b =>
                 {
-                    b.HasOne("CursoMod165.Models.StaffRole", "StaffRole")
+                    b.HasOne("CursoMod165.Models.Category", "Category")
                         .WithMany()
-                        .HasForeignKey("StaffRoleID")
+                        .HasForeignKey("CategoryID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("StaffRole");
+                    b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("CursoMod165.Models.ProductList", b =>
+                {
+                    b.HasOne("CursoMod165.Models.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CursoMod165.Models.Sale", "Sale")
+                        .WithMany()
+                        .HasForeignKey("SaleID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+
+                    b.Navigation("Sale");
+                });
+
+            modelBuilder.Entity("CursoMod165.Models.Sale", b =>
+                {
+                    b.HasOne("CursoMod165.Models.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

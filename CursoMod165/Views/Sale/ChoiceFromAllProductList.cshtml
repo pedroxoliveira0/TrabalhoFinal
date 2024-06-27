@@ -1,0 +1,139 @@
+﻿del CursoMod165.Models.ProductList
+@* aqui é o cabecalho ... da vista *@
+<h1>Choice Product</h1>
+
+<h4>Add Product to Order</h4>
+
+
+
+<body>
+    <form id="form">
+        <div>
+            <label for="firstName">First Name: </label><br />
+            <input id="firstName" type="text"
+
+        </div>
+        <div>
+            <label for="lastName">Last Name: </label><br />
+            <input id="lastName" type="text"
+
+        </div>
+        <div>
+            <button type="submit">Next Page</button>
+        </div>
+
+
+    </form>
+
+    <script>
+        const form = document.getElementById('form');
+        const firstName=document.getElementById('firstName')
+        const lastName = document.getElementById('lasttName')
+
+        form.addEvent('submit', function (e) {
+            e.preventDefault();
+
+            const firstNameValue = firstName.value;
+            const lastNameValue = lastName.value;
+
+        }
+
+    </script>
+
+
+</body>
+
+
+<form>
+    <div>
+        <label for="uname">Choose a username: </label>
+        <input type="int" id="uname" name="name" />  <!-- Name = Variavel -->
+    </div>
+    <div>
+        <button>Submit</button>
+    </div>
+
+
+</form>
+
+@*
+<!-- VAlor de teste Count e -->
+<h6>  Passar lista de categorias Peso e count do produto selecionado </h6>
+
+<h5>@ViewBag.Titulo2</h5>
+*@
+
+@*
+<!-- Tabela mais simples para encontrar a soluçao que permita escolher os produtos da lista  -->
+<!-- Faz Cabecalho da tabela -->
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <!--   está só =  Descricao    -->
+                @SharedLocalizer[@Html.DisplayNameFor(model => model.Product.Description)]
+
+            </th>
+
+            <th>
+                <!--  Nome  -->
+                <!-- (c) Html.DisplayNameFor(model => model.Name) -->
+                @SharedLocalizer[@Html.DisplayNameFor(model => model.Quantity)]
+            </th>
+            <th>
+                <!--   está só =  Descricao    -->
+                @SharedLocalizer[@Html.DisplayNameFor(model => model.Price)]
+
+            </th>
+
+
+            <th>
+                <!-- Aqui vamos criar novos botoes na tabela: apagar, modificar etc  -->
+                <!-- o que é isto ??? -->
+                <!-- titulo da tab para as accoes possiveis na tabela -->
+                @SharedLocalizer["Actions"]
+            </th>
+        </tr>
+    </thead>
+
+    <!-- Apresenta dados que estao na base de dados -->
+    <!-- se a tabela estiver vazia apresenta informacao que esta vazia -->
+    <tbody>
+        @if (!Model.Any())
+        {
+            <!-- (A base de dados nao tem qualquer valor preenchido) -->
+            <tr>@SharedLocalizer["No Data"]  </tr>
+
+        }
+        <!-- para cada elemento do staff apresenta os seguintes campos -->
+        <!-- Os campos tem de coincidir com os de cima -->
+        @foreach (var category in Model)
+        {
+            <tr>
+                <td>
+                    <!-- arroba description.Name -->
+                    @Html.DisplayFor(modelItem => category.Description)
+                </td>
+                <td>
+                    <!-- arroba category.Name -->
+                    @Html.DisplayFor(modelItem => category.Quantity)
+                </td>
+                <td>
+                    <!-- arroba category.Name -->
+                    @Html.DisplayFor(modelItem => category.Price)
+                </td>
+
+                <td>
+                    <!--  td é uma celula ou coluna na pagina html -->
+
+                    <a class="btn btn-outline-success" asp-action="AddProductToList" asp-route-id=name>@SharedLocalizer["+++"]</a>  <!-- id="(c)category.ID (c)ViewBag.OrderID-->
+                    <!-- <a class="btn btn-outline-secondary" asp-action="ProductsByCategory" asp-route-id="(c)category.ID">(c)SharedLocalizer["Products By Category"]</a> -->
+
+                </td>
+            </tr>
+        }
+    </tbody>
+
+
+</table>
+*@

@@ -1,0 +1,319 @@
+﻿@model CursoMod165.Models.ProductList
+@* Teste adicionar produto à Encomenda *@
+<h1>Add</h1>
+
+<h4>Add Product To Order List</h4>
+
+
+@*
+<!-- VAlor de teste Count e -->
+<h6>  Passar lista de categorias Peso e count do produto selecionado </h6>
+
+<h5>@ViewBag.Titulo2</h5>
+*@
+
+
+<hr />
+
+
+
+
+
+
+
+
+
+
+
+<body>
+    <form id="form">
+        <div>
+            <label for="firstName">First Name: </label><br />
+            <input id="firstName" type="text"
+
+        </div>
+        <div>
+            <label for="lastName">Last Name: </label><br />
+            <input id="lastName" type="text"
+
+        </div>
+        <div>
+            <button type="submit">Next Page</button>
+        </div>
+
+
+    </form>
+
+    <script>
+
+        localStorage.getItem();
+
+        const form = document.getElementById('form');
+        const firstName = document.getElementById('firstName')
+        const lastName = document.getElementById('lasttName')
+
+        form.addEvent('submit', function (e) {
+            e.preventDefault();
+
+            const firstNameValue = firstName.value;
+            const lastNameValue = lastName.value;
+
+            localStorage.setItem('first-name', firstNameValue)
+            localStorage.setItem('last-name', lastNameValue)
+
+        })
+
+    </script>
+
+
+</body>
+
+
+
+
+
+
+<!--  Teste   ... (c)Message ... -->
+@*
+<h3>@ViewBag.SaleList</h3>
+<form method="post"><button class="btn btn-default">Click to post</button></form>
+<p><a href="/" class="btn btn-default">Click to Get</a></p>
+ *@
+
+<form>
+    <table style="width: 100%; margin-bottom: 25px">
+        <tr>
+            <td>
+                <button name="button" style="background-color: transparent; color: yellow"
+                        value="cph" asp-action="check">København</button>
+            </td>
+            <td>
+                <button name="button" style="background-color: transparent; color: yellow" 
+                value="odense" asp-action="check">Odense</button>
+            </td>
+            <td>
+                <button name="button" style="background-color: transparent; color: yellow" 
+                value="aarhus" asp-action="check">Århus</button>
+            </td>
+            <td>
+                <button name="button" style="background-color: transparent; color: yellow" 
+                value="aalborg" asp-action="check">Aalborg</button>
+            </td>
+        </tr>
+    </table>
+
+</form>
+<div>
+    @TempData["ButtonValue"]
+</div>
+
+
+
+<div>
+    <!-- botao no topo -->
+    <a class="btn btn-outline-info" asp-action="Index">Back to List</a>    <!-- o "a" é para fazer link aparece a azul na pagina  -->
+
+</div>
+
+
+
+@*// ... *@
+<!-- ... -->
+<!--  COlocar BAckground color  papayawhip; gainsboro  -->
+<body>
+
+
+    <!--  Criar matriz para apresentacao dos dados  -->
+    <div class="row">
+        <div class="col-md-4">
+
+            <form asp-action="Botao"> <!-- Create -->
+                <!--Edit -->
+                <!-- se for dada a accao create  -->
+                <!--  valida formatos definidos no modelo -->
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+
+
+
+                <div class="form-group">
+                    <!-- <label asp-for="Price" class="form-label"></label> -->  <!--  Escreve Label class... é biblioteca bootstrap -->
+                    <input asp-for="Price" type="hidden" class="form-control" value="0" />     <!-- recebe uma entrada de valor na var Price  -->
+                    <span asp-validation-for="Price" class="text-danger"></span>
+                </div>
+
+                <!--  Não estava a criar o registo pk o campo address não era preenchido -->
+                <div class="form-group">
+                    <label asp-for="Quantity" class="form-label"></label>
+                    <input asp-for="Quantity" class="form-control" />
+                    <span asp-validation-for="Quantity" class="text-danger"></span>
+                </div>
+
+
+
+
+
+                <!-- Temos de adicionar campo para preenchimento da Chave/nome role  -->
+                <div class="form-group">
+                    <label asp-for="ProductID" class="form-label"></label>
+                    <!-- para termos acesso à informação da tabela secindaria temos de fazer uma lista de selecção -->
+                    <!-- Temos de passar uma variavel para casar com o numero da tabela secundaria roles -->
+                    <!--  <select asp-for="ProductID" class="form-control" asp-items="ViewBag.StaffRoles"></select>  -->
+
+                    <select asp-for="ProductID" class="form-control" asp-items="ViewBag.ProductList">
+                        <!-- class="form-control" asp-items="ViewBag.ProductList" -->
+                        <!-- ViewBag.ProductList -->
+                    </select>
+
+                    <span asp-validation-for="ProductID" class="text-danger"></span>
+                </div>
+
+
+                <!-- Temos de adicionar campo para preenchimento da Chave/nome role  -->
+                <div class="form-group">
+                    <label asp-for="SaleID" class="form-label"></label>
+                    <!-- para termos acesso à informação da tabela secindaria temos de fazer uma lista de selecção -->
+                    <!-- Temos de passar uma variavel para casar com o numero da tabela secundaria roles -->
+                    <!--  <select asp-for="SaleID" class="form-control" asp-items="ViewBag.StaffRoles"></select>  -->
+
+                    <select asp-for="SaleID" class="form-control" asp-items="ViewBag.SaleList">
+                        <!-- ViewBag.SaleList -->
+                    </select>
+
+                    <span asp-validation-for="SaleID" class="text-danger"></span>
+                </div>
+
+
+
+
+
+
+
+
+                <div class="form-group">
+                    <!--  fim do formulario   -->
+                    <input type="submit" value="Create" class="btn btn-primary" />  <!-- cria registo key -->
+                    <!-- este create é um do botao, final para submeter todos os dados  -->
+                </div>
+
+
+
+
+
+            </form>
+
+        </div>
+    </div>
+
+
+</body>
+
+<!--  Fim copia create Basket -->
+
+@*
+
+<div>
+    <!-- botao no topo -->
+    <!-- Aqui tenho de retornar para o Sale/Details/n    asp-action="Index"  "Details/6">-->
+    <a class="btn btn-outline-info" asp-action="Details" asp-route-id="@ViewBag.SaleID"> Back to List</a>    <!-- o "a" é para fazer link aparece a azul na pagina  -->
+
+</div>
+
+@*
+<div>
+    <p>Codigo de Venda : </p>
+    <p> @ViewBag.SaleID </p>
+</div>
+* @
+
+
+@*// ... stuff  * @
+<!-- So tenho de por na view (form) os valores que depois passam para aDBase (tabela) -->
+<!--  COlocar BAckground color  papayawhip; gainsboro  -->
+<body>
+
+
+    <!--  Criar matriz para apresentacao dos dados  -->
+    <div class="row">
+        <div class="col-md-4">
+
+            <form asp-action="AddProductToOrder">
+                <!-- se for dada a accao create  ^Nome da Vista  -->
+                <!--  valida formatos definidos no modelo -->
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+
+               
+                <!-- O valor do preço é atualizado automaticamente -->
+                <div class="form-group">
+                    <!-- <label asp-for="Price" class="form-label"></label> -->  <!--  Escreve Label class... é biblioteca bootstrap -->
+                    <input asp-for="Price" type="hidden" class="form-control" value="0"/>     <!-- recebe uma entrada de valor na var Price  -->
+                    <span asp-validation-for="Price" class="text-danger"></span>
+                </div>
+
+                <!--  Não estava a criar o registo pk o campo address não era preenchido -->
+                <div class="form-group">
+                    <label asp-for="Quantity" class="form-label"></label>
+                    <input asp-for="Quantity" class="form-control" />
+                    <span asp-validation-for="Quantity" class="text-danger"></span>
+                </div>
+
+               
+
+
+
+                <!-- Temos de adicionar campo para preenchimento da Chave/nome role  -->
+                <div class="form-group">
+                    <label asp-for="ProductID" class="form-label"></label>
+                    <!-- para termos acesso à informação da tabela secindaria temos de fazer uma lista de selecção -->
+                    <!-- Temos de passar uma variavel para casar com o numero da tabela secundaria roles -->
+                    <!--  <select asp-for="ProductID" class="form-control" asp-items="ViewBag.StaffRoles"></select>  -->
+                    
+                    <select asp-for="ProductID" class="form-control" asp-items="ViewBag.ProductList">
+                       
+                    
+                    </select>
+
+                    <span asp-validation-for="ProductID" class="text-danger"></span>
+                </div>
+
+               
+                <!-- O nome da chave ja vem preenchido   -->
+                <div class="form-group">
+                    <label asp-for="SaleID" class="form-label"></label>
+                    <!-- para termos acesso à informação da tabela secindaria temos de fazer uma lista de selecção -->
+                    <!-- Temos de passar uma variavel para casar com o numero da tabela secundaria roles -->
+                    <!--  <select asp-for="SaleID" class="form-control" asp-items="ViewBag.StaffRoles"></select>  -->
+
+                    <input asp-for="SaleID" type="hidden" class="form-control" Value="@ViewBag.SaleID">
+                        <!-- asp-items="ViewBag.SaleList" -->
+                        <!-- asp-items="ViewBag.SaleList"   ViewBag.SaleID-->
+                        <!-- ViewBag.SaleList -->
+                    </input>
+
+                    <span asp-validation-for="SaleID" class="text-danger"></span>
+                </div>
+
+ 
+
+                <div class="form-group">
+                    <!--  fim do formulario   -->
+                    <input type="submit" value="Add" class="btn btn-primary" />  <!-- cria registo key -->
+                    <!-- este create é um do botao, final para submeter todos os dados  -->
+                    <!-- <a class="btn btn-outline-info" asp-area="" asp-controller="Customer" asp-action="Index">Back to List</a> -->
+                    <a input type="submit" value="Add" class="btn btn-outline-info" asp-action="Details" asp-route-id="@ViewBag.SaleID"> Back to List</a>
+
+                </div>
+
+
+
+            </form>
+
+
+        </div>
+    </div>
+
+
+</body>
+
+    *@

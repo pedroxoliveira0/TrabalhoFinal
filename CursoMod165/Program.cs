@@ -46,6 +46,11 @@ builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy(POLICIES.APP_POLICY.NAME, Policy => Policy.RequireRole(POLICIES.APP_POLICY.APP_POLICY_ROLES));
     options.AddPolicy(POLICIES.APP_POLICY_ADMIN.NAME, Policy => Policy.RequireRole(POLICIES.APP_POLICY_ADMIN.APP_POLICY_ROLES));
+    // New
+    options.AddPolicy(POLICIES.APP_POLICY_VENDOR.NAME, Policy => Policy.RequireRole(POLICIES.APP_POLICY_VENDOR.APP_POLICY_ROLES));
+
+    options.AddPolicy(POLICIES.APP_POLICY_WAREHOUSEMAN.NAME, Policy => Policy.RequireRole(POLICIES.APP_POLICY_WAREHOUSEMAN.APP_POLICY_ROLES));
+
 });
 
 
@@ -64,7 +69,7 @@ var supportedCultures = new[]  // � um array
 {
     ptCI,
     new CultureInfo("en"),   // era: en-UK"
-    new CultureInfo("es")
+    //new CultureInfo("es")
 };
 
 builder.Services.Configure<RequestLocalizationOptions>(options =>
