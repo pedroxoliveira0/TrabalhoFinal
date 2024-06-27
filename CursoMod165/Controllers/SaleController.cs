@@ -579,7 +579,7 @@ namespace CursoMod165.Controllers
                 return RedirectToAction(nameof(Index)); //Index
             }
 
-
+            
 
             // Envia Listas  para a vista
             // this.SetupProductList();
@@ -1134,6 +1134,27 @@ namespace CursoMod165.Controllers
                 // passa para Pachage (embalado) por accao do operador
                 sale.Status = Status.Package;
 
+            //  sale == null || sale.Status!=Status.Package
+            if (sale != null && sale.Status == Status.Purchase_Process)
+            {
+                // identificacao das variaveis venda e customer
+                ViewBag.SaleID = id;
+                ViewBag.CustomerID = sale.CustomerID;
+                ViewBag.NumVenda = sale.CodVenda;
+
+                // passa para Pachage (embalado) por accao do operador
+                sale.Status = Status.Package;
+
+
+                // atualiza DBase
+                _context.Sales.Update(sale);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction("Index");
+            }
+
+            // Toastr.ERRORMessage aparecer msg em caso de falha 
+            _toastNotification.AddErrorToastMessage("Error - Order not updated.");
 
                 // atualiza DBase
                 _context.Sales.Update(sale);
