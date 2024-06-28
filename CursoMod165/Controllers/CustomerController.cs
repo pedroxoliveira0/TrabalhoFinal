@@ -2,10 +2,13 @@
 using CursoMod165.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Localization;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 using Newtonsoft.Json.Linq;
+using NToastNotify;
 using System.Collections.Generic;
 using static CursoMod165.CursoMod165Constants;
 
@@ -20,10 +23,32 @@ namespace CursoMod165.Controllers
         
         private readonly ApplicationDbContext _context;  // premir com botão direito a lampada para tnasformar var _context
 
-        public CustomerController(ApplicationDbContext context)
+        // definicao de variaveis 
+        private readonly IToastNotification _toastNotification; // Singleton -> ou seja tudo é igual em todo o lado as mesmas regras
+        private readonly IHtmlLocalizer<Resource> _sharedLocalizer;
+        private readonly IStringLocalizer<Resource> _localizer;
+        // faz ligacao à base de dados - original
+        //public CategoryController(ApplicationDbContext context)
+        //{
+        //    _context = context;
+        //}
+
+        // aqui defino var Toastr e ligacao à base de dados
+        // IToastNotification toastNotification)
+        public CustomerController(ApplicationDbContext context,
+            IToastNotification toastNotification,
+             IHtmlLocalizer<Resource> sharedLocalizer,
+            IStringLocalizer<Resource> localizer)
+
         {
+            // ligação à base de dados; emulação da base de dados
             _context = context;
+            _toastNotification = toastNotification;
+            _sharedLocalizer = sharedLocalizer;
+            _localizer = localizer;
+
         }
+
 
         public IActionResult Index()
         {
@@ -79,9 +104,37 @@ namespace CursoMod165.Controllers
                 _context.Customers.Update(customer);
                 _context.SaveChanges();
 
+
+                // Nova MSG 27-06
+                string message =
+                    string.Format(_sharedLocalizer["<b>Customer</b> Created"].Value);
+
+
+                _toastNotification.AddSuccessToastMessage(message,
+                    new ToastrOptions
+                    {
+                        Title = _sharedLocalizer["Success"].Value,
+                        TimeOut = 0,
+                        TapToDismiss = true
+                    });
+
+
+
                 return RedirectToAction("Index");
 
             }
+            // Nova MSG 27-06
+            string message2 =
+                string.Format(_sharedLocalizer["<b>Category</b> Not Created"].Value,
+                              customer.Name);
+
+            _toastNotification.AddErrorToastMessage(message2,
+                new ToastrOptions
+                {
+                    Title = _sharedLocalizer["Error"].Value,
+                    TimeOut = 0,
+                    TapToDismiss = true
+                });
 
             // Esta linha não esta julgo no projeto
             // return RedirectToAction("Index");

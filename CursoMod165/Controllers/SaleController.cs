@@ -1074,7 +1074,7 @@ namespace CursoMod165.Controllers
                     if (p.Product.Quantity < p.Quantity)
                     {
                         p.Price = 0;
-                        ViewBag.Obs = "Attention : " + p.Product.Description + " near Sold Out. " + ViewBag.Obs;
+                        ViewBag.Obs = "Attention : " + p.Product.Description + " Sold Out. " + ViewBag.Obs;
                         // + "Produto, {0} com rutura de stock", p.Product.Description.ToString();
                         ViewBag.SoldOut = true;
                     }
@@ -1123,7 +1123,7 @@ namespace CursoMod165.Controllers
         {
             Sale? sale = await _context.Sales.FindAsync(id);
 
-            //  sale == null || sale.Status!=Status.Package
+            //  sale == null || sale.Status!=Status.Package  (c/ Status.Package dá erro)
             if (sale != null && sale.Status == Status.Purchase_Process)
             {
                 // identificacao das variaveis venda e customer
@@ -1134,27 +1134,33 @@ namespace CursoMod165.Controllers
                 // passa para Pachage (embalado) por accao do operador
                 sale.Status = Status.Package;
 
-            //  sale == null || sale.Status!=Status.Package
-            if (sale != null && sale.Status == Status.Purchase_Process)
-            {
-                // identificacao das variaveis venda e customer
-                ViewBag.SaleID = id;
-                ViewBag.CustomerID = sale.CustomerID;
-                ViewBag.NumVenda = sale.CodVenda;
+                //  sale == null || sale.Status!=Status.Package
+                if (sale != null && sale.Status == Status.Purchase_Process)
+                {
+                    // identificacao das variaveis venda e customer
+                    ViewBag.SaleID = id;
+                    ViewBag.CustomerID = sale.CustomerID;
+                    ViewBag.NumVenda = sale.CodVenda;
 
-                // passa para Pachage (embalado) por accao do operador
-                sale.Status = Status.Package;
+                    // passa para Pachage (embalado) por accao do operador
+                    sale.Status = Status.Package;
 
 
-                // atualiza DBase
-                _context.Sales.Update(sale);
-                await _context.SaveChangesAsync();
+                    // atualiza DBase
+                    _context.Sales.Update(sale);
+                    await _context.SaveChangesAsync();
 
-                return RedirectToAction("Index");
-            }
+                    // Toastr.SucessMessage tem de aparecer msg quando criar um novo
+                    _toastNotification.AddSuccessToastMessage("Order sucessfully updated.");
 
-            // Toastr.ERRORMessage aparecer msg em caso de falha 
-            _toastNotification.AddErrorToastMessage("Error - Order not updated.");
+                    return RedirectToAction("Index");
+                }
+
+                // Toastr.ERRORMessage aparecer msg em caso de falha 
+                //_toastNotification.AddErrorToastMessage("Error - Order not updated.");
+                // Toastr.SucessMessage tem de aparecer msg quando criar um novo
+                _toastNotification.AddSuccessToastMessage("Order sucessfully updated.");
+
 
                 // atualiza DBase
                 _context.Sales.Update(sale);
@@ -1214,7 +1220,9 @@ namespace CursoMod165.Controllers
                     // Atualiza quantidades em stock
                     foreach (var p in produtListBySetCodVenda)
                     {
-                        p.Product.Quantity = p.Product.Quantity - p.Quantity;
+                        if (p.Price>0 && p.Product.Quantity>= p.Quantity) { 
+                            p.Product.Quantity = p.Product.Quantity - p.Quantity;
+                        }
                     }
 
                     // var TotalSumAll = produtListBySetCodVenda.Sum(p => p.TotalPrice);

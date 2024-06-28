@@ -22,7 +22,8 @@ namespace CursoMod165.Controllers
 
         // definicao de variaveis 
         private readonly IToastNotification _toastNotification; // Singleton -> ou seja tudo é igual em todo o lado as mesmas regras
-
+        private readonly IHtmlLocalizer<Resource> _sharedLocalizer;
+        private readonly IStringLocalizer<Resource> _localizer;
         // faz ligacao à base de dados - original
         //public CategoryController(ApplicationDbContext context)
         //{
@@ -32,12 +33,16 @@ namespace CursoMod165.Controllers
         // aqui defino var Toastr e ligacao à base de dados
         // IToastNotification toastNotification)
         public CategoryController(ApplicationDbContext context,
-            IToastNotification toastNotification)
+            IToastNotification toastNotification,
+             IHtmlLocalizer<Resource> sharedLocalizer,
+            IStringLocalizer<Resource> localizer)
 
         {
             // ligação à base de dados; emulação da base de dados
             _context = context;
             _toastNotification = toastNotification;
+            _sharedLocalizer = sharedLocalizer;
+            _localizer = localizer;
 
         }
 
@@ -112,9 +117,18 @@ namespace CursoMod165.Controllers
             }
 
             // Toastr.ERRORMessage aparecer msg em caso de falha 
-            _toastNotification.AddErrorToastMessage("Error - Category not created.");
+            // _toastNotification.AddErrorToastMessage("Error - Category not created.");
             // Ver diferenca entre category e "Index"
-            return View(category);
+            // Toastr.ErrorMessage - Novo 27-06
+		    _toastNotification.AddErrorToastMessage("Check the form again!",
+    		new ToastrOptions { 
+        	Title = "Appointment Creation Error",
+        	TapToDismiss = true,
+        	TimeOut = 0
+    		});
+
+
+	    return View(category);
             
         }
 
@@ -127,7 +141,8 @@ namespace CursoMod165.Controllers
         [HttpGet] // obtem dados da base de  dados, neste caso a partir do padrao
         public IActionResult Edit(int id)
         {
-            // retorna os dados da chave que entra aqui e vem da tabela
+            // int numInt = int.Parse(num);
+		// retorna os dados da chave que entra aqui e vem da tabela
             // usa-se ? porque pode não encontrar o dado e não pode ser null, quando colocamos o ? quer dizer que pode existir ou nao existir
             Category? category = _context.Categories.Find(id);  // Chave primaria = id
 
@@ -146,8 +161,20 @@ namespace CursoMod165.Controllers
                 _context.Categories.Update(category);        // atualiza
                 _context.SaveChanges();                     // grava
 
-				// Toastr.SucessMessage tem de aparecer msg quando criar um novo
-				_toastNotification.AddSuccessToastMessage("Category sucessfully updated.");
+                // Toastr.SucessMessage tem de aparecer msg quando criar um novo
+                //_toastNotification.AddSuccessToastMessage("Category sucessfully updated.");
+
+                // Nova MSG 27-06
+                string message =
+                    string.Format(_sharedLocalizer["<b>Category {0}</b> successfully edited!"].Value,
+                                  category.Name);
+
+
+                _toastNotification.AddSuccessToastMessage(message, 
+    				new ToastrOptions { Title = _sharedLocalizer["Success"].Value,
+        			TimeOut = 0,
+        			TapToDismiss = true
+    				});
 
 				return RedirectToAction(nameof(Index));   // volta para a pagina principal, para o cliente saber que gravou, mostra lista
             }
@@ -201,14 +228,43 @@ namespace CursoMod165.Controllers
                 _context.SaveChanges();                     // grava
 				
                 // Toastr.SucessMessage tem de aparecer msg quando criar um novo
-				_toastNotification.AddSuccessToastMessage("Category sucessfully deleted.");
+				//_toastNotification.AddSuccessToastMessage("Category sucessfully deleted.");
+                // Nova MSG 27-06
+                string message1 =
+                    string.Format(_sharedLocalizer["<b>Category</b> Deleted"].Value,
+                                  category.Name);
 
-				return RedirectToAction(nameof(Index));
+
+                _toastNotification.AddSuccessToastMessage(message1,
+                    new ToastrOptions
+                    {
+                        Title = _sharedLocalizer["Success"].Value,
+                        TimeOut = 0,
+                        TapToDismiss = true
+                    });
+
+
+                return RedirectToAction(nameof(Index));
             }
 
 			// Toastr.ERRORMessage aparecer msg em caso de falha 
-			_toastNotification.AddErrorToastMessage("Error - Category not deleted.");
-			return View(category);
+			// _toastNotification.AddErrorToastMessage("Error - Category not deleted.");
+            // Nova MSG 27-06
+            string message2 =
+                string.Format(_sharedLocalizer["<b>Category</b> Not Deleted"].Value,
+                              category.Name);
+
+
+            _toastNotification.AddErrorToastMessage(message2,
+                new ToastrOptions
+                {
+                    Title = _sharedLocalizer["Error"].Value,
+                    TimeOut = 0,
+                    TapToDismiss = true
+                });
+
+
+            return View(category);
         }
 
 

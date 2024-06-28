@@ -117,26 +117,11 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="&lt;b&gt;Appointment # {0}&lt;/b&gt; successfully edited!" xml:space="preserve">
-    <value>&lt;b&gt;Consulta # {0}&lt;/b&gt; editada com sucesso!</value>
-  </data>
   <data name="Actions" xml:space="preserve">
     <value>Ações</value>
   </data>
   <data name="Address" xml:space="preserve">
     <value>Morada</value>
-  </data>
-  <data name="Administrative" xml:space="preserve">
-    <value>Administrativo(a)</value>
-  </data>
-  <data name="Appointment" xml:space="preserve">
-    <value>Consulta</value>
-  </data>
-  <data name="Appointment #" xml:space="preserve">
-    <value>Consulta Nº</value>
-  </data>
-  <data name="Appointment Number" xml:space="preserve">
-    <value>Consulta Número</value>
   </data>
   <data name="Back to List" xml:space="preserve">
     <value>Voltar à Lista</value>
@@ -168,26 +153,20 @@
   <data name="Date" xml:space="preserve">
     <value>Data</value>
   </data>
-  <data name="Date &lt;b&gt;{0}&lt;/b&gt; at &lt;b&gt;{1}&lt;/b&gt;" xml:space="preserve">
-    <value>Data &lt;b&gt;{0}&lt;/b&gt; às &lt;b&gt;{1}&lt;/b&gt;</value>
-  </data>
   <data name="Delete" xml:space="preserve">
     <value>Apagar</value>
   </data>
   <data name="Description" xml:space="preserve">
     <value>Descrição</value>
   </data>
-  <data name="Driver" xml:space="preserve">
-    <value>Motorista</value>
-  </data>
   <data name="Edit" xml:space="preserve">
     <value>Editar</value>
   </data>
+  <data name="Error" xml:space="preserve">
+    <value>Erro</value>
+  </data>
   <data name="Informations" xml:space="preserve">
     <value>Informações</value>
-  </data>
-  <data name="Is Done?" xml:space="preserve">
-    <value>Realizada?</value>
   </data>
   <data name="Is Paid" xml:space="preserve">
     <value>Saldado</value>
@@ -198,9 +177,6 @@
   <data name="Job Statmente" xml:space="preserve">
     <value>Enunciado</value>
   </data>
-  <data name="Medic" xml:space="preserve">
-    <value>Médico(a)</value>
-  </data>
   <data name="No" xml:space="preserve">
     <value>Não</value>
   </data>
@@ -209,9 +185,6 @@
   </data>
   <data name="Number" xml:space="preserve">
     <value>Número</value>
-  </data>
-  <data name="Nurse" xml:space="preserve">
-    <value>Enfermeiro(a)</value>
   </data>
   <data name="Observation" xml:space="preserve">
     <value>Observação</value>
@@ -252,17 +225,14 @@
   <data name="Sent" xml:space="preserve">
     <value>Enviado</value>
   </data>
-  <data name="Specialty" xml:space="preserve">
-    <value>Especialidade</value>
-  </data>
-  <data name="Staff" xml:space="preserve">
-    <value>Equipa</value>
-  </data>
-  <data name="Staff Role" xml:space="preserve">
-    <value>Categoria</value>
-  </data>
   <data name="Status" xml:space="preserve">
     <value>Estado</value>
+  </data>
+  <data name="Success" xml:space="preserve">
+    <value>Sucesso</value>
+  </data>
+  <data name="Successfully edited!" xml:space="preserve">
+    <value>Editada com sucesso</value>
   </data>
   <data name="Time" xml:space="preserve">
     <value>Hora</value>

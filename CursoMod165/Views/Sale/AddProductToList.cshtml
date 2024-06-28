@@ -259,7 +259,9 @@ Html
 
 <div class="form-group">
     
-    <a asp-action="Index">Back to Order Head</a> @* devia returnar para Details/id*@
+    
+    <a class="btn btn-outline-success" asp-area="" asp-controller="Sale" asp-action="Details" asp-route-id="@(ViewBag.OrderID)">Back to List</a>
+    <a class="btn btn-outline-primary" asp-action="Index">Back to Order Head</a> @* devia returnar para Details/id*@
 </div>
 
 @**@
